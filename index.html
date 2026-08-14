@@ -4,129 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Macless — ship an iOS app without a Mac</title>
-<meta name="description" content="The GitHub Actions pipeline, signing scripts, and notes I used to build and submit a real App Store app without owning a Mac.">
-<style>
-  :root{
-    --bg: #faf8f3;
-    --bg-panel: #f2efe6;
-    --border: #e2ddd0;
-    --text: #24211c;
-    --text-dim: #6b6558;
-    --text-faint: #948d7c;
-    --accent: #a8461e;
-    --accent-ink: #ffffff;
-    --code-bg: #eeeae0;
-    --serif: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
-    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    --mono: 'SF Mono', Menlo, Consolas, monospace;
-  }
-  *{ box-sizing:border-box; margin:0; padding:0; }
-  html{ scroll-behavior:smooth; }
-  body{
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 17px;
-    line-height: 1.6;
-  }
-  a{ color: var(--accent); }
-  .wrap{ max-width: 640px; margin: 0 auto; padding: 0 24px; }
-  code, .mono{ font-family: var(--mono); }
-
-  h1, h2{ font-family: var(--serif); font-weight: 700; }
-
-  /* ---- header ---- */
-  header.site{ padding: 28px 0; border-bottom: 1px solid var(--border); }
-  .site-inner{ display:flex; align-items:center; justify-content:space-between; max-width:640px; margin:0 auto; padding:0 24px; }
-  .wordmark{ font-family: var(--serif); font-weight:700; font-size:18px; }
-  .site-inner a.pricelink{ font-size:14px; color: var(--text-dim); text-decoration:none; border-bottom:1px solid var(--border); }
-  .site-inner a.pricelink:hover{ color: var(--accent); border-color: var(--accent); }
-
-  /* ---- hero ---- */
-  .hero{ padding: 56px 0 8px; }
-  .eyebrow{ font-size: 14px; color: var(--text-faint); margin-bottom: 14px; }
-  h1{ font-size: 38px; line-height:1.2; margin-bottom: 18px; }
-  .hero-sub{ color: var(--text-dim); font-size: 18px; margin-bottom: 26px; max-width: 560px; }
-  .cta-row{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom: 8px; }
-  .btn{
-    display:inline-block; padding: 13px 22px; border-radius: 6px; font-weight:600; font-size:15.5px;
-    text-decoration:none; cursor:pointer; border: 1px solid transparent;
-  }
-  .btn-primary{ background: var(--text); color: #fdfcf9; }
-  .btn-primary:hover{ background: var(--accent); }
-  .btn-text{ color: var(--text-dim); font-size:14.5px; text-decoration:none; border-bottom:1px solid var(--border); }
-  .btn-text:hover{ color: var(--accent); border-color: var(--accent); }
-  .hero-note{ font-size: 13px; color: var(--text-faint); margin-top: 16px; }
-
-  /* ---- code block ---- */
-  pre.demo{
-    margin: 40px 0 0; background: var(--code-bg); border:1px solid var(--border); border-radius: 8px;
-    padding: 18px 20px; font-family: var(--mono); font-size: 13.5px; color: #3a362e; overflow-x:auto;
-  }
-  pre.demo .dim{ color: var(--text-faint); }
-
-  /* ---- note / story ---- */
-  .note{
-    margin: 48px 0; padding: 20px 0 20px 20px; border-left: 3px solid var(--border);
-    color: var(--text-dim); font-size: 16px;
-  }
-  .note b{ color: var(--text); }
-  .sig{ margin-top:12px; font-size:14px; color: var(--text-faint); }
-
-  /* ---- sections ---- */
-  section{ padding: 44px 0; border-top: 1px solid var(--border); }
-  h2{ font-size: 25px; margin-bottom: 16px; }
-  section > .wrap > p.lead{ color: var(--text-dim); margin-bottom: 20px; }
-
-  ol.steps, ul.plain{ list-style:none; margin-top: 8px; }
-  ol.steps li{ display:flex; gap: 14px; padding: 10px 0; font-size:15.5px; color: var(--text-dim); }
-  ol.steps li .n{ font-family: var(--serif); color: var(--text-faint); font-size:15px; flex-shrink:0; width:18px; }
-  ol.steps li b{ color: var(--text); }
-
-  ul.plain li{ padding: 11px 0; border-bottom: 1px solid var(--border); font-size:15.5px; }
-  ul.plain li:last-child{ border-bottom:none; }
-  ul.plain li b{ display:block; color: var(--text); margin-bottom: 2px; }
-  ul.plain li span{ color: var(--text-dim); font-size:14.5px; }
-
-  blockquote.proof{
-    margin-top: 30px; padding-left: 20px; border-left: 3px solid var(--accent);
-    color: var(--text-dim); font-size: 16px; font-style: italic;
-  }
-  blockquote.proof a{ display:inline-block; margin-top:10px; font-style:normal; font-size:14px; }
-
-  /* ---- pricing ---- */
-  .price-block{ margin-top: 12px; }
-  .price-tag{ font-family: var(--serif); font-size:44px; font-weight:700; margin: 6px 0 2px; }
-  .price-tag small{ font-size:16px; font-weight:400; color: var(--text-dim); font-family: var(--sans); }
-  .price-note{ color: var(--text-faint); font-size:14px; margin-bottom: 22px; }
-  .guarantee{ margin-top:16px; font-size:14px; color: var(--text-dim); }
-
-  /* ---- FAQ ---- */
-  .faq-item{ padding: 20px 0; border-bottom: 1px solid var(--border); }
-  .faq-item:last-child{ border-bottom:none; }
-  .faq-item h3{ font-size:16px; font-weight:700; margin-bottom:6px; font-family: var(--sans); }
-  .faq-item p{ font-size:15px; color: var(--text-dim); }
-
-  .final-cta{ text-align:left; padding: 50px 0 60px; }
-
-  footer{ border-top:1px solid var(--border); padding: 30px 0 50px; color: var(--text-faint); font-size:14px; }
-  footer a{ color: var(--text-dim); text-decoration:none; border-bottom:1px solid var(--border); }
-  footer a:hover{ color: var(--accent); border-color: var(--accent); }
-</style>
+<meta name="description" content="The GitHub Actions pipeline, signing scripts, and notes I used to build and submit an actual App Store app without owning a Mac.">
+<link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
 
 <header class="site">
   <div class="site-inner">
     <div class="wordmark">Macless</div>
-    <a class="pricelink" href="#pricing">$99, one-time →</a>
+    <div style="display:flex; align-items:center; gap:22px;">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="#pricing">$99, one-time →</a>
+    </div>
   </div>
 </header>
 
 <div class="hero">
   <div class="wrap">
     <div class="eyebrow">No Mac. No rented Mac. No monthly CI bill.</div>
-    <h1>Ship a real iOS app to the App Store without ever owning a Mac</h1>
+    <h1>Ship an iOS app to the App Store without ever owning a Mac</h1>
     <p class="hero-sub">This is the GitHub Actions pipeline, signing scripts, and notes I used to build and submit an actual App Store app — using GitHub's free build servers and a web browser. Nothing else.</p>
     <div class="cta-row">
       <a class="btn btn-primary" href="#pricing">Get the template — $99</a>
@@ -150,7 +46,7 @@ done. no Mac involved, nothing spent.</pre>
 <section id="how">
   <div class="wrap">
     <h2>What this replaces</h2>
-    <p class="lead">Normally, shipping an iOS app means owning a Mac (upwards of $600) or renting one in the cloud (usually $20–100+ a month) just to run Xcode long enough to sign and upload a build. This replaces that with a GitHub Actions workflow that does the same steps — for free, because GitHub doesn't charge for macOS runners on public repositories.</p>
+    <p class="lead">Normally, shipping an iOS app means owning a Mac (starting around $799) or renting one in the cloud (usually $20–100+ a month) just to run Xcode long enough to sign and upload a build. This replaces that with a GitHub Actions workflow that does the same steps — for free, because GitHub doesn't charge for macOS runners on public repositories.</p>
 
     <h2 style="margin-top:36px;">How it works</h2>
     <ol class="steps">
@@ -179,7 +75,7 @@ done. no Mac involved, nothing spent.</pre>
     </ul>
 
     <blockquote class="proof">
-      This is the exact pipeline behind Citolex — a real app with native Swift plugins that went from "is this even possible" to submitted for App Store review, without a single Mac. Every fix in the troubleshooting doc is one this pipeline actually needed.
+      This is the exact pipeline behind Citolex — a full app with native Swift plugins that went from "is this even possible" to submitted for App Store review, without a single Mac. Every fix in the troubleshooting doc is one this pipeline actually needed.
       <a href="https://citolex.com" target="_blank" rel="noopener">→ citolex.com</a>
     </blockquote>
   </div>
@@ -207,7 +103,7 @@ done. no Mac involved, nothing spent.</pre>
 
     <div class="faq-item">
       <h3>Do I need any Apple hardware?</h3>
-      <p>No Mac to build or sign. You'll still want an iPhone to actually test the finished app — TestFlight installs directly on a real device.</p>
+      <p>No Mac to build or sign. You'll still want an iPhone to actually test the finished app — TestFlight installs directly on a physical device.</p>
     </div>
     <div class="faq-item">
       <h3>Is this against Apple's or GitHub's rules?</h3>
@@ -223,11 +119,11 @@ done. no Mac involved, nothing spent.</pre>
     </div>
     <div class="faq-item">
       <h3>What if my repo needs to be private?</h3>
-      <p>The free build minutes are specifically a public-repo perk — private repos get a much smaller free allowance, and macOS minutes cost extra past that. The guide covers what a private setup would actually cost you.</p>
+      <p>Private repos work exactly the same way — nothing about the pipeline changes. The only difference is GitHub's free-minutes allowance: public repos get unlimited free macOS build minutes, private repos get a monthly allowance before you're billed per minute past it (still usually cheaper than a rented Mac). Either way, your signing certificates and credentials are stored as encrypted GitHub secrets — they're never exposed in your repo or build logs, public or private.</p>
     </div>
     <div class="faq-item">
       <h3>What if I get stuck?</h3>
-      <p>Email me. The troubleshooting doc covers the real errors this pipeline produces, and if you genuinely can't get a build out within 30 days, I'll refund you.</p>
+      <p>Email me. The troubleshooting doc covers the errors this pipeline has actually produced, and if you can't get a build out within 30 days, I'll refund you.</p>
     </div>
   </div>
 </section>
