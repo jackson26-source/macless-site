@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix "No signing certificate matching team ID" in GitHub Actions — Macless</title>
+<meta name="description" content="The three actual causes of the 'No signing certificate matching team ID' codesign error in a GitHub Actions iOS build, and how to tell which one you've hit.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div style="display:flex; align-items:center; gap:22px;">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>Fix "No signing certificate matching team ID" in GitHub Actions</h1>
+    <p class="hero-sub">Three things actually cause this, and one log line tells you which one before you start regenerating things at random.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>If you're building an iOS app in GitHub Actions (or any headless CI, really) and your archive/export step fails with something like <code class="mono">No signing certificate "iOS Distribution" matching team ID "XXXXXXXXXX" with a private key was found</code>, the good news is this is almost never a code problem. It's a mismatch somewhere between what Apple's portal has on file and what your CI job is trying to use.</p>
+
+    <p>In practice it's one of three things. Check them in this order — it's the order they're easiest to rule out in.</p>
+
+    <h2>1. Check whether the certificate actually imported</h2>
+    <p>Before anything else, open the "Import signing certificate" (or equivalent keychain-setup) step in your Actions log. It prints the identities it actually found after importing your <code class="mono">.p12</code> file — something like:</p>
+    <pre class="demo">1) AB12CD34EF... "Apple Distribution: Your Name (XXXXXXXXXX)"
+     1 valid identities found</pre>
+    <p>If that list is empty, or the identity isn't there at all, stop looking at provisioning profiles — the certificate itself didn't import. Usual causes: the base64-encoded <code class="mono">.p12</code> secret got truncated or corrupted when it was pasted into GitHub Secrets, or the <code class="mono">.p12</code> password secret is wrong. Re-export the certificate from Keychain Access (or wherever you generated it) and re-encode it fresh rather than debugging the existing value — it's faster than trying to figure out where a few bytes went missing.</p>
+
+    <h2>2. Confirm the certificate and profile actually match</h2>
+    <p>A provisioning profile isn't generic — it's generated against one specific signing certificate. If the identity from step 1 <em>did</em> import successfully, the next most common cause is that the certificate on Apple's portal was regenerated (often because the old one expired) without regenerating the profile that references it. Profiles pin to a certificate's public key; once that certificate is gone, every profile built against it silently stops working, even though the profile itself hasn't "expired" and still shows as valid in the portal.</p>
+    <p>The fix: in Apple's developer portal, open the provisioning profile, and regenerate it (this re-links it to your current active certificate), then re-download it and update the base64 secret your workflow uses.</p>
+
+    <h2>3. Check the profile name and bundle ID match exactly</h2>
+    <p>The third cause is the most tedious to catch because it fails silently on typos. Two things have to match <b>character-for-character</b>, including case and whitespace, between Apple's portal and your CI configuration:</p>
+    <ul>
+      <li>The provisioning profile's name, as typed into your <code class="mono">IOS_PROVISIONING_PROFILE_NAME</code> variable/secret — "YourApp App Store" and "YourApp app store" are different strings as far as <code class="mono">xcodebuild</code> is concerned.</li>
+      <li>The bundle ID in <code class="mono">IOS_BUNDLE_ID</code> — it has to match the App ID the profile was actually generated for, not just "close enough."</li>
+    </ul>
+    <p>Copy both values directly out of the Apple Developer portal rather than retyping them from memory — that's the single easiest place a mismatch sneaks in.</p>
+
+    <div class="callout">
+      <p><b>If you've checked all three and it's still failing:</b> double-check you're not mixing up an "Apple Development" certificate with an "Apple Distribution" one — TestFlight and App Store builds need Distribution, not Development, and the error message doesn't always make that obvious. It's worth re-reading the exact certificate type in your import log against what your provisioning profile expects.</p>
+    </div>
+
+    <h2>Why this happens more in CI than in Xcode</h2>
+    <p>Xcode's GUI does a lot of this matching for you automatically when "Automatically manage signing" is on — it'll silently regenerate or fix up mismatched profiles in the background. CI has none of that; it uses exactly the certificate and profile you hand it, which is more predictable once it's working but means every mismatch surfaces as a hard failure instead of getting quietly patched over.</p>
+
+    <div class="cta-box">
+      <h2>This is covered end-to-end in the template</h2>
+      <p>I hit every one of these while building the CI pipeline behind <a href="https://citolex.com" target="_blank" rel="noopener">Citolex</a>. The signing script and troubleshooting doc in Macless walk through generating certificates and profiles correctly the first time, plus every error message this pipeline has actually produced.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>

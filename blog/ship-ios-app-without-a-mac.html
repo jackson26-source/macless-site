@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to build and ship an iOS app without a Mac — Macless</title>
+<meta name="description" content="Every option for shipping an iOS app to the App Store without owning a Mac — buying one, renting a cloud Mac, and using GitHub Actions' free macOS build minutes — with actual costs and the pitfalls each one hits.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div style="display:flex; align-items:center; gap:22px;">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Guide</div>
+    <h1>How to build and ship an iOS app without a Mac</h1>
+    <p class="hero-sub">Every option, what each one actually costs, and where each one falls apart — written after going through it myself.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>If you want to put an app on the App Store, Apple requires you to build and sign it with Xcode, and Xcode only runs on macOS. That's true no matter what you built the app with — Swift, React Native, Capacitor, Flutter, whatever. At some point, something running on a Mac has to sign the thing.</p>
+
+    <p>Not owning a Mac is a common enough problem that there are a few genuine ways around it, each with its own cost. Here's what I found when I hit this wall building an iOS app of my own, and what each option actually costs versus what it's usually advertised as.</p>
+
+    <h2>Option 1: Buy a Mac</h2>
+    <p>The straightforward option. A Mac mini starts around $799 (Apple raised the entry price in 2026), which is a one-time cost — no recurring bill, and it's hardware you own outright and can use for other things. If you're going to be doing iOS development regularly, long-term, this is genuinely the simplest answer and probably the right one.</p>
+    <p>Where it doesn't make sense: a side project, a one-off app, or testing whether an idea is worth pursuing before you've made any money from it. Spending $799 to find out if your app idea has legs is a genuine barrier, and it's the reason a lot of iOS side projects never ship.</p>
+
+    <h2>Option 2: Rent a cloud Mac</h2>
+    <p>Services like MacStadium, MacinCloud, and similar exist specifically to rent you remote access to an actual Mac by the hour or month. Typical pricing runs anywhere from about $20/month for a shared, lower-spec machine up to $100+/month for dedicated, faster hardware.</p>
+    <p>This solves the ownership problem but trades it for a recurring bill, and most of these services are built around interactive use — you remote into a desktop and click around, same as if you owned the machine. For something you might only need for a few minutes every time you cut a release, paying by the month is a lot of unused capacity.</p>
+
+    <h2>Option 3: GitHub Actions' free macOS runners</h2>
+    <p>The option that actually got me unblocked. GitHub Actions — GitHub's built-in CI/CD system — provides macOS build machines, and on <b>public repositories, macOS runner minutes are free</b>. They're intended for running test suites before a merge. Nothing about a macOS runner requires that it only run tests, though — it's an actual macOS machine with Xcode's command-line tools available, and it can run the exact same <code class="mono">xcodebuild</code> commands that sign, archive, and export an app that Xcode's GUI runs under the hood. (More detail on how the free tier actually works in <a href="/blog/github-actions-free-macos-minutes-explained.html">this post</a>.)</p>
+
+    <p>At a high level, the pipeline looks like this:</p>
+    <pre class="demo"><span class="dim">$</span> git push origin main
+<span class="dim">→ GitHub spins up a free macOS build machine</span>
+<span class="dim">→ workflow checks out your project</span>
+<span class="dim">→ signing certificate + provisioning profile are installed from secrets you set once</span>
+<span class="dim">→ xcodebuild archives the app and exports a signed .ipa</span>
+<span class="dim">→ the .ipa uploads straight to App Store Connect / TestFlight</span></pre>
+
+    <p>No Mac touched at any point. You push code, the machine that briefly exists to build it goes away when it's done, and the signed build shows up in TestFlight.</p>
+
+    <h3>What it costs</h3>
+    <table class="compare">
+      <tr><th>Approach</th><th>Cost</th><th>Ongoing?</th></tr>
+      <tr><td>Buy a Mac</td><td><b>~$799+</b></td><td>No — one-time</td></tr>
+      <tr><td>Rent a cloud Mac</td><td><b>~$20–100+/mo</b></td><td>Yes — for as long as you develop</td></tr>
+      <tr><td>GitHub Actions (public repo)</td><td><b>$0</b> for macOS build minutes</td><td>No — free tier is ongoing, not time-limited</td></tr>
+    </table>
+    <p>One thing to plan around: this $0 figure is specifically for public repos. Private repos work exactly the same way, pipeline and all — you just get a monthly allowance of free minutes instead of an unlimited amount, and pay per minute past it (macOS minutes run at roughly 10x the cost of standard Linux minutes). That's usually still cheaper than renting a Mac, just not literally free. Either way, your signing certificates and credentials sit in encrypted GitHub secrets, never exposed in the repo or build logs — repo visibility only affects CI minute pricing, nothing else. You also still owe Apple's <b>$99/year Apple Developer Program fee</b> regardless of which build option you use — none of this replaces that, it only removes the Mac requirement. (Full cost breakdown in <a href="/blog/cost-of-shipping-an-ios-app.html">this post</a>.)</p>
+
+    <h3>Where this approach actually gets hard</h3>
+    <p>The build pipeline itself is a fairly short workflow file. The part that actually eats time is code signing, because it's fussy in ways that aren't obvious until you've hit them:</p>
+    <ul>
+      <li><b>Certificate/profile mismatches.</b> A provisioning profile is generated against one specific signing certificate. If you regenerate the certificate in Apple's portal without regenerating every profile that references it, builds start failing with signing errors that don't clearly say why. (Walked through in detail <a href="/blog/fix-no-signing-certificate-matching-team-id.html">here</a>.)</li>
+      <li><b>Exact-name matching.</b> Provisioning profile names and bundle IDs have to match character-for-character (case and whitespace included) between Apple's portal and your CI configuration, or codesigning fails.</li>
+      <li><b>Silent TestFlight failures.</b> This one is sneaky: if you reupload a build using the same marketing version and build number as a previous upload, App Store Connect silently rejects it — but the upload tool reports success either way, so your CI log shows green while the build never actually appears in TestFlight. The fix is making sure your build number changes on every single run (GitHub's own per-workflow run counter works well for this). (Full walkthrough <a href="/blog/testflight-build-not-showing-up.html">here</a>.)</li>
+      <li><b>Export Compliance and App Privacy.</b> Not CI problems, but they'll block a TestFlight install or App Store submission if you haven't answered them, and they're easy to miss the first time through App Store Connect.</li>
+    </ul>
+
+    <div class="callout">
+      <p><b>None of this is a sign the approach doesn't work</b> — it's the same signing complexity every iOS build has, Xcode's GUI just hides more of it behind clicks. Once the certificates, profiles, and workflow are set up correctly once, every build after that is just <code class="mono">git push</code>.</p>
+    </div>
+
+    <h2>Which option is actually right for you</h2>
+    <p>If you're going to be doing iOS work regularly for years, buying a Mac is genuinely the simplest long-term answer. If you need occasional interactive access to a macOS desktop — for reasons beyond just building, like testing something Simulator-only — a rented cloud Mac covers that in a way CI can't. But if what you actually need is just: build this, sign it, get it into TestFlight, on a public repo — GitHub Actions' free macOS minutes get you there without spending anything on hardware or hosting.</p>
+
+    <div class="cta-box">
+      <h2>I wrote up the whole setup</h2>
+      <p>I went through all of this shipping <a href="https://citolex.com" target="_blank" rel="noopener">Citolex</a>, a full App Store app with native Swift plugins, entirely through this pipeline. I packaged the GitHub Actions workflow, the signing script, and a setup guide that covers every one of the pitfalls above (plus the fixes) as a one-time template — no subscription.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>

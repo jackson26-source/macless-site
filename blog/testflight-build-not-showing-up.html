@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why your TestFlight build doesn't show up after a successful upload — Macless</title>
+<meta name="description" content="Your CI log says the upload succeeded, but TestFlight shows nothing. Here's the silent App Store Connect rejection that causes it, and the one-line fix.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div style="display:flex; align-items:center; gap:22px;">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>Why your TestFlight build doesn't show up after a successful upload</h1>
+    <p class="hero-sub">This is the most confusing failure mode in the whole pipeline, because your CI log shows green the entire time.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>You push, the build runs, the archive and export steps succeed, the upload step succeeds, the workflow finishes green. You open App Store Connect to check on it and TestFlight shows... the previous build. Not a failed build. Not a processing build. Nothing new at all.</p>
+
+    <p>This one is genuinely confusing the first time it happens, because there's no error anywhere — everything you can see reports success.</p>
+
+    <h2>What's actually happening</h2>
+    <p>App Store Connect silently rejects an upload if it reuses the same marketing version <em>and</em> build number as a build you've already uploaded — even one from weeks ago. It considers that pair a duplicate. But the upload tool (<code class="mono">xcrun altool</code>, or <code class="mono">xcrun notarytool</code>/the newer transporter flows) reports a successful <em>file transfer</em> regardless — it uploaded the bytes fine, it just didn't tell you App Store Connect threw the result away on the other end.</p>
+    <p>So the failure genuinely happened, it's just invisible at the layer your CI log is watching.</p>
+
+    <h2>The fix</h2>
+    <p>Make sure your build number (<code class="mono">CURRENT_PROJECT_VERSION</code> in Xcode's build settings) changes on <em>every single</em> upload, even when your marketing version (<code class="mono">1.2.0</code>, the human-facing version) stays the same across several builds while you're iterating.</p>
+    <p>The reliable way to do this in GitHub Actions is to use GitHub's own per-workflow run counter instead of anything you maintain by hand:</p>
+    <pre class="demo">xcodebuild archive \
+  CURRENT_PROJECT_VERSION="$BUILD_NUMBER" \
+  ...
+
+<span class="dim"># where, earlier in the workflow:</span>
+env:
+  BUILD_NUMBER: ${{ github.run_number }}</pre>
+    <p><code class="mono">github.run_number</code> increments by one on every run of that specific workflow, forever, with no state you have to track yourself. It survives failed runs, manual re-runs, and branch changes — there's no scenario where two uploads accidentally land on the same number unless you've hardcoded it somewhere, which is the actual root cause most of the time: someone customized the archive step and dropped the dynamic build number in the process, usually while debugging something unrelated.</p>
+
+    <div class="callout">
+      <p><b>If you're already using a dynamic build number and this is still happening:</b> double check the substitution is actually reaching the archive command — a common way this breaks is the environment variable being set in the wrong step, or in a shell context that doesn't inherit it, so <code class="mono">$BUILD_NUMBER</code> silently expands to empty and Xcode falls back to whatever's hardcoded in the project file.</p>
+    </div>
+
+    <h2>How to confirm this is actually your problem</h2>
+    <p>In App Store Connect, under your app's TestFlight tab, look at "Build Activity" or the processing history rather than just the current builds list — a duplicate-version upload sometimes doesn't even appear there, since it's rejected before entering the processing queue at all. If you genuinely see nothing, and your CI log shows a clean upload, mismatched version/build numbers is the first thing to check before anything else — it's the cause behind the overwhelming majority of "upload succeeded but nothing shows up" reports.</p>
+    <p>Worth separately ruling out: App Store Connect processing does take a few minutes even on a successful, non-duplicate upload — if it's only been a minute or two, it may simply not have finished processing yet.</p>
+
+    <div class="cta-box">
+      <h2>This exact fix ships in the template</h2>
+      <p>The Macless workflow file sets <code class="mono">CURRENT_PROJECT_VERSION</code> from <code class="mono">github.run_number</code> by default, so this failure mode doesn't happen unless you specifically override it. Every other silent failure I hit shipping <a href="https://citolex.com" target="_blank" rel="noopener">Citolex</a> is documented the same way.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>

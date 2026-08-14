@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The actual cost of shipping an iOS app in 2026 — Macless</title>
+<meta name="description" content="Every line item for getting an app onto the App Store in 2026 — Apple's fee, hardware or CI, and what's actually optional — added up.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div style="display:flex; align-items:center; gap:22px;">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Guide</div>
+    <h1>The actual cost of shipping an iOS app in 2026</h1>
+    <p class="hero-sub">Every line item that's actually required, versus everything that's optional or a myth — added up so you know the total going in.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>"How much does it cost to put an app on the App Store" gets answered inconsistently online because most answers either only count Apple's fee, or only count hardware, or quietly assume you're renting expensive cloud infrastructure you don't actually need. Here's every cost, split into what's mandatory and what's a choice.</p>
+
+    <h2>Mandatory: Apple Developer Program — $99/year</h2>
+    <p>This is the one cost nobody can avoid. To submit any app to the App Store — free or paid, one app or fifty — you need an active Apple Developer Program membership, which is <b>$99/year</b>, billed annually, direct to Apple. There's no one-time version and no way around it; it's the toll for using App Store Connect, TestFlight, and code signing at all.</p>
+    <p>(There is a free-tier Apple ID you can register apps to for personal on-device testing without paying this, but it doesn't let you submit to TestFlight external testers or the App Store — for an actual public release, the $99/year membership is required.)</p>
+
+    <h2>Required, but where you have genuine choices: building and signing</h2>
+    <p>To submit a build, something has to run Xcode's command-line signing and archive tools — that part isn't optional. Where you have a choice is <i>what</i> runs it:</p>
+    <table class="compare">
+      <tr><th>Option</th><th>Cost</th><th>Recurring?</th></tr>
+      <tr><td>Buy a Mac</td><td><b>~$799+</b> (Mac mini, entry price)</td><td>No</td></tr>
+      <tr><td>Rent a cloud Mac (MacStadium, MacinCloud, etc.)</td><td><b>~$20–100+/month</b></td><td>Yes</td></tr>
+      <tr><td>GitHub Actions macOS runners, public repo</td><td><b>$0</b></td><td>No</td></tr>
+      <tr><td>GitHub Actions macOS runners, private repo</td><td><b>$0</b> up to a monthly allowance, then per-minute</td><td>Only if you exceed the free allowance</td></tr>
+    </table>
+    <p>Full breakdown of that last row (why macOS minutes burn through the free allowance faster than other CI) is in <a href="/blog/github-actions-free-macos-minutes-explained.html">this post</a>. The short version: on a public repo, this line item can legitimately be $0, indefinitely.</p>
+
+    <h2>Optional or one-time: the things people assume cost more than they do</h2>
+    <ul>
+      <li><b>App Store screenshots and marketing assets.</b> Apple requires screenshots in specific device sizes, but you can generate these yourself for free — from the Simulator or a physical device — no paid tooling required, just time.</li>
+      <li><b>A physical iPhone for testing.</b> Not strictly required to submit (the Simulator gets you most of the way), but you'll want one to sanity-check the finished app before release. If you don't already own one, this is the one cost this list doesn't have a workaround for — though a used or older-model iPhone is more than sufficient for testing.</li>
+      <li><b>TestFlight itself.</b> Free, included in the $99/year membership — no separate cost to distribute beta builds to testers.</li>
+      <li><b>App Store listing itself.</b> Free — no fee to list an app beyond the membership, whether you charge for the app or not.</li>
+    </ul>
+
+    <h2>Adding it up</h2>
+    <p>For someone shipping a side project on a public repo, using GitHub Actions instead of a Mac or a cloud rental:</p>
+    <pre class="demo">Apple Developer Program ....... $99/year  (mandatory)
+Build & sign (public repo CI) ..... $0    (GitHub Actions)
+Screenshots / assets .............. $0    (self-generated)
+TestFlight / listing .............. $0    (included)
+-----------------------------------------
+Total to actually ship ......... $99/year</pre>
+    <p>Compare that to the same app built with a purchased Mac (<b>~$898 first year</b>, then $99/year after) or a rented cloud Mac (<b>~$339–1,299 first year</b> depending on tier, then that same range every year after). The gap isn't small, and it's entirely in the "how do I run Xcode" line item — which is the one this whole approach exists to remove.</p>
+
+    <div class="callout">
+      <p><b>Worth flagging plainly:</b> the $0 build-cost row above is specific to public repositories. Keeping your code private doesn't change how the pipeline works or expose anything extra — it just switches you from unlimited free minutes to a metered monthly allowance, covered in the GitHub Actions post linked above. Still usually cheaper than a Mac or cloud rental, just not literally free.</p>
+    </div>
+
+    <div class="cta-box">
+      <h2>The setup that gets you to $99/year, not $99/month</h2>
+      <p>I built this pipeline shipping <a href="https://citolex.com" target="_blank" rel="noopener">Citolex</a> specifically because I didn't want a recurring Mac-rental bill on top of Apple's own fee. Macless packages the GitHub Actions workflow, signing scripts, and setup guide as a one-time $99 purchase — not a subscription.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>

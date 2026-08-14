@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub Actions' free macOS minutes, explained — Macless</title>
+<meta name="description" content="What's actually free on GitHub Actions' macOS runners, what isn't, and what a private repo costs on top of it.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div style="display:flex; align-items:center; gap:22px;">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Explainer</div>
+    <h1>GitHub Actions' free macOS minutes, explained</h1>
+    <p class="hero-sub">This whole approach to shipping iOS apps without a Mac hinges on one specific free tier. Here's exactly what it covers.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>GitHub Actions is GitHub's built-in CI/CD system — it spins up a fresh virtual machine, runs whatever commands you tell it to, and tears the machine down when it's done. It supports Linux, Windows, and macOS runners. The macOS runners are the interesting part here, because they're actual macOS machines with Xcode's command-line build tools available, which means they can build and sign iOS apps — not just run tests.</p>
+
+    <h2>The headline rule: public repos are free</h2>
+    <p>On a <b>public</b> repository, standard GitHub-hosted runner minutes — including macOS — don't cost anything, on any plan, including the free plan. This has been true for a long time and, as of GitHub's 2026 pricing update, standard runner usage on public repos explicitly remains free. It's a genuine free tier, not a trial or a limited allowance that runs out.</p>
+    <p>One nuance worth knowing: this free-on-public-repos rule covers <i>standard</i> runners. GitHub also offers "larger runners" (more CPU/RAM, for heavier workloads) — those are billed regardless of whether the repo is public or private. A default macOS build for signing and archiving a typical app doesn't need a larger runner, so this rarely matters in practice, but it's the one exception to "public repo = free."</p>
+
+    <h2>What changes on a private repo</h2>
+    <p>If your repository is private, you get a monthly allowance of free minutes instead of unlimited free usage, and the size of that allowance depends on your GitHub plan:</p>
+    <table class="compare">
+      <tr><th>Plan</th><th>Included minutes / month</th></tr>
+      <tr><td>Free</td><td><b>2,000</b></td></tr>
+      <tr><td>Pro</td><td><b>3,000</b></td></tr>
+      <tr><td>Team</td><td><b>3,000</b></td></tr>
+    </table>
+    <p>The number that actually matters for iOS builds, though, is how fast macOS runners burn through that allowance — because they don't count as one minute per minute.</p>
+
+    <h3>macOS minutes cost roughly 10x</h3>
+    <p>GitHub prices runner minutes per-OS, and applies a multiplier against your included minutes: Linux runners run at the baseline rate, and macOS runners run at roughly <b>10x</b> that rate. In practical terms, a 6-minute macOS build eats through the same allowance as roughly 60 minutes of Linux CI would.</p>
+    <p>Applied to the table above, that means a Free-plan private repo effectively gets around <b>200 macOS-runner-minutes</b> worth of free build time per month before you're billed per minute past it (Pro/Team works out to roughly 300). For a single app with occasional releases, that can be enough — for anything with frequent CI runs, it goes fast.</p>
+
+    <div class="callout">
+      <p><b>The practical upshot:</b> if you're fine building in the open, a public repo gets you unlimited macOS build minutes at zero cost, indefinitely. If you'd rather keep the code private, everything about the pipeline still works the same way — you're just drawing from a metered allowance instead of an unlimited one, and it still usually works out cheaper than a rented cloud Mac subscription. Repo visibility only changes CI minute pricing here; your signing certificates and credentials live in encrypted GitHub secrets either way, never exposed in the repo or logs regardless of visibility.</p>
+    </div>
+
+    <h2>What this doesn't cover</h2>
+    <p>Two things people sometimes assume are included but aren't:</p>
+    <ul>
+      <li><b>The Apple Developer Program fee.</b> Still $99/year, paid directly to Apple, completely separate from anything GitHub does. Free build minutes remove the Mac requirement, not Apple's own membership fee.</li>
+      <li><b>Storage and artifact retention.</b> GitHub Actions has separate limits/pricing for storing build artifacts and logs long-term — not usually a concern for a simple build → sign → upload pipeline where nothing needs to stick around after it's uploaded to App Store Connect, but worth knowing it's a distinct line item if you're archiving builds for later.</li>
+    </ul>
+
+    <p>Numbers and pricing tiers on GitHub's side can and do shift — this reflects GitHub's published billing documentation as of when this was written, so it's worth a quick check against <a href="https://docs.github.com/en/billing/concepts/product-billing/github-actions" target="_blank" rel="noopener">GitHub's current billing docs</a> if it's been a while.</p>
+
+    <div class="cta-box">
+      <h2>Wired up correctly from the start</h2>
+      <p>The Macless workflow file is built around the public-repo free tier by default, with the setup guide covering exactly what changes (and what it costs) if you need to go private. Same pipeline that shipped <a href="https://citolex.com" target="_blank" rel="noopener">Citolex</a>.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
