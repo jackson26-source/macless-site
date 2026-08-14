@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Macless — ship an iOS app without a Mac</title>
+<meta name="description" content="The GitHub Actions pipeline, signing scripts, and notes I used to build and submit a real App Store app without owning a Mac.">
+<style>
+  :root{
+    --bg: #faf8f3;
+    --bg-panel: #f2efe6;
+    --border: #e2ddd0;
+    --text: #24211c;
+    --text-dim: #6b6558;
+    --text-faint: #948d7c;
+    --accent: #a8461e;
+    --accent-ink: #ffffff;
+    --code-bg: #eeeae0;
+    --serif: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --mono: 'SF Mono', Menlo, Consolas, monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  a{ color: var(--accent); }
+  .wrap{ max-width: 640px; margin: 0 auto; padding: 0 24px; }
+  code, .mono{ font-family: var(--mono); }
+
+  h1, h2{ font-family: var(--serif); font-weight: 700; }
+
+  /* ---- header ---- */
+  header.site{ padding: 28px 0; border-bottom: 1px solid var(--border); }
+  .site-inner{ display:flex; align-items:center; justify-content:space-between; max-width:640px; margin:0 auto; padding:0 24px; }
+  .wordmark{ font-family: var(--serif); font-weight:700; font-size:18px; }
+  .site-inner a.pricelink{ font-size:14px; color: var(--text-dim); text-decoration:none; border-bottom:1px solid var(--border); }
+  .site-inner a.pricelink:hover{ color: var(--accent); border-color: var(--accent); }
+
+  /* ---- hero ---- */
+  .hero{ padding: 56px 0 8px; }
+  .eyebrow{ font-size: 14px; color: var(--text-faint); margin-bottom: 14px; }
+  h1{ font-size: 38px; line-height:1.2; margin-bottom: 18px; }
+  .hero-sub{ color: var(--text-dim); font-size: 18px; margin-bottom: 26px; max-width: 560px; }
+  .cta-row{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom: 8px; }
+  .btn{
+    display:inline-block; padding: 13px 22px; border-radius: 6px; font-weight:600; font-size:15.5px;
+    text-decoration:none; cursor:pointer; border: 1px solid transparent;
+  }
+  .btn-primary{ background: var(--text); color: #fdfcf9; }
+  .btn-primary:hover{ background: var(--accent); }
+  .btn-text{ color: var(--text-dim); font-size:14.5px; text-decoration:none; border-bottom:1px solid var(--border); }
+  .btn-text:hover{ color: var(--accent); border-color: var(--accent); }
+  .hero-note{ font-size: 13px; color: var(--text-faint); margin-top: 16px; }
+
+  /* ---- code block ---- */
+  pre.demo{
+    margin: 40px 0 0; background: var(--code-bg); border:1px solid var(--border); border-radius: 8px;
+    padding: 18px 20px; font-family: var(--mono); font-size: 13.5px; color: #3a362e; overflow-x:auto;
+  }
+  pre.demo .dim{ color: var(--text-faint); }
+
+  /* ---- note / story ---- */
+  .note{
+    margin: 48px 0; padding: 20px 0 20px 20px; border-left: 3px solid var(--border);
+    color: var(--text-dim); font-size: 16px;
+  }
+  .note b{ color: var(--text); }
+  .sig{ margin-top:12px; font-size:14px; color: var(--text-faint); }
+
+  /* ---- sections ---- */
+  section{ padding: 44px 0; border-top: 1px solid var(--border); }
+  h2{ font-size: 25px; margin-bottom: 16px; }
+  section > .wrap > p.lead{ color: var(--text-dim); margin-bottom: 20px; }
+
+  ol.steps, ul.plain{ list-style:none; margin-top: 8px; }
+  ol.steps li{ display:flex; gap: 14px; padding: 10px 0; font-size:15.5px; color: var(--text-dim); }
+  ol.steps li .n{ font-family: var(--serif); color: var(--text-faint); font-size:15px; flex-shrink:0; width:18px; }
+  ol.steps li b{ color: var(--text); }
+
+  ul.plain li{ padding: 11px 0; border-bottom: 1px solid var(--border); font-size:15.5px; }
+  ul.plain li:last-child{ border-bottom:none; }
+  ul.plain li b{ display:block; color: var(--text); margin-bottom: 2px; }
+  ul.plain li span{ color: var(--text-dim); font-size:14.5px; }
+
+  blockquote.proof{
+    margin-top: 30px; padding-left: 20px; border-left: 3px solid var(--accent);
+    color: var(--text-dim); font-size: 16px; font-style: italic;
+  }
+  blockquote.proof a{ display:inline-block; margin-top:10px; font-style:normal; font-size:14px; }
+
+  /* ---- pricing ---- */
+  .price-block{ margin-top: 12px; }
+  .price-tag{ font-family: var(--serif); font-size:44px; font-weight:700; margin: 6px 0 2px; }
+  .price-tag small{ font-size:16px; font-weight:400; color: var(--text-dim); font-family: var(--sans); }
+  .price-note{ color: var(--text-faint); font-size:14px; margin-bottom: 22px; }
+  .guarantee{ margin-top:16px; font-size:14px; color: var(--text-dim); }
+
+  /* ---- FAQ ---- */
+  .faq-item{ padding: 20px 0; border-bottom: 1px solid var(--border); }
+  .faq-item:last-child{ border-bottom:none; }
+  .faq-item h3{ font-size:16px; font-weight:700; margin-bottom:6px; font-family: var(--sans); }
+  .faq-item p{ font-size:15px; color: var(--text-dim); }
+
+  .final-cta{ text-align:left; padding: 50px 0 60px; }
+
+  footer{ border-top:1px solid var(--border); padding: 30px 0 50px; color: var(--text-faint); font-size:14px; }
+  footer a{ color: var(--text-dim); text-decoration:none; border-bottom:1px solid var(--border); }
+  footer a:hover{ color: var(--accent); border-color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <div class="wordmark">Macless</div>
+    <a class="pricelink" href="#pricing">$99, one-time →</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">No Mac. No rented Mac. No monthly CI bill.</div>
+    <h1>Ship a real iOS app to the App Store without ever owning a Mac</h1>
+    <p class="hero-sub">This is the GitHub Actions pipeline, signing scripts, and notes I used to build and submit an actual App Store app — using GitHub's free build servers and a web browser. Nothing else.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#pricing">Get the template — $99</a>
+      <a class="btn-text" href="#how">see how it works</a>
+    </div>
+    <div class="hero-note">One-time payment. Instant download. 30-day money-back guarantee.</div>
+
+    <pre class="demo"><span class="dim">$</span> git push origin main
+<span class="dim">→ GitHub spins up a macOS build machine (free, public repo)</span>
+<span class="dim">→ signs the app, archives it, exports a .ipa</span>
+<span class="dim">→ uploads to TestFlight</span>
+done. no Mac involved, nothing spent.</pre>
+
+    <div class="note">
+      I'm Jackson. I built <b>Citolex</b>, a speed-reading app, and wanted it on the App Store — but I don't own a Mac and wasn't going to rent one just to click a few buttons in Xcode. It turns out GitHub gives away free macOS build minutes on public repos. Normally that's used for running tests. I used it to build, sign, and upload the whole app instead. It worked, and Citolex actually shipped. This is that setup, cleaned up so you don't have to piece it together yourself.
+      <div class="sig">— Jackson</div>
+    </div>
+  </div>
+</div>
+
+<section id="how">
+  <div class="wrap">
+    <h2>What this replaces</h2>
+    <p class="lead">Normally, shipping an iOS app means owning a Mac (upwards of $600) or renting one in the cloud (usually $20–100+ a month) just to run Xcode long enough to sign and upload a build. This replaces that with a GitHub Actions workflow that does the same steps — for free, because GitHub doesn't charge for macOS runners on public repositories.</p>
+
+    <h2 style="margin-top:36px;">How it works</h2>
+    <ol class="steps">
+      <li><span class="n">1</span><span><b>You push code</b> to GitHub, same as any normal commit.</span></li>
+      <li><span class="n">2</span><span><b>GitHub starts a free macOS machine</b> and checks out your project onto it.</span></li>
+      <li><span class="n">3</span><span><b>A script fills in your bundle ID, App Group, and code signing</b> using secrets you set once — no clicking through Xcode.</span></li>
+      <li><span class="n">4</span><span><b>The command-line build tools archive the app</b> and export a signed <code class="mono">.ipa</code>.</span></li>
+      <li><span class="n">5</span><span><b>The build uploads straight to App Store Connect</b> / TestFlight.</span></li>
+      <li><span class="n">6</span><span>You never opened Xcode. You never touched a Mac.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="included">
+  <div class="wrap">
+    <h2>What's included</h2>
+    <p class="lead">Not just a workflow file you copy and hope works. The whole setup, written up the way I wish it existed before I had to figure it out myself.</p>
+
+    <ul class="plain">
+      <li><b>The GitHub Actions workflow</b><span>The actual build → sign → archive → upload pipeline, ready to drop into your project.</span></li>
+      <li><b>The signing script</b><span>Handles bundle ID, App Group, entitlements, and provisioning automatically.</span></li>
+      <li><b>A setup guide</b><span>Walks from an empty GitHub repo to a signed build in TestFlight, no steps skipped.</span></li>
+      <li><b>Certificate and secrets notes</b><span>How to generate every signing credential you need without opening Xcode.</span></li>
+      <li><b>An App Store Connect guide</b><span>Screenshot sizes, the export compliance question, App Privacy — the fields that aren't obvious the first time through.</span></li>
+      <li><b>A troubleshooting doc</b><span>The actual errors this pipeline hit while I was building it, and how I fixed each one.</span></li>
+    </ul>
+
+    <blockquote class="proof">
+      This is the exact pipeline behind Citolex — a real app with native Swift plugins that went from "is this even possible" to submitted for App Store review, without a single Mac. Every fix in the troubleshooting doc is one this pipeline actually needed.
+      <a href="https://citolex.com" target="_blank" rel="noopener">→ citolex.com</a>
+    </blockquote>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <h2>Price</h2>
+    <div class="price-block">
+      <div class="price-tag">$99 <small>one-time</small></div>
+      <div class="price-note">No subscription — you're already saving on a Mac, no reason to pay monthly on top of it.</div>
+      <ul class="plain" style="margin-bottom:22px;">
+        <li><span>Workflow file, signing script, setup guide, App Store Connect guide, and troubleshooting doc</span></li>
+        <li><span>Any future updates to the guide, included</span></li>
+      </ul>
+      <a class="btn btn-primary" href="https://buy.stripe.com/00w00l1CGbH47zOfeCfbq00">Get instant access — $99</a>
+      <div class="guarantee">30-day money-back guarantee. If you can't get a signed build out, email me and I'll refund it — no back-and-forth.</div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>Before you ask</h2>
+
+    <div class="faq-item">
+      <h3>Do I need any Apple hardware?</h3>
+      <p>No Mac to build or sign. You'll still want an iPhone to actually test the finished app — TestFlight installs directly on a real device.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Is this against Apple's or GitHub's rules?</h3>
+      <p>No. You're using GitHub's own free macOS minutes to build your own app, on your own repo, under your own Apple Developer account — exactly what they're for. This isn't reselling compute or running anyone else's builds.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Do I still need to pay Apple?</h3>
+      <p>Yes — the $99/year Apple Developer Program fee is separate and unavoidable. This removes the Mac requirement, not Apple's own fee.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What if I'm not using Capacitor?</h3>
+      <p>The signing and CI steps work no matter what generates your iOS project — Capacitor is just what my example app used. The guide covers plain Xcode projects too.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What if my repo needs to be private?</h3>
+      <p>The free build minutes are specifically a public-repo perk — private repos get a much smaller free allowance, and macOS minutes cost extra past that. The guide covers what a private setup would actually cost you.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What if I get stuck?</h3>
+      <p>Email me. The troubleshooting doc covers the real errors this pipeline produces, and if you genuinely can't get a build out within 30 days, I'll refund you.</p>
+    </div>
+  </div>
+</section>
+
+<div class="final-cta">
+  <div class="wrap">
+    <h2>Ready to give it a try?</h2>
+    <a class="btn btn-primary" href="#pricing">Get the template — $99</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    Questions before buying? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
