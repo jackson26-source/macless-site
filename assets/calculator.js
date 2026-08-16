@@ -4,6 +4,7 @@
   var monthlyInput = document.getElementById('monthlyCost');
   var monthsInput = document.getElementById('monthsPaying');
   var presetBtns = document.querySelectorAll('.preset-btn');
+  var stepperBtns = document.querySelectorAll('.stepper-btn');
   var copyBtn = document.getElementById('copyBtn');
   var copyStatus = document.getElementById('copyStatus');
 
@@ -49,6 +50,10 @@
     } else {
       breakEvenEl.textContent = breakEvenDays + ' day' + (breakEvenDays === 1 ? '' : 's');
     }
+
+    presetBtns.forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-value') === String(monthlyInput.value));
+    });
   }
 
   monthlyInput.addEventListener('input', recalc);
@@ -59,6 +64,20 @@
                 monthlyInput.value = btn.getAttribute('data-value');
       recalc();
         });
+  });
+
+  stepperBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var field = btn.parentElement.querySelector('input[type="number"]');
+      if (!field) return;
+      var dir = parseInt(btn.getAttribute('data-step'), 10) || 0;
+      var step = parseFloat(field.step) || 1;
+      var min = field.hasAttribute('min') ? parseFloat(field.min) : -Infinity;
+      var next = (parseFloat(field.value) || 0) + dir * step;
+      if (next < min) next = min;
+      field.value = next;
+      field.dispatchEvent(new Event('input', { bubbles: true }));
+    });
   });
 
   copyBtn.addEventListener('click', function () {

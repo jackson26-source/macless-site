@@ -54,6 +54,8 @@ h1{ font-size: 38px; line-height:1.2; margin-bottom: 18px; }
 .btn-primary:hover{ background: var(--accent); }
 .btn-text{ color: var(--text-dim); font-size:14.5px; text-decoration:none; border-bottom:1px solid var(--border); }
 .btn-text:hover{ color: var(--accent); border-color: var(--accent); }
+button.btn-text{ background:none; border:none; border-bottom:1px solid var(--border); border-radius:0; padding:0; font-family: var(--sans); cursor:pointer; }
+button.btn-text:hover{ background:none; }
 .hero-note{ font-size: 13px; color: var(--text-faint); margin-top: 16px; }
 .back-link{ display:block; margin: 28px 0 0; font-size: 14px; color: var(--text-faint); text-decoration:none; }
 .back-link:hover{ color: var(--accent); }
@@ -150,3 +152,56 @@ table.compare td b{ color: var(--text); }
 footer{ border-top:1px solid var(--border); padding: 30px 0 50px; color: var(--text-faint); font-size:14px; }
 footer a{ color: var(--text-dim); text-decoration:none; border-bottom:1px solid var(--border); }
 footer a:hover{ color: var(--accent); border-color: var(--accent); }
+
+/* ---- calculator ---- */
+.calc-box{ margin: 40px 0; padding: 28px 24px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 10px; }
+.calc-row{ margin-bottom: 22px; }
+.calc-row:last-child{ margin-bottom: 0; }
+.calc-row label{ display:block; font-size: 13px; font-weight:600; letter-spacing:.02em; color: var(--text-dim); margin-bottom: 10px; }
+
+.stepper{
+  display:flex; align-items:stretch; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  overflow:hidden; box-shadow: inset 0 1px 3px rgba(36,33,28,0.05); transition: border-color .15s ease, box-shadow .15s ease;
+}
+.stepper:focus-within{ border-color: var(--accent); box-shadow: 0 0 0 3px rgba(168,70,30,0.12); }
+.stepper-btn{
+  flex-shrink:0; width:44px; border:none; background:transparent; color: var(--text-faint);
+  font-family: var(--serif); font-size:21px; line-height:1; cursor:pointer; user-select:none;
+  display:flex; align-items:center; justify-content:center; transition: background .15s ease, color .15s ease;
+}
+.stepper-btn:hover{ background: var(--bg-panel); color: var(--accent); }
+.stepper-btn:active{ background: var(--border); }
+.stepper-field{ position:relative; flex:1; display:flex; align-items:center; border-left:1px solid var(--border); border-right:1px solid var(--border); }
+.stepper-field .prefix{ padding-left:14px; color: var(--text-faint); font-size:17px; pointer-events:none; }
+.stepper-field .suffix{ padding-right:14px; color: var(--text-faint); font-size:14px; pointer-events:none; }
+.stepper-field input[type="number"]{
+  width:100%; min-width:0; border:none; background:transparent; padding:12px 6px; text-align:center;
+  font-family: var(--serif); font-size:19px; color: var(--text); font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+}
+.stepper-field input[type="number"]:focus{ outline:none; }
+.stepper-field input[type="number"]::-webkit-outer-spin-button,
+.stepper-field input[type="number"]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+
+.presets{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+.preset-btn{
+  font-size: 13px; padding: 7px 12px; border-radius: 20px; border: 1px solid var(--border);
+  background: var(--bg); color: var(--text-dim); cursor: pointer; font-family: var(--sans);
+  transition: border-color .15s ease, color .15s ease, background-color .15s ease;
+}
+.preset-btn:hover{ border-color: var(--accent); color: var(--accent); }
+.preset-btn.active{ border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
+
+.result-panel{ margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--border); }
+.result-line{
+  display:grid; grid-template-columns: 1fr auto; align-items:baseline; column-gap: 20px;
+  padding: 10px 0; font-size: 15.5px; color: var(--text-dim); border-bottom: 1px solid var(--border);
+}
+.result-line:last-of-type{ border-bottom:none; }
+.result-line b{ color: var(--text); font-family: var(--serif); font-size: 20px; text-align:right; font-variant-numeric: tabular-nums; white-space:nowrap; }
+.result-headline{ font-family: var(--serif); font-size: 30px; font-weight:700; margin: 4px 0 4px; }
+.result-headline .accent{ color: var(--accent); }
+.result-sub{ color: var(--text-faint); font-size: 14px; margin-bottom: 20px; }
+.share-row{ display:flex; gap:14px; align-items:center; margin-top: 22px; flex-wrap:wrap; }
+#copyBtn{ cursor:pointer; }
+#copyStatus{ font-size: 13px; color: var(--text-faint); }
