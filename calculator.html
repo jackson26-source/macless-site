@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How much have you spent shipping iOS apps? — Macless</title>
+  <meta name="description" content="A 2-minute calculator: add up what you've actually paid for Mac rentals or cloud CI to ship iOS apps, and see it against a $99 one-time setup.">
+  <link rel="canonical" href="https://macless.dev/calculator.html">
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+    .calc-box{ margin: 40px 0; padding: 28px 24px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 10px; }
+  .calc-row{ margin-bottom: 20px; }
+  .calc-row label{ display:block; font-size: 14.5px; color: var(--text-dim); margin-bottom: 8px; }
+  .calc-row input[type="number"]{
+    width: 100%; font-family: var(--sans); font-size: 17px; padding: 11px 14px;
+    border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text);
+  }
+  .presets{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .preset-btn{
+        font-size: 13px; padding: 7px 12px; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text-dim); cursor: pointer; font-family: var(--sans);
+}
+  .preset-btn:hover{ border-color: var(--accent); color: var(--accent); }
+  .result-panel{ margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .result-line{ display:flex; justify-content:space-between; align-items:baseline; padding: 8px 0; font-size: 15.5px; color: var(--text-dim); }
+  .result-line b{ color: var(--text); font-family: var(--serif); font-size: 20px; }
+  .result-headline{ font-family: var(--serif); font-size: 30px; font-weight:700; margin: 4px 0 4px; }
+  .result-headline .accent{ color: var(--accent); }
+  .result-sub{ color: var(--text-faint); font-size: 14px; margin-bottom: 20px; }
+  .share-row{ display:flex; gap:14px; align-items:center; margin-top: 22px; flex-wrap:wrap; }
+  #copyBtn{ cursor:pointer; }
+  #copyStatus{ font-size: 13px; color: var(--text-faint); }
+</style>
+  </head>
+  <body>
+
+  <header class="site">
+    <div class="site-inner">
+      <a class="wordmark" href="/" style="text-decoration:none;">Macless</a>
+      <div style="display:flex; align-items:center; gap:22px;">
+        <a class="pricelink" href="/blog/">Blog</a>
+        <a class="pricelink" href="/#pricing">$99, one-time →</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="hero compact">
+    <div class="wrap">
+      <div class="eyebrow">A 2-minute gut check</div>
+    <h1>How much have you actually spent shipping iOS apps?</h1>
+    <p class="hero-sub">Rented Mac, CI minutes, a subscription you forgot to cancel — it adds up faster than people expect. Plug in what you're paying and see it next to a one-time $99.</p>
+    </div>
+  </div>
+
+  <section style="border-top:none; padding-top:8px;">
+    <div class="wrap">
+      <div class="calc-box">
+        <div class="calc-row">
+          <label for="monthlyCost">What are you paying per month right now, in total, for Mac access or iOS CI? ($)</label>
+          <input type="number" id="monthlyCost" min="0" step="1" value="79" inputmode="decimal">
+          <div class="presets">
+            <button type="button" class="preset-btn" data-value="79">MacStadium (~$79/mo)</button>
+            <button type="button" class="preset-btn" data-value="95">Codemagic (~$95/mo)</button>
+            <button type="button" class="preset-btn" data-value="45">Bitrise (~$45/mo)</button>
+            <button type="button" class="preset-btn" data-value="67">Mac mini, amortized (~$67/mo)</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label for="monthsPaying">How many months have you been paying this?</label>
+          <input type="number" id="monthsPaying" min="0" step="1" value="8" inputmode="decimal">
+        </div>
+
+        <div class="result-panel">
+          <div class="result-headline">You've spent <span class="accent" id="spentSoFar">$632</span> so far.</div>
+          <div class="result-sub">At this rate, a year of this costs <b id="yearlyCost">$948</b>.</div>
+
+        <div class="result-line"><span>One-time Macless setup</span><b>$99</b></div>
+        <div class="result-line"><span>You'd have broken even in</span><b id="breakEven">38 days</b></div>
+          <div class="result-line"><span>What you'd save this year alone</span><b id="savedThisYear">$849</b></div>
+
+          <div class="share-row">
+            <a class="btn btn-primary" href="/#pricing">Get the template — $99</a>
+            <button type="button" id="copyBtn" class="btn-text">Copy my result to share</button>
+          <span id="copyStatus"></span>
+        </div>
+        </div>
+      </div>
+
+      <p style="color:var(--text-faint); font-size:13px; margin-top:-8px;">Ballpark numbers for comparison, not a quote from any of these services — check their current pricing directly. Macless doesn't include the $99/year Apple Developer fee, which you'd pay either way.</p>
+    </div>
+  </section>
+
+  <a class="back-link wrap" href="/">← back to macless.dev</a>
+
+  <footer>
+    <div class="wrap">
+      Questions before buying? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+      Built by Jackson · 2026
+    </div>
+  </footer>
+
+  <script src="/assets/calculator.js"></script>
+  </body>
+  </html>
+  
