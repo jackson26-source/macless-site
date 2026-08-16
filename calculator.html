@@ -12,9 +12,24 @@
   .calc-row{ margin-bottom: 20px; }
   .calc-row label{ display:block; font-size: 14.5px; color: var(--text-dim); margin-bottom: 8px; }
   .calc-row input[type="number"]{
-    width: 100%; font-family: var(--sans); font-size: 17px; padding: 11px 14px;
+    width: 100%; font-family: var(--sans); font-size: 17px; padding: 12px 14px;
     border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text);
+    -moz-appearance: textfield; transition: border-color .15s ease, box-shadow .15s ease;
   }
+    .calc-row input[type="number"]::-webkit-outer-spin-button,
+    .calc-row input[type="number"]::-webkit-inner-spin-button{
+      -webkit-appearance: none; margin: 0;
+    }
+    .calc-row input[type="number"]:hover{ border-color: #cfc7b3; }
+    .calc-row input[type="number"]:focus{
+      outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(168,70,30,0.12);
+    }
+    .input-money{ position: relative; }
+    .input-money .prefix{
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-faint); font-size: 17px; pointer-events: none;
+    }
+    .input-money input[type="number"]{ padding-left: 28px; }
   .presets{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
   .preset-btn{
         font-size: 13px; padding: 7px 12px; border-radius: 20px; border: 1px solid var(--border);
@@ -37,7 +52,7 @@
   <header class="site">
     <div class="site-inner">
       <a class="wordmark" href="/" style="text-decoration:none;">Macless</a>
-      <div style="display:flex; align-items:center; gap:22px;">
+            <div class="nav-links">
         <a class="pricelink" href="/blog/">Blog</a>
         <a class="pricelink" href="/#pricing">$99, one-time →</a>
       </div>
@@ -56,8 +71,11 @@
     <div class="wrap">
       <div class="calc-box">
         <div class="calc-row">
-          <label for="monthlyCost">What are you paying per month right now, in total, for Mac access or iOS CI? ($)</label>
-          <input type="number" id="monthlyCost" min="0" step="1" value="79" inputmode="decimal">
+          <label for="monthlyCost">What are you paying per month right now, in total, for Mac access or iOS CI?</label>
+          <div class="input-money">
+            <span class="prefix">$</span>
+            <input type="number" id="monthlyCost" min="0" step="1" value="79" inputmode="decimal">
+          </div>
           <div class="presets">
             <button type="button" class="preset-btn" data-value="79">MacStadium (~$79/mo)</button>
             <button type="button" class="preset-btn" data-value="95">Codemagic (~$95/mo)</button>
