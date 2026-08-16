@@ -31,6 +31,7 @@ h1, h2{ font-family: var(--serif); font-weight: 700; }
 header.site{ padding: 28px 0; border-bottom: 1px solid var(--border); }
 .site-inner{ display:flex; align-items:center; justify-content:space-between; max-width:640px; margin:0 auto; padding:0 24px; }
 .wordmark{ font-family: var(--serif); font-weight:700; font-size:18px; text-decoration:none; color:var(--text); }
+.nav-links{ display:flex; align-items:center; gap:36px; }
 .site-inner a.pricelink{ font-size:14px; color: var(--text-dim); text-decoration:none; border-bottom:1px solid var(--border); }
 .site-inner a.pricelink:hover{ color: var(--accent); border-color: var(--accent); }
 
