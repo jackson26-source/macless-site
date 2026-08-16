@@ -7,52 +7,13 @@
   <meta name="description" content="A 2-minute calculator: add up what you've actually paid for Mac rentals or cloud CI to ship iOS apps, and see it against a $99 one-time setup.">
   <link rel="canonical" href="https://macless.dev/calculator.html">
   <link rel="stylesheet" href="/assets/site.css">
-  <style>
-    .calc-box{ margin: 40px 0; padding: 28px 24px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 10px; }
-  .calc-row{ margin-bottom: 20px; }
-  .calc-row label{ display:block; font-size: 14.5px; color: var(--text-dim); margin-bottom: 8px; }
-  .calc-row input[type="number"]{
-    width: 100%; font-family: var(--sans); font-size: 17px; padding: 12px 14px;
-    border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text);
-    -moz-appearance: textfield; transition: border-color .15s ease, box-shadow .15s ease;
-  }
-    .calc-row input[type="number"]::-webkit-outer-spin-button,
-    .calc-row input[type="number"]::-webkit-inner-spin-button{
-      -webkit-appearance: none; margin: 0;
-    }
-    .calc-row input[type="number"]:hover{ border-color: #cfc7b3; }
-    .calc-row input[type="number"]:focus{
-      outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(168,70,30,0.12);
-    }
-    .input-money{ position: relative; }
-    .input-money .prefix{
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      color: var(--text-faint); font-size: 17px; pointer-events: none;
-    }
-    .input-money input[type="number"]{ padding-left: 28px; }
-  .presets{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
-  .preset-btn{
-        font-size: 13px; padding: 7px 12px; border-radius: 20px; border: 1px solid var(--border);
-    background: var(--bg); color: var(--text-dim); cursor: pointer; font-family: var(--sans);
-}
-  .preset-btn:hover{ border-color: var(--accent); color: var(--accent); }
-  .result-panel{ margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); }
-  .result-line{ display:flex; justify-content:space-between; align-items:baseline; padding: 8px 0; font-size: 15.5px; color: var(--text-dim); }
-  .result-line b{ color: var(--text); font-family: var(--serif); font-size: 20px; }
-  .result-headline{ font-family: var(--serif); font-size: 30px; font-weight:700; margin: 4px 0 4px; }
-  .result-headline .accent{ color: var(--accent); }
-  .result-sub{ color: var(--text-faint); font-size: 14px; margin-bottom: 20px; }
-  .share-row{ display:flex; gap:14px; align-items:center; margin-top: 22px; flex-wrap:wrap; }
-  #copyBtn{ cursor:pointer; }
-  #copyStatus{ font-size: 13px; color: var(--text-faint); }
-</style>
   </head>
   <body>
 
   <header class="site">
     <div class="site-inner">
       <a class="wordmark" href="/" style="text-decoration:none;">Macless</a>
-            <div class="nav-links">
+      <div class="nav-links">
         <a class="pricelink" href="/blog/">Blog</a>
         <a class="pricelink" href="/#pricing">$99, one-time →</a>
       </div>
@@ -72,9 +33,13 @@
       <div class="calc-box">
         <div class="calc-row">
           <label for="monthlyCost">What are you paying per month right now, in total, for Mac access or iOS CI?</label>
-          <div class="input-money">
-            <span class="prefix">$</span>
-            <input type="number" id="monthlyCost" min="0" step="1" value="79" inputmode="decimal">
+          <div class="stepper">
+            <button type="button" class="stepper-btn" data-step="-1" aria-label="Decrease">−</button>
+            <div class="stepper-field">
+              <span class="prefix">$</span>
+              <input type="number" id="monthlyCost" min="0" step="1" value="79" inputmode="decimal">
+            </div>
+            <button type="button" class="stepper-btn" data-step="1" aria-label="Increase">+</button>
           </div>
           <div class="presets">
             <button type="button" class="preset-btn" data-value="79">MacStadium (~$79/mo)</button>
@@ -85,7 +50,14 @@
         </div>
         <div class="calc-row">
           <label for="monthsPaying">How many months have you been paying this?</label>
-          <input type="number" id="monthsPaying" min="0" step="1" value="8" inputmode="decimal">
+          <div class="stepper">
+            <button type="button" class="stepper-btn" data-step="-1" aria-label="Decrease">−</button>
+            <div class="stepper-field">
+              <input type="number" id="monthsPaying" min="0" step="1" value="8" inputmode="decimal">
+              <span class="suffix">months</span>
+            </div>
+            <button type="button" class="stepper-btn" data-step="1" aria-label="Increase">+</button>
+          </div>
         </div>
 
         <div class="result-panel">
