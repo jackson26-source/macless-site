@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ionic Appflow alternative — Appflow shuts down Dec 31, 2027</title>
+<meta name="description" content="Ionic Appflow is shutting down December 31, 2027. If you're on it now, here's what to actually consider when picking what replaces it — including a one-time-cost option most comparisons don't mention.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/subscription-calculator.html">Cost comparison</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <div class="eyebrow" style="margin-top:18px;">Ionic Appflow is shutting down</div>
+    <h1>Looking for an Ionic Appflow alternative?</h1>
+    <p class="hero-sub">Appflow shuts down December 31, 2027. If that's your current CI/CD, the question isn't "should I switch" — it's already "what do I switch to." Here's what's actually worth weighing.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>Appflow bundled build, deploy, and native update tooling for Ionic/Capacitor apps into one managed service. Whatever replaces it for you needs to cover at least the build-and-ship half — getting a signed iOS (and usually Android) build out to the App Store / Play Store — since that's the part that actually blocks you from shipping at all.</p>
+
+    <h2>What to actually compare</h2>
+    <p>Every replacement option falls into one of two shapes: a metered service you pay monthly or per-build (Codemagic, Bitrise, Xcode Cloud), or a pipeline you set up once and own — no ongoing bill tied to how much you build. Most "Appflow alternative" writeups only compare the first kind against each other. The real fork in the road is which of the two shapes you want, not just which specific vendor.</p>
+
+    <table class="compare">
+      <tr><th>Option</th><th>Shape</th><th>1-year cost*</th></tr>
+      <tr><td><b>Macless</b></td><td>One-time pipeline, self-hosted on GitHub Actions</td><td><b>$99 once</b></td></tr>
+      <tr><td>Xcode Cloud</td><td>Metered, monthly past 25 free hrs/mo</td><td>~$600</td></tr>
+      <tr><td>Bitrise</td><td>Metered, monthly</td><td>~$1,068</td></tr>
+      <tr><td>Codemagic</td><td>Metered, monthly or per-build</td><td>~$3,990</td></tr>
+    </table>
+    <p style="font-size:14px; color:var(--muted);">*Full breakdown, including 3-year figures and current published pricing for each: <a href="/subscription-calculator.html">/subscription-calculator.html</a>.</p>
+
+    <div class="callout">
+      <p><b>If you were relying on Appflow's native updates (live-push JS/HTML updates without an App Store review):</b> none of the options above replace that specific feature — that's a separate concern from CI/CD, worth evaluating independently (Capgo and a few others focus specifically on that space). This page is only about the build-and-ship half.</p>
+    </div>
+
+    <h2>Why this is worth checking now, not in 2027</h2>
+    <p>A CI/CD switch touches signing certificates, provisioning profiles, and however your team's build secrets are currently stored in Appflow — none of that migrates automatically. Doing it under a hard deadline at the end of 2027, alongside everyone else on Appflow doing the same thing at once, is worse than doing it on your own schedule now.</p>
+
+    <div class="cta-box">
+      <h2>Own the pipeline once, not the meter</h2>
+      <p>Same end result — a signed build in TestFlight (and optionally Google Play) — for a one-time $99 instead of a bill that keeps going after Appflow's gone.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>

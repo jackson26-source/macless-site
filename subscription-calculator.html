@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Macless vs. Codemagic, Bitrise, Xcode Cloud — real cost over time</title>
+<meta name="description" content="A one-time $99 pipeline vs. the subscription CI services — what each actually costs over 1 and 3 years, with current pricing.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/calculator.html">What are you paying now?</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <div class="eyebrow" style="margin-top:18px;">Comparison</div>
+    <h1>Macless vs. the subscription CI services</h1>
+    <p class="hero-sub">Codemagic, Bitrise, and Xcode Cloud all do something similar to this pipeline — but they bill monthly or per-build, forever. Here's what each actually costs over 1 and 3 years, using their current published pricing.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>Every option below still requires Apple's own $99/year Developer Program membership — that's unavoidable no matter which CI approach you use, so it's left out of the table below on purpose. What's compared here is only the cost of the thing that actually builds and signs your app.</p>
+
+    <table class="compare">
+      <tr><th>Service</th><th>Free tier</th><th>Cheapest paid tier</th><th>1-year cost*</th><th>3-year cost*</th></tr>
+      <tr>
+        <td><b>Macless</b></td>
+        <td>—</td>
+        <td>$99 once</td>
+        <td><b>$99</b></td>
+        <td><b>$99</b></td>
+      </tr>
+      <tr>
+        <td>Xcode Cloud</td>
+        <td>25 compute hrs/mo (included free with the Apple Developer Program everyone already pays for)</td>
+        <td>$49.99/mo for 100 hrs</td>
+        <td>~$600</td>
+        <td>~$1,800</td>
+      </tr>
+      <tr>
+        <td>Bitrise</td>
+        <td>1 private app, 300 credits/mo</td>
+        <td>$89/mo billed annually</td>
+        <td>~$1,068</td>
+        <td>~$3,204</td>
+      </tr>
+      <tr>
+        <td>Codemagic</td>
+        <td>500 build-minutes/mo</td>
+        <td>$3,990/yr fixed plan (or pay-per-minute, $0.095/min on Mac)</td>
+        <td>~$3,990</td>
+        <td>~$11,970</td>
+      </tr>
+    </table>
+    <p style="font-size:14px; color:var(--muted);">*Once your usage outgrows each service's free tier — a single side project might stay inside Xcode Cloud's or Codemagic's free allowance for a while. Macless's cost doesn't depend on usage at all, because it's not metered — you own the pipeline once it's set up.</p>
+
+    <div class="callout">
+      <p><b>Worth noting if you're currently on Ionic Appflow:</b> Appflow is shutting down December 31, 2027. If that's your current setup, the actual decision isn't "should I switch" — it's "what do I switch to," and this comparison is exactly that question.</p>
+    </div>
+
+    <h2>Why the gap is this big</h2>
+    <p>Macless isn't cheaper because it does less — it runs the same build-sign-archive-upload steps, on the same category of macOS runner. The difference is the business model: Codemagic, Bitrise, and Xcode Cloud sell you their infrastructure and charge for every minute you use it, indefinitely. Macless sells you the pipeline itself, once, running on GitHub's own free-for-public-repos macOS minutes — there's no usage meter because there's no ongoing service to meter.</p>
+
+    <p style="font-size:14px; color:var(--muted);">More specific comparisons: <a href="/xcode-cloud-vs-macless.html">Xcode Cloud vs Macless</a> · <a href="/ionic-appflow-alternative.html">Ionic Appflow alternative</a></p>
+
+    <div class="cta-box">
+      <h2>Own the pipeline once, not the meter</h2>
+      <p>Same category of result — a signed build in TestFlight — for a one-time $99 instead of a recurring bill that scales with how much you actually ship.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
