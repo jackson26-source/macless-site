@@ -69,6 +69,7 @@ done. no Mac involved, nothing spent.</pre>
 
     <ul class="plain">
       <li><b>The GitHub Actions workflow</b><span>The actual build → sign → archive → upload pipeline, ready to drop into your project.</span></li>
+      <li><b>A Simulator-preview workflow</b><span>Builds your app and screenshots it running in the iOS Simulator, on GitHub's own servers — no signing setup, no Apple hardware, so you can see it before you've configured anything else.</span></li>
       <li><b>The signing script</b><span>Handles bundle ID, App Group, entitlements, and provisioning automatically.</span></li>
       <li><b>A setup guide</b><span>Walks from an empty GitHub repo to a signed build in TestFlight, no steps skipped.</span></li>
       <li><b>Certificate and secrets notes</b><span>How to generate every signing credential you need without opening Xcode.</span></li>
@@ -110,7 +111,7 @@ done. no Mac involved, nothing spent.</pre>
 
     <div class="faq-item">
       <h3>Do I need any Apple hardware?</h3>
-      <p>No Mac to build or sign. You'll still want an iPhone to actually test the finished app — TestFlight installs directly on a physical device.</p>
+      <p>No. No Mac to build or sign — and no iPhone or iPad to see it running, either. The template includes a built-in Simulator-preview workflow: it builds your app and boots an iOS Simulator right on GitHub's own servers, then hands you a screenshot, so you can check that it actually launches and looks right without owning any Apple hardware. (A real device is still the last word before you actually submit — camera, push notifications, and true on-device performance can't be fully checked in a Simulator — but it's no longer something you need just to get started.)</p>
     </div>
     <div class="faq-item">
       <h3>Is this against Apple's or GitHub's rules?</h3>
