@@ -35,6 +35,16 @@ header.site{ padding: 28px 0; border-bottom: 1px solid var(--border); }
 .site-inner a.pricelink{ font-size:14px; color: var(--text-dim); text-decoration:none; border-bottom:1px solid var(--border); }
 .site-inner a.pricelink:hover{ color: var(--accent); border-color: var(--accent); }
 
+/* ---- responsive header ----
+   The header row (wordmark + nav links) doesn't fit on phone-width
+   screens at its default single-row layout, which was overflowing
+   the viewport and forcing horizontal scroll on the whole page.
+   Below 640px, let it wrap onto its own row(s) instead. */
+@media (max-width: 640px){
+  .site-inner{ flex-wrap: wrap; row-gap: 10px; }
+  .nav-links{ width: 100%; flex-wrap: wrap; gap: 10px 20px; row-gap: 8px; }
+}
+
 /* ---- hero (landing page + post/index heroes) ---- */
 .hero{ padding: 56px 0 8px; }
 .hero.compact{ padding: 48px 0 8px; }
@@ -103,6 +113,14 @@ blockquote.proof a{ display:inline-block; margin-top:10px; font-style:normal; fo
 .price-tag small{ font-size:16px; font-weight:400; color: var(--text-dim); font-family: var(--sans); }
 .price-note{ color: var(--text-faint); font-size:14px; margin-bottom: 22px; }
 .guarantee{ margin-top:16px; font-size:14px; color: var(--text-dim); }
+
+.price-block-alt{
+  margin-top: 32px; padding: 24px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-panel);
+}
+.price-block-alt h3{ font-family: var(--serif); font-size: 19px; margin-bottom: 8px; }
+.price-block-alt .price-tag{ font-size: 32px; }
+.btn-secondary{ background: transparent; color: var(--text); border: 1px solid var(--text); }
+.btn-secondary:hover{ background: var(--text); color: #fdfcf9; }
 
 /* ---- FAQ ---- */
 .faq-item{ padding: 20px 0; border-bottom: 1px solid var(--border); }
