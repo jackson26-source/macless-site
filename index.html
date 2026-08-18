@@ -98,6 +98,14 @@ done. no Mac involved, nothing spent.</pre>
       <div class="guarantee">30-day money-back guarantee. If you can't get a signed build out, email me and I'll refund it — no back-and-forth.</div>
     </div>
 
+    <div class="price-block-alt" id="android">
+      <h3>Only need Android?</h3>
+      <div class="price-tag">$39 <small>one-time</small></div>
+      <div class="price-note">The Android-only cut of the same pipeline — build, sign, and upload a Play-Store-ready <code class="mono">.aab</code> via GitHub Actions, no monthly CI subscription. Android builds never needed a Mac in the first place, so this one's priced for just that.</div>
+      <a class="btn btn-secondary" href="https://buy.stripe.com/9B6dRbftw4eC6vKd6ufbq01">Get the Android template — $39</a>
+      <div class="guarantee">Same 30-day money-back guarantee.</div>
+    </div>
+
     <div class="note" style="margin-top:26px;">
       <b>Would rather I just set it up for you?</b> I'll configure the whole pipeline directly on your repo — signing, provisioning, the works — so you never touch any of it yourself. Starting at $299, final quote after a quick look at your project.
       <div class="sig"><a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a></div>
@@ -132,6 +140,10 @@ done. no Mac involved, nothing spent.</pre>
     <div class="faq-item">
       <h3>What if my repo needs to be private?</h3>
       <p>Private repos work exactly the same way — nothing about the pipeline changes. The only difference is GitHub's free-minutes allowance: public repos get unlimited free macOS build minutes, private repos get a monthly allowance before you're billed per minute past it (still usually cheaper than a rented Mac). Either way, your signing certificates and credentials are stored as encrypted GitHub secrets — they're never exposed in your repo or build logs, public or private.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What if I only need Android, not iOS?</h3>
+      <p>There's a <a href="#android">separate $39 Android-only template</a> — the same live-tested GitHub Actions workflow, just without the iOS signing and build steps you'd never use. Android builds never needed a Mac to begin with, so this one's priced for that.</p>
     </div>
     <div class="faq-item">
       <h3>What if I get stuck?</h3>
