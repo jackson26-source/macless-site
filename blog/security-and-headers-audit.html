@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A header scan says 16/16. Here's what it can't see — Macless</title>
+<meta name="description" content="A reader's header scan caught six missing headers on macless.dev — real gaps, now fixed. He also pointed out a scan can't see the CI pipeline underneath. Here's what I checked there, and the two real fixes it turned up.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Security</div>
+    <h1>A header scan says 16/16. Here's what it can't see.</h1>
+    <p class="hero-sub">A reader caught six real missing headers on macless.dev. Getting to 16/16 clean was the easy part — the harder, more useful question he asked afterward was what a header scan can't see.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>A few days after this blog went up on dev.to, a reader named Amit Feldman left a comment with an actual finding, not a vague warning: macless.dev was fast and the on-page SEO was tidy, but HSTS, Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, and Permissions-Policy were all missing. Six headers, zero excuses — the site's on GitHub Pages, and Pages doesn't let you set custom response headers at all. That's just how the platform works, and it's an easy thing to never notice if nobody runs the scan.</p>
+
+    <p>The fix was straightforward once it was named: keep the site on Pages, put Cloudflare in front of the custom domain, and add the header set with a Response Header Transform Rule. HSTS is a toggle under Edge Certificates. None of it touches the deploy workflow. Amit re-scanned twice more as things landed — first the five easy headers, then a properly tight Content-Security-Policy (<code class="mono">default-src 'self'; script-src 'none'</code>, since the page ships zero JavaScript, nothing to break) — and macless.dev sits at 16 passed, 0 warnings, 0 failures now. He's writing that before/after up as its own case study, which is a nicer way to end up getting linked than most.</p>
+
+    <p>His follow-up point was the more useful one. A header scan reads what a browser receives — it says nothing about what a CI pipeline does with your signing certificates. Macless <em>is</em> a signing pipeline: GitHub Actions, code-signing certificates, App Store Connect and Google Play credentials. A header scan can't tell you whether a cert is sitting in the repo, whether a workflow echoes a secret into its log, or whether a token is scoped wider than it needs to be. That's a fair distinction between two different layers, so rather than take anyone's word for either layer, I went and checked the second one directly.</p>
+
+    <h2>What "actually checked" means here</h2>
+    <p>Not a policy review. A search of the real git history of both <code class="mono">appledev</code> (Citolex's source) and the Macless product template, plus a read-through of every workflow file line by line:</p>
+    <ul>
+      <li>Full commit history (not just current files) searched for any certificate, private key, or keystore ever committed and later removed.</li>
+      <li>Every workflow checked for secrets interpolated directly into shell commands versus passed through <code class="mono">env:</code> (the safer pattern — GitHub can mask an env-sourced secret in logs; a value pasted straight into a <code class="mono">run:</code> string is both a log-exposure and shell-injection risk).</li>
+      <li>Checked for <code class="mono">set -x</code>/<code class="mono">set -ex</code>, which would dump every command — including expanded secret values — into the public build log.</li>
+      <li>Checked what triggers each workflow. <code class="mono">pull_request_target</code> combined with secrets is the classic way a fork PR exfiltrates credentials from a public repo; none of these workflows use it.</li>
+      <li>Traced exactly where decoded certs and keystores get written during a build — ephemeral runner temp storage that dies with the job, or the repo working directory that could get committed or accidentally artifact-uploaded.</li>
+      <li>Checked the actual GitHub Actions secret scoping this template's own docs tell you to set up (App Store Connect API key role, Play Console service account role).</li>
+    </ul>
+
+    <h2>What was already clean</h2>
+    <p>No certificate, key, or keystore file has ever been committed to either repo, at any point in their history. Secrets are passed through <code class="mono">env:</code> blocks, not interpolated into shell strings. Nothing sets <code class="mono">-x</code>. Every workflow triggers on <code class="mono">push</code> or <code class="mono">workflow_dispatch</code> only — nothing runs on a fork's pull request, so there's no path for an outside contributor to exfiltrate a secret through a crafted PR. Decoded cert and keystore material only ever lands in the runner's ephemeral temp directory, never the repo itself, and the artifact-upload steps grab specific screenshot files, not whole build directories. The documented credential roles (App Store Connect "App Manager," Play Console "Release manager") were already scoped down from full admin access.</p>
+
+    <h2>Two real things, both fixed</h2>
+    <p>Not everything was already perfect — two genuine, if minor, gaps:</p>
+
+    <p><b>1. No explicit <code class="mono">permissions:</code> block.</b> None of these workflows push commits, open PRs, or otherwise need to write back to the repo — they build, sign, and upload. Without an explicit block, <code class="mono">GITHUB_TOKEN</code> inherits whatever the repo or org default is, which can be broader than a workflow actually needs. Fixed by adding this to the top of every workflow:</p>
+    <pre class="demo">permissions:
+  contents: read</pre>
+
+    <p><b>2. No <code class="mono">.gitignore</code> for signing material.</b> SIGNING.md and ANDROID.md walk you through generating a real certificate or keystore with <code class="mono">openssl</code>/<code class="mono">keytool</code>. Nothing in the docs stopped someone from running those commands inside their project folder, and a plain <code class="mono">git add .</code> afterward would have committed a real private key. Fixed two ways: a <code class="mono">.gitignore</code> now ships with the template covering <code class="mono">*.p12 *.key *.cer *.pem *.mobileprovision *.keystore *.jks *_base64.txt</code>, and both docs now say plainly to generate this material from a scratch folder outside the repo, not inside it.</p>
+
+    <div class="callout">
+      <p><b>If you're building something similar:</b> both of these are worth checking in any CI pipeline that handles signing material, not just this one. An explicit <code class="mono">permissions:</code> block costs three lines and closes off a class of supply-chain risk for free. A <code class="mono">.gitignore</code> that anticipates exactly which files your setup docs are about to tell someone to generate is cheap insurance against the single most common way a real credential ends up in a public repo — someone followed the instructions correctly, in the wrong directory.</p>
+    </div>
+
+    <h2>Where this leaves things</h2>
+    <p>Both CI fixes are live now — in Citolex's own repo and in the Macless product template everyone downloads. The header layer Amit caught is fixed and independently reverified at 16/16. Worth being straightforward about the rest of that comment too: alongside the case-study offer, the same message pitched a paid $99 follow-on audit covering exactly this CI/secrets layer. Given he'd already found three real things for free, that's not an unreasonable thing to charge for — I just happened to be able to check it myself directly, in about twenty minutes, using the repos' own git history rather than a read-only link handed to someone else. Two real, minor issues turned up, same as the header pass did. Thanks are owed either way: the header catch was real, the nudge to check the layer underneath it was a good one, and the case study is a fair trade for both.</p>
+
+    <div class="cta-box">
+      <h2>The security-relevant parts, in the template itself</h2>
+      <p>SIGNING.md and ANDROID.md now warn you before you generate anything, every workflow ships with a scoped-down <code class="mono">permissions:</code> block, and the <code class="mono">.gitignore</code> is there as a backstop either way.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
