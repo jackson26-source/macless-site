@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Set it up once. Stop thinking about it. — Macless</title>
+<meta name="description" content="A setup wizard that runs the fiddly signing commands for you, a free Signing Doctor that now checks Android keystores too, and a workflow that catches an expiring certificate before it catches you. Here's what shipped and why.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">What shipped</div>
+    <h1>Set it up once. Stop thinking about it.</h1>
+    <p class="hero-sub">Macless already got you off Xcode and off a monthly CI bill. The part that was still on you was the signing setup itself — running commands by hand, and hoping you'd notice before a certificate expired. Three things shipped this week to close that gap.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>The whole pitch of Macless is that you shouldn't need a Mac, a rented cloud Mac, or a monthly CI subscription to ship an iOS or Android app — GitHub's free build minutes and a workflow file do the job Xcode used to. That part's been true since Citolex shipped on it. But there was a second, quieter kind of manual work I hadn't fully gotten rid of: generating the signing certificates and keystores in the first place, pasting the right base64 blobs into the right GitHub secrets, and then just... remembering that certificates expire, on your own, with no reminder, until a build fails the week you actually needed it to work.</p>
+
+    <p>That's the part I went after this week. Not the pipeline — the setup and the upkeep around it. Three things, all live in the template now.</p>
+
+    <h2>A wizard that runs the commands for you</h2>
+    <p><code class="mono">generate_signing_secrets.sh</code> already handled iOS. It now walks through Android too — generating a real keystore with <code class="mono">keytool</code>, base64-encoding it, and telling you exactly which GitHub secret each value goes into. If you have the <code class="mono">gh</code> CLI installed, it'll offer to push the secrets straight to your repo for you, so there's no copy-pasting eight values into a settings page by hand. And when it's done, it can hand off straight into Signing Doctor to confirm the keystore it just built is actually valid — not "the script exited zero," but an actual check that it works.</p>
+
+    <pre class="demo"><span class="dim">$</span> ./scripts/generate_signing_secrets.sh
+<span class="dim">→ generates the keystore, encodes it, shows you what to paste</span>
+<span class="dim">→ offers to push it to GitHub for you via gh</span>
+<span class="dim">→ hands off to Signing Doctor to confirm it's good</span>
+no manual keytool flags, no guessing which secret name goes where.</pre>
+
+    <h2>Signing Doctor now reads Android keystores</h2>
+    <p>Signing Doctor is the free diagnostic tool I built alongside Macless — point it at your signing material and it tells you what's actually wrong, instead of you guessing from a cryptic Xcode or Gradle error. It's always checked iOS certificates and provisioning profiles. It now checks Android keystores the same way: alias, validity window, whether the password you think you have actually opens it. Same tool, same free download, one more thing it won't let slip past you.</p>
+
+    <h2>A workflow that checks before you ship, not after</h2>
+    <p>The one I think matters most: <code class="mono">check-expiry.yml</code>, a scheduled GitHub Actions workflow that runs weekly against your own signing secrets and tells you if anything's getting close to expiring — before you're mid-release and a build starts failing for a reason that has nothing to do with your code. If you've got a webhook set up, it'll ping you directly. If not, it still writes the result to the workflow's own summary, so it's there the next time you look.</p>
+
+    <div class="callout">
+      <p><b>Why this is the part that actually saves you:</b> a broken build from bad code is annoying but obvious — you know immediately, and you know why. An expired certificate is worse, because it looks like everything's fine until it isn't, usually at the least convenient moment. That's the failure mode this closes off. Not "the pipeline works," but "the pipeline keeps working without you having to check on it."</p>
+    </div>
+
+    <h2>Why this is different from the alternatives</h2>
+    <p>Doing this by hand in Xcode, you get none of this — expiry is something you find out about when a build fails, and there's no diagnostic tool telling you why. Paying for a managed CI service, you might get some of it, but you're paying monthly for the privilege, indefinitely, for a pipeline you don't own. Macless is still a one-time $99 (or $39 for Android-only) — no subscription — and now that includes a setup that walks you through it, a free tool that tells you what's wrong when something is, and a workflow that watches your certificates so you don't have to remember to.</p>
+
+    <p>All three are already in the template if you've bought it — pull the latest and they're there, no repurchase needed. Signing Doctor is free either way, iOS or Android, whether or not you're using the rest of Macless.</p>
+
+    <div class="cta-box">
+      <h2>Ship it, then stop thinking about it</h2>
+      <p>The build pipeline, the setup wizard, the expiry checks, and a free Signing Doctor for whenever something looks off — all in one $99 template, no subscription.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
