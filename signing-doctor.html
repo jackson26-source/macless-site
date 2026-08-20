@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signing Doctor — a free iOS &amp; Android code-signing checker</title>
+<meta name="description" content="Free, standalone command-line tool that decodes your .mobileprovision, .p12, or Android .keystore and tells you in plain English why signing is failing — not just Xcode or Google Play's generic error.">
+<link rel="canonical" href="https://macless.dev/signing-doctor.html">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/" style="text-decoration:none;">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <div class="eyebrow">Free. No signup. No install.</div>
+    <h1>Signing Doctor: find out why your iOS or Android build won't sign</h1>
+    <p class="hero-sub">Point it at a <code class="mono">.mobileprovision</code> (and optionally a <code class="mono">.p12</code>), or an Android release <code class="mono">.keystore</code> — it decodes them and tells you exactly what's wrong, instead of the generic error <code class="mono">xcodebuild</code> or Google Play give you.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://github.com/jackson26-source/macless-signing-doctor" target="_blank" rel="noopener">Get it on GitHub — free</a>
+      <a class="btn-text" href="#what">see what it checks</a>
+    </div>
+    <div class="hero-note">Works with any Xcode or Android project, any CI system — not just Macless's own pipeline.</div>
+
+    <pre class="demo"><span class="dim">$</span> ./signing-doctor.sh --profile App.mobileprovision --cert dist.p12
+<span class="dim">Team ID:            ABCDE12345</span>
+<span class="dim">Bundle ID:          com.example.app</span>
+FAIL  Your certificate's fingerprint does NOT match any certificate
+      embedded in this profile. This usually means you regenerated one
+      (the cert after the old one expired, or vice versa) without
+      regenerating the other to match.</pre>
+  </div>
+</div>
+
+<section id="what">
+  <div class="wrap">
+    <h2>What it catches</h2>
+    <p class="lead">These are the failures that produce the least helpful native error messages — the ones that send people down a Stack Overflow rabbit hole instead of telling them what's actually wrong.</p>
+
+    <ul class="plain">
+      <li><b>A corrupted or mis-encoded profile file</b><span>The single most common first-time mistake — Xcode's own error for this tells you nothing useful.</span></li>
+      <li><b>An expired (or soon-to-expire) provisioning profile</b><span>Caught with an exact day count, before it silently breaks your next build.</span></li>
+      <li><b>A Team ID or bundle ID mismatch</b><span>Compares the profile against what you expect, wildcard App ID profiles handled correctly.</span></li>
+      <li><b>A certificate that doesn't match its profile</b><span>The hardest of these to self-diagnose — a profile only trusts the specific certificate(s) it was generated against, and regenerating one without the other is a very common, nearly invisible "why won't this codesign" cause.</span></li>
+      <li><b>An Android keystore that won't open</b><span>Wrong password or mismatched alias — the Android equivalent of the corrupted-profile problem, and <code class="mono">keytool</code>'s own error is just as unhelpful.</span></li>
+      <li><b>An expired Android signing key</b><span>Google Play rejects any update signed with an expired key, and unlike iOS you generally can't just regenerate a fresh keystore for an app already published.</span></li>
+    </ul>
+
+    <blockquote class="proof">
+      This is the same "validate signing setup" step pulled straight out of Macless's own <code class="mono">ios-testflight.yml</code> / <code class="mono">android-build.yml</code> workflows, generalized so it's useful whether or not you ever buy the full template.
+    </blockquote>
+  </div>
+</section>
+
+<section id="use">
+  <div class="wrap">
+    <h2>Two ways to run it</h2>
+
+    <h3 style="font-family:inherit; margin:26px 0 10px;">As a shell script, anywhere</h3>
+    <pre class="demo"><span class="dim"># iOS</span>
+$ ./signing-doctor.sh --profile App.mobileprovision \
+    --expected-team-id ABCDE12345 \
+    --expected-bundle-id com.example.app \
+    --cert dist.p12 --cert-password "..."
+
+<span class="dim"># Android</span>
+$ ./signing-doctor.sh --android-keystore release.keystore \
+    --android-keystore-password "..." --android-key-alias upload</pre>
+
+    <h3 style="font-family:inherit; margin:26px 0 10px;">As a GitHub Actions step</h3>
+    <pre class="demo">- uses: jackson26-source/macless-signing-doctor@v1
+  with:
+    profile-path: ${{ runner.temp }}/app.mobileprovision
+    expected-team-id: ABCDE12345</pre>
+
+    <p class="lead" style="margin-top:18px;">iOS checks need macOS (it shells out to <code class="mono">security</code>, <code class="mono">PlistBuddy</code>, and <code class="mono">openssl</code>) — run it locally on a Mac or as a step on a macOS GitHub Actions runner. Android checks only need <code class="mono">keytool</code> and <code class="mono">openssl</code>, so those run anywhere, including a plain Ubuntu runner.</p>
+  </div>
+</section>
+
+<div class="cta-box">
+  <div class="wrap" style="padding:0;">
+    <h2>If signing is the last thing standing between you and TestFlight</h2>
+    <p>Signing Doctor tells you what's wrong. The <a href="/#pricing">$99 template</a> is the whole pipeline around it — the GitHub Actions workflow, the script that fills in your signing info automatically, and the setup guide — built so you never have to hand-diagnose this stuff in the first place. Same 30-day guarantee.</p>
+    <a class="btn btn-primary" href="/#pricing">See the full pipeline — $99</a>
+  </div>
+</div>
+
+<a class="back-link wrap" href="/">← back to macless.dev</a>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
