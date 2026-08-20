@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix "Provisioning profile doesn't include signing certificate" — Macless</title>
+<meta name="description" content="Why a provisioning profile that looks completely valid still fails with 'doesn't include signing certificate', how to confirm it before you regenerate anything, and the actual fix.">
+<link rel="canonical" href="https://macless.dev/blog/provisioning-profile-doesnt-include-signing-certificate.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>Fix "Provisioning profile doesn't include signing certificate"</h1>
+    <p class="hero-sub">This one's confusing because the profile genuinely isn't expired and genuinely isn't misspelled — it's just pinned to a certificate that no longer exists.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>The exact error looks something like this:</p>
+    <pre class="demo">error: Provisioning profile "YourApp App Store" doesn't include
+signing certificate "Apple Distribution: Your Name (XXXXXXXXXX)".</pre>
+
+    <p>It's a confusing one the first time you hit it, because everything looks fine: the profile shows as <b>Active</b> in the Apple Developer portal, the bundle ID matches, the team ID matches. The thing that's actually wrong isn't visible from any of the fields you'd normally check.</p>
+
+    <h2>What's actually happening</h2>
+    <p>A provisioning profile doesn't just declare an App ID and a team — it's baked at generation time against one or more <em>specific certificates</em>, referenced by their exact public key. It's not "any valid Distribution certificate for this team," it's "these particular certificates, by fingerprint." If the certificate your CI job (or Xcode) is currently using isn't one of those exact certificates, this error fires — even though, from every other angle, the profile looks completely valid.</p>
+
+    <p>This almost always happens in one specific sequence: a Distribution certificate expires or gets revoked, someone generates a fresh one to replace it, and the provisioning profile — which was pinned to the <em>old</em> certificate — never gets regenerated to match. The profile doesn't expire when this happens. It just quietly stops working with your current certificate.</p>
+
+    <h2>How to confirm this is actually what's wrong</h2>
+    <p>Before regenerating anything, check the fingerprint match directly rather than guessing. Two ways to do it:</p>
+
+    <p><b>Manually, with openssl:</b> extract the certificates embedded in the profile and compare their fingerprints against your current <code class="mono">.p12</code>:</p>
+    <pre class="demo">$ security cms -D -i YourApp.mobileprovision > profile.plist
+$ /usr/libexec/PlistBuddy -c "Print DeveloperCertificates:0" profile.plist \
+    | openssl x509 -inform DER -noout -fingerprint
+
+$ openssl pkcs12 -in dist.p12 -nokeys -passin pass:yourpassword \
+    | openssl x509 -noout -fingerprint</pre>
+    <p>If those two fingerprints don't match, that's the whole problem confirmed in two commands.</p>
+
+    <p><b>Or skip the manual steps</b> — this is exactly the check <a href="/signing-doctor.html">Signing Doctor</a>, a free tool I put together, automates. Point it at your profile and certificate and it tells you directly whether they match, instead of you extracting and comparing fingerprints by hand:</p>
+    <pre class="demo">$ ./signing-doctor.sh --profile YourApp.mobileprovision --cert dist.p12
+FAIL  Your certificate's fingerprint does NOT match any certificate
+      embedded in this profile.</pre>
+
+    <h2>The fix</h2>
+    <p>Once confirmed, the fix is straightforward: in the Apple Developer portal, open the provisioning profile and regenerate it. Regenerating re-links it to whichever Distribution certificate is currently active for your team. Download the new profile, re-encode it, and update wherever your CI stores it (a GitHub secret, in most setups) — the old one can be safely deleted once the new one's working.</p>
+
+    <div class="callout">
+      <p><b>If you manage certificates for a team,</b> this is the exact failure mode that "automatically manage signing" in Xcode's GUI papers over — it silently regenerates mismatched profiles for you. CI has no equivalent, so a certificate rotation that Xcode would have absorbed invisibly becomes a hard failure in a headless pipeline. Worth regenerating the relevant profiles as a matter of course any time a Distribution certificate is rotated, rather than waiting for a build to fail first.</p>
+    </div>
+
+    <div class="cta-box">
+      <h2>This is covered end-to-end in the template</h2>
+      <p>Certificate/profile mismatches were one of the sharper edges I hit building the CI pipeline behind <a href="https://citolex.com" target="_blank" rel="noopener">Citolex</a>. The signing script and troubleshooting doc in Macless walk through generating certificates and profiles so they match the first time, plus every error message this pipeline has actually produced.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
