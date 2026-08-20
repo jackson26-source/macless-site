@@ -51,6 +51,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://macless.dev/blog/keystore-was-tampered-with-or-password-was-incorrect.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://macless.dev/blog/provisioning-profile-doesnt-include-signing-certificate.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
