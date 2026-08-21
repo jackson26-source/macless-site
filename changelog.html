@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Changelog — Macless</title>
+<meta name="description" content="What's actually changed in the Macless template since launch, dated, with the real bugs found and fixed along the way.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/calculator.html">What are you paying now?</a>
+      <a class="pricelink" href="/signing-doctor.html">Free signing checker</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <div class="eyebrow" style="margin-top:18px;">Changelog</div>
+    <h1>What's actually shipped</h1>
+    <p class="hero-sub">Every buyer gets this file inside the download too. This is the same list, public, so you can see it's maintained before you pay for it.</p>
+    <div class="byline">Jackson · updated as it changes</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>No mailing list exists yet — Stripe hands you a direct download link with no follow-up email. The reliable way to check for updates is comparing the dates below against when you last downloaded, and re-grabbing the zip from your original purchase confirmation link if anything here looks relevant to you.</p>
+
+    <h2>2026-08-19</h2>
+    <ul>
+      <li><b>Automated certificate/keystore expiry monitoring.</b> A weekly scheduled workflow (also runnable on demand) checks whichever of your iOS profile/cert and Android keystore secrets are set, and pings a webhook only when something's actually expiring or expired — silent the rest of the time. A full report always lands in that run's Summary tab regardless.</li>
+      <li><b>Signing Doctor now checks Android keystores, not just iOS.</b> Checks whether a keystore opens with the given password/alias, whether the signing key has expired or is expiring soon, and flags an older SHA1-based signature algorithm. Only needs a JDK — no macOS requirement, unlike the iOS checks.</li>
+      <li><b>The setup wizard now covers Android too, and can push secrets straight to GitHub for you</b> if you have the GitHub CLI installed and logged in, instead of copy-pasting each secret into the web UI by hand. Falls back cleanly to the old copy-paste flow if it isn't. Ends by running Signing Doctor against exactly what it just generated.</li>
+    </ul>
+
+    <h2>2026-08-18</h2>
+    <ul>
+      <li><b>Legibility pass on the docs.</b> The setup and signing guides now define their own jargon in plain language the first time it's used — GitHub Actions, Xcode, App Store Connect, TestFlight, certificate, provisioning profile, bundle ID, Team ID — instead of assuming you already know it. No instructions changed, same steps, same order.</li>
+      <li><b>Store metadata automation added.</b> Pushes your listing text and screenshots to App Store Connect / Play Console via fastlane, reusing the same credentials you already set up for TestFlight/Play Store uploads. Never touches your build, never submits for review. Optional.</li>
+      <li><b>React Native and Flutter workflow variants are now live-tested and proven, not just reviewed.</b> The React Native live-test found and fixed two real bugs (a dependency pin that doesn't exist before RN 0.85, and a trimmed test scaffold missing a file the bundler needs at archive time) before a clean run succeeded end to end.</li>
+      <li><b>Macless Signing Doctor released as a free standalone tool</b> — the same signing validation this template runs internally, usable against any provisioning profile/certificate pair, in or out of this pipeline.</li>
+      <li><b>Bare React Native and Flutter workflow variants added</b>, alongside the existing Capacitor one. Same signing setup and secrets, only the build steps before signing differ.</li>
+      <li><b>Security hardening pass, prompted by an outside review.</b> Added a <code>.gitignore</code> covering every signing-material file type, so a copy-pasted local command can't accidentally get committed. Added an explicit read-only permissions block to every workflow — none of them need to write back to the repo, so the default token no longer inherits more access than it needs. Audited the full commit history of this template's source and of the real app it's built from for any previously-committed cert or key file — none found. Confirmed secrets were always passed through GitHub Actions secrets, never printed into logs, and never triggered by pull requests from forks.</li>
+      <li><b>Fixed the Android build workflow</b> after live-testing it end to end on a disposable repo, which caught three real bugs anyone following the guide would have hit — a missing platform dependency, a version-resolution error, and a Java version mismatch. Build and signing are confirmed working; only the final Play Store upload step remains untested against a real Play Console account.</li>
+    </ul>
+
+    <h2>2026-08-17</h2>
+    <ul>
+      <li>Added a screenshots workflow that generates the exact sizes Apple requires at submission time, by running the Simulator at those device classes.</li>
+      <li><b>Fixed a real bug</b> in the Simulator-preview workflow where a product lookup could report "not found" even after a fully successful build. Now live-tested end to end.</li>
+      <li>Added the Android build workflow and guide, structured the same way as the iOS pipeline.</li>
+      <li>Added optional build caching for faster repeat runs, and an optional webhook notification step for build success/failure.</li>
+      <li>Added an interactive script that walks through certificate/profile generation and writes the values straight to files, instead of copy-pasting each command by hand.</li>
+      <li>Added a guide for live-testing a workflow change in a throwaway repo before trusting it — the exact process that caught the bug above.</li>
+    </ul>
+
+    <h2>2026-08-16</h2>
+    <ul>
+      <li><b>Fixed a critical packaging bug:</b> the product zip was missing the actual pipeline file, even though the setup guide told you to copy it in. If you bought before this date and hit a dead end at that step, re-download from your original purchase confirmation link, it's fixed now.</li>
+      <li>Added a Simulator-preview workflow — build and screenshot your app in the iOS Simulator, no signing setup or Apple hardware required.</li>
+      <li>Added a validation step to the main pipeline that checks your provisioning profile's Team ID and bundle ID against your secrets before the archive step, so a mismatch fails with a specific reason instead of a generic error buried in the log.</li>
+    </ul>
+
+    <h2>Earlier</h2>
+    <ul>
+      <li>Initial release: the core iOS pipeline, signing guide, setup guide, App Store submission guide, troubleshooting doc, and Share Extension/native plugin support notes.</li>
+    </ul>
+
+    <div class="cta-box">
+      <h2>Still on the fence?</h2>
+      <p>This is the same file every buyer gets. If it stops getting updated, you'll see it here before you'd hear it from me any other way.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
