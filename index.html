@@ -52,9 +52,9 @@
   <div class="wrap">
     <div class="eyebrow">No Mac. No rented Mac. No monthly CI bill.</div>
     <h1>Ship an iOS app to the App Store without ever owning a Mac</h1>
-    <p class="hero-sub">This is the automated build pipeline, signing scripts, and notes I used to build and submit an actual App Store app. It runs on GitHub Actions — GitHub's own free build servers — so all you need is a web browser. Nothing else.</p>
+    <p class="hero-sub">This is the automated build pipeline, signing scripts, and notes I used to build and submit an actual App Store app. I've run it against Apple's real signing and App Store systems, not just written it and assumed it works, the changelog has the specific bugs it caught along the way. It runs on GitHub Actions — GitHub's own free build servers — so all you need is a web browser. Nothing else.</p>
     <div class="cta-row">
-      <a class="btn btn-primary" href="#pricing">Get the template — $99</a>
+      <a class="btn btn-primary" href="#pricing">Get the pipeline — $99</a>
       <a class="btn-text" href="#how">see how it works</a>
     </div>
     <div class="hero-note">One-time payment. Instant download. 30-day money-back guarantee.</div>
@@ -92,12 +92,13 @@ done. no Mac involved, nothing spent.</pre>
 <section id="included">
   <div class="wrap">
     <h2>What's included</h2>
-    <p class="lead">Not just a workflow file you copy and hope works. The whole setup, written up the way I wish it existed before I had to figure it out myself.</p>
+    <p class="lead">Not just a workflow file you copy and hope works. I've actually run every piece of this against Apple's real signing and build systems, the <a href="/changelog.html">changelog</a> has the dated, specific bugs it caught along the way, not just a claim that it's tested.</p>
 
     <ul class="plain">
       <li><b>The GitHub Actions workflow</b><span>The actual build → sign → archive → upload pipeline, ready to drop into your project.</span></li>
       <li><b>A Simulator-preview workflow</b><span>Builds your app and screenshots it running in the iOS Simulator, on GitHub's own servers — no signing setup, no Apple hardware, so you can see it before you've configured anything else.</span></li>
       <li><b>The signing script</b><span>Fills in your app's unique identifiers and signing certificates automatically — the fiddly part that normally means clicking through Xcode by hand.</span></li>
+      <li><b>Scheduled expiry monitoring</b><span>A workflow that checks your signing certificate and keystore expiry dates on a schedule and warns you before a build silently starts failing because something quietly expired.</span></li>
       <li><b>A setup guide</b><span>Walks from an empty GitHub repo to a signed build in TestFlight, no steps skipped.</span></li>
       <li><b>Certificate and secrets notes</b><span>How to generate every signing credential you need without opening Xcode.</span></li>
       <li><b>An App Store Connect guide</b><span>Screenshot sizes, the export compliance question, App Privacy — the fields that aren't obvious the first time through.</span></li>
@@ -118,12 +119,12 @@ done. no Mac involved, nothing spent.</pre>
     <h2>Price</h2>
     <div class="price-block">
       <div class="price-tag">$99 <small>one-time</small></div>
-      <div class="price-note">No subscription — you're already saving on a Mac, no reason to pay monthly on top of it.</div>
+      <div class="price-note">No subscription. Part of the $99 pays for keeping this working as Apple changes things on its end, the changelog below is proof that's actually happening, not just a promise.</div>
       <ul class="plain" style="margin-bottom:22px;">
         <li><span>Workflow file, signing script, setup guide, App Store Connect guide, and troubleshooting doc</span></li>
         <li><span>Any future updates to the guide, included — <a href="/changelog.html">see what's shipped so far</a></span></li>
       </ul>
-      <a class="btn btn-primary" href="https://buy.stripe.com/00w00l1CGbH47zOfeCfbq00" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'ios_99'});}">Get instant access — $99</a>
+      <a class="btn btn-primary" href="https://buy.stripe.com/00w00l1CGbH47zOfeCfbq00" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'ios_99'});}">Get the pipeline — $99</a>
       <div class="guarantee">30-day money-back guarantee. If you can't get a signed build out, email me and I'll refund it — no back-and-forth.</div>
     </div>
 
@@ -131,7 +132,7 @@ done. no Mac involved, nothing spent.</pre>
       <h3>Only need Android?</h3>
       <div class="price-tag">$39 <small>one-time</small></div>
       <div class="price-note">The Android-only cut of the same pipeline — build, sign, and upload a Play-Store-ready <code class="mono">.aab</code> via GitHub Actions, no monthly CI subscription. Android builds never needed a Mac in the first place, so this one's priced for just that.</div>
-      <a class="btn btn-secondary" href="https://buy.stripe.com/9B6dRbftw4eC6vKd6ufbq01" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'android_39'});}">Get the Android template — $39</a>
+      <a class="btn btn-secondary" href="https://buy.stripe.com/9B6dRbftw4eC6vKd6ufbq01" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'android_39'});}">Get the Android pipeline — $39</a>
       <div class="guarantee">Same 30-day money-back guarantee.</div>
     </div>
 
@@ -148,7 +149,7 @@ done. no Mac involved, nothing spent.</pre>
 
     <div class="faq-item">
       <h3>Do I need any Apple hardware?</h3>
-      <p>No. No Mac to build or sign — and no iPhone or iPad to see it running, either. The template includes a built-in Simulator-preview workflow: it builds your app and boots an iOS Simulator right on GitHub's own servers, then hands you a screenshot, so you can check that it actually launches and looks right without owning any Apple hardware. (A real device is still the last word before you actually submit — camera, push notifications, and true on-device performance can't be fully checked in a Simulator — but it's no longer something you need just to get started.)</p>
+      <p>No. No Mac to build or sign — and no iPhone or iPad to see it running, either. The pipeline includes a built-in Simulator-preview workflow: it builds your app and boots an iOS Simulator right on GitHub's own servers, then hands you a screenshot, so you can check that it actually launches and looks right without owning any Apple hardware. (A real device is still the last word before you actually submit — camera, push notifications, and true on-device performance can't be fully checked in a Simulator — but it's no longer something you need just to get started.)</p>
     </div>
     <div class="faq-item">
       <h3>Is this against Apple's or GitHub's rules?</h3>
@@ -180,7 +181,7 @@ done. no Mac involved, nothing spent.</pre>
     </div>
     <div class="faq-item">
       <h3>What if I only need Android, not iOS?</h3>
-      <p>There's a <a href="#android">separate $39 Android-only template</a> — the same live-tested GitHub Actions workflow, just without the iOS signing and build steps you'd never use. Android builds never needed a Mac to begin with, so this one's priced for that.</p>
+      <p>There's a <a href="#android">separate $39 Android-only pipeline</a> — the same GitHub Actions workflow, already run against real Android build failures, just without the iOS signing and build steps you'd never use. Android builds never needed a Mac to begin with, so this one's priced for that.</p>
     </div>
     <div class="faq-item">
       <h3>What if I get stuck?</h3>
@@ -192,7 +193,7 @@ done. no Mac involved, nothing spent.</pre>
 <div class="final-cta">
   <div class="wrap">
     <h2>Ready to give it a try?</h2>
-    <a class="btn btn-primary" href="#pricing">Get the template — $99</a>
+    <a class="btn btn-primary" href="#pricing">Get the pipeline — $99</a>
   </div>
 </div>
 
