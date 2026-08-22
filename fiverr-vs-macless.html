@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A $20 Fiverr gig vs Macless — what the cheap option actually covers</title>
+<meta name="description" content="A Fiverr gig to upload your iOS app looks cheaper than Macless's $99. Here's exactly what it does and doesn't cover, so you can compare them honestly.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/subscription-calculator.html">Cost comparison</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <div class="eyebrow" style="margin-top:18px;">Comparison</div>
+    <h1>A $20 Fiverr gig vs Macless</h1>
+    <p class="hero-sub">If you've found a Fiverr gig offering to upload your iOS app for $20, this is the honest comparison. They're not solving the same problem.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p><b>The short version:</b> a $20 Fiverr upload gig starts from an app you've already built and signed. That's the part most people without a Mac actually get stuck on. Macless starts before that, it sets up the signing and build pipeline itself, so you (or your CI) can produce that signed build in the first place, then upload it, then do it again for every update after this one. They look like the same task from the outside. They're not.</p>
+
+    <table class="compare">
+      <tr><th></th><th>$20 Fiverr gig</th><th>Macless</th></tr>
+      <tr>
+        <td><b>What it needs from you first</b></td>
+        <td>An already-built, already-signed <code class="mono">.ipa</code> file, ready to hand over. Signing is listed as your responsibility on most of these gigs, not theirs.</td>
+        <td>Nothing pre-built. Handles signing, building, and archiving from your source code, not just the upload step.</td>
+      </tr>
+      <tr>
+        <td><b>Solves the actual hard part (signing, certs, provisioning)?</b></td>
+        <td>No, that's a listed prerequisite, not part of the gig.</td>
+        <td>Yes, that's most of what the $99 pays for.</td>
+      </tr>
+      <tr>
+        <td><b>What you have after it's done</b></td>
+        <td>One app, uploaded once. Nothing reusable for your next update.</td>
+        <td>A pipeline you own. Every future update ships the same way, a normal <code class="mono">git push</code>, no repeat payment.</td>
+      </tr>
+      <tr>
+        <td><b>Your second update</b></td>
+        <td>Back to square one, either sign it yourself somehow or pay for another gig.</td>
+        <td>Already set up. Push and it ships.</td>
+      </tr>
+      <tr>
+        <td><b>Who's actually doing the work</b></td>
+        <td>Someone else's machine, one time, for one file.</td>
+        <td>Your own GitHub Actions runners, every time, under your own account.</td>
+      </tr>
+    </table>
+
+    <div class="callout">
+      <p><b>If you already have a signed .ipa</b> sitting on someone else's Mac or a cloud-Mac rental and just need it uploaded once, a cheap upload gig is a completely reasonable choice, there's no reason to pay $99 for that. This page isn't arguing you should never use one.</p>
+      <p><b>If you don't have a signed build yet</b>, which is the actual situation most people without a Mac are in, an upload-only gig doesn't get you there. You'd still need to solve signing and building first, by hand, on someone's Mac, or by paying for Macless, or a comparable pipeline, to do it for you.</p>
+    </div>
+
+    <h2>Why this comparison matters</h2>
+    <p>$99 next to a $20 gig looks like a 5x markup for the same thing. It isn't the same thing. The gig is a one-time favor for a file you already have. Macless is the tool that produces that file, and every file after it, without needing a Mac anywhere in the process. If you're shipping more than once, a $20-per-upload gig adds up past $99 by your fifth release. If you're shipping exactly once and already have a signed build, the gig is genuinely cheaper, and that's fine.</p>
+
+    <div class="cta-box">
+      <h2>No Mac, no problem</h2>
+      <p>If you're still before the signed-build step, this is the part that actually gets you there, not just the upload after it.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>

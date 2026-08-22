@@ -168,6 +168,10 @@ done. no Mac involved, nothing spent.</pre>
       <p>Appflow shuts down December 31, 2027, and Ionic's already stopped selling it to new customers. If that's your current CI, <a href="/ionic-appflow-alternative.html">here's what to actually weigh</a> before picking a replacement, including the one-time-cost option most "Appflow alternative" writeups don't mention.</p>
     </div>
     <div class="faq-item">
+      <h3>Isn't there a $20 Fiverr gig that does this?</h3>
+      <p>Those gigs upload an already-signed <code class="mono">.ipa</code> you hand them, signing itself is listed as your problem to solve first on most of them. Macless is the part before that, it sets up the actual build and signing pipeline from your source code, so you have a signed build to upload in the first place, and every update after this one ships the same way with a normal <code class="mono">git push</code>. <a href="/fiverr-vs-macless.html">Full comparison here</a> if you want the honest breakdown of when each one actually makes sense.</p>
+    </div>
+    <div class="faq-item">
       <h3>Why not just use Xcode Cloud, fastlane, or a free GitHub Action?</h3>
       <p>Xcode Cloud works if you already own a Mac — <a href="/xcode-cloud-vs-macless.html">full comparison here</a> — but setup happens inside Xcode itself, so it doesn't help if you don't have one. fastlane's <code>match</code> is free and handles signing well if you're willing to learn it. Free GitHub Marketplace actions can build and sign for free too, they just don't upload to TestFlight, and they don't stop you from hitting the same certificate and provisioning profile errors this pipeline's troubleshooting doc already has fixes for. This is for someone with no Mac access at all who doesn't want to spend a weekend finding that out.</p>
     </div>
