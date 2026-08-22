@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIY GitHub Actions vs Macless — free marketplace actions vs a working pipeline</title>
+<meta name="description" content="You can build an iOS signing pipeline yourself on GitHub Actions for free, including free marketplace actions. Here's honestly what that takes, what it skips, and when Macless's $99 one-time pipeline is worth it instead.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/subscription-calculator.html">Cost comparison</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <div class="eyebrow" style="margin-top:18px;">Comparison</div>
+    <h1>DIY GitHub Actions vs Macless</h1>
+    <p class="hero-sub">Both run on GitHub's own free macOS minutes. The honest question isn't whether you can build this yourself — you can — it's whether you want to spend the time finding out what a free marketplace action doesn't do, or start from a pipeline that already has.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p><b>The short version:</b> Nothing about this pipeline uses infrastructure you can't get for free. GitHub gives every public repo free macOS build minutes, and free marketplace actions like <code class="mono">ios-build-action</code> can build and sign an iOS app for zero dollars. What they don't do — and what most of the setup time actually goes into — is the App Store Connect upload step, and catching the certificate and provisioning-profile mismatches that cause most first-attempt failures. Macless is a one-time $99 payment for a pipeline where that part is already solved, instead of a free starting point where it's still yours to solve.</p>
+
+    <table class="compare">
+      <tr><th></th><th>DIY GitHub Actions</th><th>Macless</th></tr>
+      <tr>
+        <td><b>Cost of the infrastructure</b></td>
+        <td>Free — GitHub's own macOS runners, free marketplace actions.</td>
+        <td>Free — same GitHub runners. The $99 pays for the pipeline, not the compute.</td>
+      </tr>
+      <tr>
+        <td><b>Builds and signs the app</b></td>
+        <td>Yes, most free actions get you this far.</td>
+        <td>Yes.</td>
+      </tr>
+      <tr>
+        <td><b>Uploads to App Store Connect / TestFlight</b></td>
+        <td>Usually not included — you're wiring up <code class="mono">altool</code> or <code class="mono">xcrun notarytool</code> and an App Store Connect API key yourself.</td>
+        <td>Yes, built in — that's most of what the pipeline actually does after a successful build.</td>
+      </tr>
+      <tr>
+        <td><b>What happens on a cert or provisioning-profile mismatch</b></td>
+        <td>You get a cryptic Apple error and start searching Stack Overflow and GitHub issues, the same way everyone building this from scratch does.</td>
+        <td>The troubleshooting doc already covers the errors this exact pipeline has actually produced, with fixes.</td>
+      </tr>
+      <tr>
+        <td><b>Time to a working, signed, uploaded build</b></td>
+        <td>Realistically a weekend or more if this is your first time touching code signing — most of it spent debugging, not building.</td>
+        <td>Follows a guide written by someone who already made the mistakes once.</td>
+      </tr>
+      <tr>
+        <td><b>What you have after it's done</b></td>
+        <td>A workflow you wrote and understand completely — genuinely valuable if you have the time.</td>
+        <td>A workflow you own the same way, just without spending the weekend finding the failure modes yourself.</td>
+      </tr>
+    </table>
+
+    <div class="callout">
+      <p><b>If you've got a free weekend and want to actually learn how iOS code signing works</b>, doing it yourself is a legitimate, even valuable choice — you'll understand your own pipeline better than anyone who paid for one. This page isn't arguing you can't build this for free, because you can.</p>
+      <p><b>If you just want a signed build in TestFlight without owning that learning curve</b>, that weekend of debugging certificate errors is the actual cost this pipeline removes. $99 once is the price of skipping straight to the part where it works.</p>
+    </div>
+
+    <h2>Why this comparison matters</h2>
+    <p>"Just use a free GitHub Action" is the most common — and fairest — objection to a paid product built on a free platform. It's fair because it's true: nothing here is proprietary infrastructure. But "can build and sign" and "can go from source code to a TestFlight build without a debugging weekend" aren't the same claim. Most free marketplace actions stop at the first one. The gap between them is exactly the part that costs time, and it's the part this pipeline is priced for.</p>
+
+    <div class="cta-box">
+      <h2>No Mac, no problem</h2>
+      <p>Skip the debugging weekend — get the pipeline already wired end-to-end, signing through TestFlight.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
