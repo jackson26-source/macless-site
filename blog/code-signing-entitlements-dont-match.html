@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix "Provisioning profile doesn't match the entitlements file" — Macless</title>
+<meta name="description" content="What's actually pinned to what when Xcode says a profile doesn't match your entitlements file's application-identifier or keychain-access-groups — and the two places that mismatch actually comes from.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>Fix "Provisioning profile doesn't match the entitlements file"</h1>
+    <p class="hero-sub">The error names two entitlement keys, but it's almost always one of two root causes — and neither of them is "your entitlements file is wrong."</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>The full error usually reads something like: <code class="mono">Provisioning profile "YourApp App Store" doesn't match the entitlements file's values for the application-identifier and keychain-access-groups entitlements</code>. It sounds like your <code class="mono">.entitlements</code> file has the wrong values, but in practice the entitlements file is almost always fine — what's actually out of sync is what the provisioning profile on Apple's portal has been generated to allow.</p>
+
+    <h2>1. A capability was added in Xcode but never enabled on the profile</h2>
+    <p>This is the most common cause. Turning on a capability in Xcode's "Signing &amp; Capabilities" tab — Push Notifications, App Groups, Associated Domains, Keychain Sharing — immediately updates your local <code class="mono">.entitlements</code> file and your App ID's configuration if Xcode has portal access. It does <b>not</b> retroactively update a provisioning profile you already generated and downloaded earlier. That profile still only grants the capabilities it had at the moment it was created.</p>
+    <p>Fix: in the Apple Developer portal, open the App ID, confirm the new capability is actually checked there, then regenerate the provisioning profile itself (not just re-download the old one — an unchanged profile keeps its old capability set even if you download it again) and update the base64 secret your CI workflow uses.</p>
+
+    <h2>2. keychain-access-groups still points at the wrong team or app ID prefix</h2>
+    <p><code class="mono">keychain-access-groups</code> in the entitlements file is typically written as <code class="mono">$(AppIdentifierPrefix)com.yourcompany.yourapp</code>. If the entitlements file was copied from a different target, a different app, or an older version of the project, that literal string sometimes gets hardcoded to the wrong prefix instead of using the <code class="mono">$(AppIdentifierPrefix)</code> build variable. Since that variable resolves to your team ID at build time, a hardcoded mismatch here fails signing even though every other value looks correct at a glance.</p>
+    <p>Check it directly rather than trusting Xcode's UI — open the raw entitlements file and confirm every keychain-access-groups entry actually uses the <code class="mono">$(AppIdentifierPrefix)</code> variable, not a typed-out team ID.</p>
+
+    <div class="callout">
+      <p><b>Fast way to check which one you've hit:</b> run <code class="mono">security cms -D -i /path/to/profile.mobileprovision</code> and look at the <code class="mono">Entitlements</code> dictionary it prints — compare it key-by-key against your project's <code class="mono">.entitlements</code> file. Whatever capability or value is present in one and missing in the other is the actual mismatch, rather than guessing from the error text alone.</p>
+    </div>
+
+    <h2>Why wildcard App IDs make this worse</h2>
+    <p>A wildcard App ID (<code class="mono">com.yourcompany.*</code>) can't carry most capabilities at all — Push Notifications, App Groups, and several others require an explicit App ID. If your project is signed against a wildcard profile and you add one of these capabilities in Xcode, this exact error is what shows up, because there's no version of that profile that could ever satisfy it. The fix there isn't regenerating the profile — it's switching to an explicit App ID and generating a new profile against it.</p>
+
+    <div class="cta-box">
+      <h2>This is covered end-to-end in the template</h2>
+      <p>I hit every one of these while building the CI pipeline behind <a href="https://citolex.com" target="_blank" rel="noopener">Citolex</a>. The signing script and troubleshooting doc in Macless walk through generating certificates and profiles with the right capabilities the first time, plus every error message this pipeline has actually produced.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>

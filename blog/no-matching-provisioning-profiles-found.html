@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix "No matching provisioning profiles found" in GitHub Actions — Macless</title>
+<meta name="description" content="The three actual causes of 'No matching provisioning profiles found' in a headless GitHub Actions iOS build, and how to tell which one you've hit before you start regenerating things.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>Fix "No matching provisioning profiles found" in GitHub Actions</h1>
+    <p class="hero-sub">This one usually isn't about the profile at all — it's about whether Xcode is even looking at the profile you installed.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>In Xcode's GUI, "No matching provisioning profiles found" almost always means what it says — go to the portal, fix the profile. In a headless CI build, the same message shows up for a completely different reason most of the time: <code class="mono">xcodebuild</code> never even looked at the profile you carefully installed, because something upstream of it is still set to automatic signing.</p>
+
+    <p>Check these in order — the first one catches most CI failures specifically, and it's the one Xcode's GUI never makes you think about because it handles it silently.</p>
+
+    <h2>1. Confirm the project is actually set to manual signing for the build</h2>
+    <p>If <code class="mono">CODE_SIGN_STYLE</code> is still <code class="mono">Automatic</code> in your Xcode project (the default for new projects), <code class="mono">xcodebuild</code> tries to manage signing itself during the build — including in CI, where there's no Apple ID session for it to manage anything with. It ignores the profile you installed into <code class="mono">~/Library/MobileDevice/Provisioning Profiles/</code> and fails with this exact error, because as far as it's concerned, there's nothing there yet.</p>
+    <p>The fix is to force manual signing at build time rather than relying on project settings, either directly on the <code class="mono">xcodebuild</code> command:</p>
+    <pre class="demo">xcodebuild archive \
+  -scheme YourApp \
+  CODE_SIGN_STYLE=Manual \
+  PROVISIONING_PROFILE_SPECIFIER="Your Profile Name" \
+  CODE_SIGN_IDENTITY="Apple Distribution" \
+  DEVELOPMENT_TEAM=XXXXXXXXXX</pre>
+    <p>or via an explicit <code class="mono">signingStyle: manual</code> entry in the export options plist for the export step. Either way, this is the single most common cause of this error being a CI-only problem — the exact same project archives fine locally because Xcode's GUI papers over automatic signing without telling you.</p>
+
+    <h2>2. Confirm the profile actually installed where Xcode looks</h2>
+    <p>Headless CI has no Xcode session to place the profile for you — your workflow has to copy it into <code class="mono">~/Library/MobileDevice/Provisioning Profiles/</code> itself, named as <code class="mono">&lt;UUID&gt;.mobileprovision</code>. A profile sitting anywhere else, or written before the directory exists, is silently invisible to <code class="mono">xcodebuild</code>. Add a debug step that lists the directory right before the build:</p>
+    <pre class="demo">ls -la ~/Library/MobileDevice/Provisioning\ Profiles/</pre>
+    <p>If it's empty or missing your profile, the problem is earlier in the pipeline than signing — the base64 secret decoded wrong, or the copy step ran before <code class="mono">mkdir -p</code> created the target directory.</p>
+
+    <h2>3. Check profile type and bundle ID match what you're building</h2>
+    <p>If steps 1 and 2 check out, it's back to a real mismatch: a Development profile can't sign an Archive build meant for TestFlight, an Ad Hoc profile won't satisfy an App Store export, and the profile's App ID has to match <code class="mono">PRODUCT_BUNDLE_IDENTIFIER</code> exactly — a wildcard profile (<code class="mono">com.you.*</code>) works for basic builds but won't cover an app using push notifications or other capabilities that require an explicit App ID.</p>
+
+    <div class="callout">
+      <p><b>Quick sanity check</b> if you're not sure which of the three you've hit: run <code class="mono">security cms -D -i /path/to/profile.mobileprovision</code> in the CI job right after installing it. It prints the profile's actual App ID, team ID, and expiry as plain XML — compare that against your build settings directly instead of guessing.</p>
+    </div>
+
+    <h2>Why this trips people up more in CI than locally</h2>
+    <p>Xcode's automatic signing is designed to be invisible when it works — it silently regenerates and matches profiles in the background so you never see the mechanism. CI has none of that; every piece has to be handed to it explicitly, so the first missing piece surfaces as a hard failure with a message that reads like a profile problem even when the profile was never the issue.</p>
+
+    <div class="cta-box">
+      <h2>This is covered end-to-end in the template</h2>
+      <p>I hit every one of these while building the CI pipeline behind <a href="https://citolex.com" target="_blank" rel="noopener">Citolex</a>. The signing script and troubleshooting doc in Macless force manual signing correctly from the start, so this error doesn't come up in the first place.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
