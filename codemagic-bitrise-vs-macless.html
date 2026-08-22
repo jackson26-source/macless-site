@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codemagic and Bitrise vs Macless — subscription CI vs a one-time pipeline</title>
+<meta name="description" content="Codemagic and Bitrise both build iOS apps without a Mac, on a recurring plan. Here's the honest comparison against Macless's one-time $99 pipeline.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/subscription-calculator.html">Cost comparison</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <div class="eyebrow" style="margin-top:18px;">Comparison</div>
+    <h1>Codemagic and Bitrise vs Macless</h1>
+    <p class="hero-sub">Both are polished, full-service mobile CI platforms that also solve "no Mac." The difference isn't whether they work, it's whether you're paying for it once or every month.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p><b>The short version:</b> Codemagic and Bitrise are real, capable products. You don't need a Mac with either because the build runs entirely in their cloud, and both handle signing for you through their own UI. What you're actually choosing between isn't capability, it's the billing model: a per-minute or monthly plan that continues for as long as you ship the app, versus a one-time $99 payment for a pipeline that's yours to keep.</p>
+
+    <table class="compare">
+      <tr><th></th><th>Codemagic / Bitrise</th><th>Macless</th></tr>
+      <tr>
+        <td><b>What it needs from you first</b></td>
+        <td>Sign up, connect your repo, configure the build in their dashboard, upload your signing certs to their vault.</td>
+        <td>Nothing pre-built. Sets up your own GitHub Actions workflow, signing included, from your source code.</td>
+      </tr>
+      <tr>
+        <td><b>Solves the actual hard part (signing, certs, provisioning)?</b></td>
+        <td>Yes — that's a real part of what the subscription pays for.</td>
+        <td>Yes — that's most of what the one-time $99 pays for.</td>
+      </tr>
+      <tr>
+        <td><b>Ongoing cost</b></td>
+        <td>Per-build-minute or monthly plan, indefinitely, scaling with how much you ship and how many people are on the team.</td>
+        <td>$0 more after the $99. Runs on GitHub's own free macOS minutes on public repos.</td>
+      </tr>
+      <tr>
+        <td><b>Who's actually doing the work</b></td>
+        <td>Their hosted build infrastructure, behind their own dashboard and config format.</td>
+        <td>Your own GitHub Actions runners, in a plain workflow file you can open, read, and modify.</td>
+      </tr>
+      <tr>
+        <td><b>What you have after it's done</b></td>
+        <td>A working pipeline tied to their platform, their pricing tier, and their continued willingness to run it.</td>
+        <td>A YAML file in your own repo. No vendor, no seat count, no plan to outgrow.</td>
+      </tr>
+    </table>
+
+    <div class="callout">
+      <p><b>If you're on a team</b> with heavy build volume, private repos where public-runner minutes don't apply, or you want a managed dashboard and support contract, Codemagic or Bitrise's paid infrastructure is a legitimate, often better choice. This page isn't arguing you should never pay for CI.</p>
+      <p><b>If you're a solo developer or small team</b> shipping from a public repo (or fine making it public), the free GitHub Actions minutes that Codemagic and Bitrise also ultimately run on top of are available to you directly. Macless is the one-time cost of wiring that up correctly, instead of paying someone else monthly to have already wired it up for you.</p>
+    </div>
+
+    <h2>Why this comparison matters</h2>
+    <p>Codemagic and Bitrise aren't the "hard way" and Macless isn't the "easy way" — both solve the actual signing and provisioning problem, which is the part that actually costs time. The real difference shows up in month three, not day one: a subscription keeps billing for as long as the app ships, and a one-time pipeline doesn't. If you're shipping for years, that gap compounds. If you want someone else's infrastructure and support behind every build, it might be worth paying for regardless.</p>
+
+    <div class="cta-box">
+      <h2>No Mac, no problem</h2>
+      <p>If what you actually want is the pipeline without the recurring bill, this is that.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
