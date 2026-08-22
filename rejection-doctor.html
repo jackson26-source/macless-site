@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rejection Doctor — decode your App Store rejection message</title>
+<meta name="description" content="Free tool: paste the rejection message Apple actually sent you and get a plain-English explanation of what it means and how to fix it, grounded in Apple's own App Store Review Guidelines.">
+<link rel="canonical" href="https://macless.dev/rejection-doctor.html">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  #rdInput{
+    width:100%; min-height:140px; padding:16px; border:1px solid var(--border); border-radius:8px;
+    background:var(--bg); color:var(--text); font-family:var(--mono); font-size:14px; line-height:1.5;
+    resize:vertical;
+  }
+  #rdInput:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(168,70,30,0.12); }
+  .rd-match{
+    margin:22px 0; padding:20px 22px; background:var(--bg-panel); border:1px solid var(--border); border-radius:10px;
+  }
+  .rd-match .rd-guideline{
+    font-family:var(--mono); font-size:12.5px; color:var(--accent); letter-spacing:.02em; margin-bottom:6px;
+  }
+  .rd-match h3{ font-family:var(--serif); font-size:19px; margin-bottom:10px; }
+  .rd-match p{ color:var(--text-dim); font-size:15px; margin-bottom:10px; }
+  .rd-match p:last-child{ margin-bottom:0; }
+  .rd-match .rd-label{ font-weight:700; color:var(--text); font-size:13px; text-transform:uppercase; letter-spacing:.03em; }
+  #rdEmpty{ color:var(--text-faint); font-size:14.5px; margin-top:18px; display:none; }
+  #rdResults{ margin-top:8px; }
+  .rd-count{ font-size:13px; color:var(--text-faint); margin-top:10px; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/" style="text-decoration:none;">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/signing-doctor.html">Signing Doctor</a>
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <div class="eyebrow">Free. No signup. Paste and go.</div>
+    <h1>Rejection Doctor: what did Apple's rejection message actually mean?</h1>
+    <p class="hero-sub">Paste the message from your App Store Connect Resolution Center below. This checks it against Apple's own App Store Review Guidelines and tells you in plain English what usually triggers that specific rejection, and what to actually change before you resubmit.</p>
+    <div class="hero-note">Works for any iOS or Android app in review — not just apps built with Macless's pipeline.</div>
+  </div>
+</div>
+
+<section id="check">
+  <div class="wrap">
+    <div class="calc-box">
+      <div class="calc-row">
+        <label for="rdInput">Paste the rejection message here</label>
+        <textarea id="rdInput" placeholder="Example: Guideline 2.1 - Information Needed
+
+We were unable to complete your review because we need additional information about your app..."></textarea>
+      </div>
+      <button type="button" class="btn btn-primary" id="rdBtn">Diagnose it</button>
+      <div class="rd-count" id="rdCount"></div>
+    </div>
+
+    <div id="rdResults"></div>
+    <p id="rdEmpty">Didn't recognize a specific guideline in that text. If Apple gave you a guideline number (something like "Guideline 2.1" or "5.1.1"), try pasting that line on its own — Apple's messages sometimes bury the actual number in the middle of a longer paragraph. If it's still not matching, <a href="mailto:localinfine@gmail.com">email me the message</a> and I'll add it here so the next person searching for the same wording finds an answer.</p>
+  </div>
+</section>
+
+<section id="what">
+  <div class="wrap">
+    <h2>What this is, honestly</h2>
+    <p class="lead">This is a rule-based lookup against Apple's published App Store Review Guidelines and the rejection wording Apple actually sends, not an AI guessing at your specific situation. It covers the rejection reasons that come up most often. It's new and the coverage will grow as more real rejection messages get added — if it doesn't recognize yours, that's useful information too, tell me and it gets added.</p>
+
+    <blockquote class="proof">
+      Same idea as <a href="/signing-doctor.html">Signing Doctor</a>: a specific, plain-English answer instead of Apple's own dense, boilerplate-heavy explanation, built to be useful whether or not you ever buy anything from Macless.
+    </blockquote>
+  </div>
+</section>
+
+<div class="cta-box">
+  <div class="wrap" style="padding:0;">
+    <h2>If a rejection is the last thing standing between you and TestFlight</h2>
+    <p>Rejection Doctor tells you what a message means. The <a href="/#pricing">$99 pipeline</a> is what actually gets a build signed and uploaded in the first place, so you're not troubleshooting Xcode by hand between rejections. Same 30-day guarantee.</p>
+    <a class="btn btn-primary" href="/#pricing">See the full pipeline — $99</a>
+  </div>
+</div>
+
+<a class="back-link wrap" href="/">← back to macless.dev</a>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:localinfine@gmail.com">localinfine@gmail.com</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+<script src="/assets/rejection-doctor.js"></script>
+</body>
+</html>
