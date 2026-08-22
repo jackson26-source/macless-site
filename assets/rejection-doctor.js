@@ -228,7 +228,7 @@
     });
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
+  function wireUp() {
     var btn = document.getElementById("rdBtn");
     if (btn) btn.addEventListener("click", diagnose);
     var input = document.getElementById("rdInput");
@@ -237,5 +237,15 @@
         if ((e.metaKey || e.ctrlKey) && e.key === "Enter") diagnose();
       });
     }
-  });
+  }
+
+  // Defensive against a DOMContentLoaded race: if the script happens to run
+  // after the event already fired (can happen depending on load timing),
+  // waiting on the event alone means it never fires again and the button
+  // silently does nothing. Wire up immediately if the DOM is already ready.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", wireUp);
+  } else {
+    wireUp();
+  }
 })();
