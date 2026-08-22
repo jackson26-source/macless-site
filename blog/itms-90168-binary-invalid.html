@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix ITMS-90168: "The binary you uploaded was invalid" — Macless</title>
+<meta name="description" content="ITMS-90168 with no other detail is Apple's most useless error message — it's a catch-all for several unrelated problems. Here's how to actually narrow down which one you've hit.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>Fix ITMS-90168: "The binary you uploaded was invalid"</h1>
+    <p class="hero-sub">This is Apple's catch-all — the message is identical whether the real cause is your architecture, your Info.plist, or your embedded provisioning profile. Here's how to actually find out which.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>Unlike ITMS-90683 or ITMS-90717, which each mean one specific thing, ITMS-90168 is genuinely a catch-all — Apple's validator uses it for several unrelated failures, and worse, it often shows up with no further detail at all. If you've gotten this with an empty or unhelpful message body, don't start guessing; run local validation first, which almost always surfaces the real reason.</p>
+
+    <h2>Get the real reason with local validation before resubmitting blind</h2>
+    <p>Apple's own validator will usually tell you what App Store Connect's rejection email didn't:</p>
+    <pre class="demo">xcrun altool --validate-app -f YourApp.ipa -t ios \
+  --apiKey YOUR_KEY_ID --apiIssuer YOUR_ISSUER_ID</pre>
+    <p>or with the newer notarization tool:</p>
+    <pre class="demo">xcrun notarytool submit YourApp.ipa --apple-id you@example.com \
+  --team-id XXXXXXXXXX --password app-specific-password --wait</pre>
+    <p>This step alone resolves most cases of "the error message told me nothing," because local validation returns the specific underlying complaint instead of the generic ITMS-90168 wrapper App Store Connect sometimes shows.</p>
+
+    <h2>The most common actual causes, roughly in order of likelihood</h2>
+    <p><b>Missing or wrong architecture slice.</b> If your build was archived on Apple Silicon but a dependency was compiled for the wrong slice (or vice versa), the binary can look valid locally and still fail server-side validation. Check <code class="mono">lipo -info</code> on the actual executable inside the <code class="mono">.app</code> bundle to confirm which architectures it contains.</p>
+    <p><b>Invalid or missing <code class="mono">Info.plist</code> keys.</b> A malformed <code class="mono">CFBundleVersion</code> or <code class="mono">CFBundleShortVersionString</code> (non-numeric, or not incremented from the last build), or a missing required key, fails validation without always being called out by name.</p>
+    <p><b>Embedded provisioning profile problems.</b> A profile embedded in the archive that's expired, or doesn't match the entitlements actually compiled into the binary, can surface as this generic error rather than a signing-specific one — worth checking the entitlements-mismatch cause covered in <a href="/blog/code-signing-entitlements-dont-match.html">this post</a> even if the message doesn't mention entitlements directly.</p>
+    <p><b>Symlinks or extended attributes inside the archive.</b> Less common, but a <code class="mono">.ipa</code> zipped with the wrong tool (rather than through Xcode's own export step) can carry symlinks or macOS extended attributes that Apple's validator rejects outright. If you're building the <code class="mono">.ipa</code> manually in a CI script rather than letting <code class="mono">xcodebuild -exportArchive</code> produce it, this is worth ruling out specifically.</p>
+
+    <div class="callout">
+      <p><b>If local validation itself fails to even run</b>, that's actually useful information on its own — it usually means the archive itself is malformed (a bad export options plist, or an interrupted archive step) rather than anything about App Store Connect's review, which narrows the search considerably.</p>
+    </div>
+
+    <div class="cta-box">
+      <h2>This is covered end-to-end in the template</h2>
+      <p>I hit every one of these while building the CI pipeline behind <a href="https://citolex.com" target="_blank" rel="noopener">Citolex</a>. The Macless troubleshooting doc covers this and every other upload error the pipeline has actually produced.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>

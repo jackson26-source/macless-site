@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix ITMS-90683: "Missing purpose string in Info.plist" — Macless</title>
+<meta name="description" content="ITMS-90683 means one specific thing: a privacy usage description key is missing from Info.plist. Here's how to find which one, including the ones that get pulled in by a dependency you didn't add yourself.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>Fix ITMS-90683: "Missing purpose string in Info.plist"</h1>
+    <p class="hero-sub">Unlike most ITMS errors, this one only means one thing. The hard part is finding which key, not what the error means.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>ITMS-90683 is one of the more useful App Store Connect errors, because it's specific: your app links against a framework that can access a privacy-sensitive API — camera, location, contacts, microphone, photo library, and so on — and your <code class="mono">Info.plist</code> is missing the matching <code class="mono">NS...UsageDescription</code> key explaining to the user why. Apple requires that string to exist before it'll accept the binary at all, whether or not your app actually calls that API at runtime.</p>
+
+    <h2>Find which key is actually missing</h2>
+    <p>The rejection email usually names it directly, in a line like:</p>
+    <pre class="demo">ITMS-90683: Missing purpose string in Info.plist - Your app's code
+references one or more APIs that access sensitive user data. The
+app's Info.plist file should contain a NSLocationWhenInUseUsageDescription
+key with a user-facing purpose string explaining clearly and completely
+why your app needs the data.</pre>
+    <p>If the email is vague or you're checking before you submit, the fastest way to find every key your binary actually needs is to search the compiled binary itself for known API symbols, or more simply, grep your own project and every linked SDK's source for the usage-description-triggering APIs (location, camera, microphone, contacts, calendar, photos, bluetooth, tracking). The common keys, if you need to check your <code class="mono">Info.plist</code> against the full list: <code class="mono">NSCameraUsageDescription</code>, <code class="mono">NSMicrophoneUsageDescription</code>, <code class="mono">NSLocationWhenInUseUsageDescription</code>, <code class="mono">NSPhotoLibraryUsageDescription</code>, <code class="mono">NSContactsUsageDescription</code>, <code class="mono">NSCalendarsUsageDescription</code>, <code class="mono">NSBluetoothAlwaysUsageDescription</code>, <code class="mono">NSUserTrackingUsageDescription</code>.</p>
+
+    <h2>Why this often isn't a key you added yourself</h2>
+    <p>The most confusing version of this error happens when your app doesn't call the sensitive API directly at all — a dependency does. Analytics SDKs, ad networks, and cross-platform framework plugins (Capacitor and Cordova plugins especially) frequently link against location or tracking frameworks internally, even for features you're not using. Apple's static analysis flags the linked capability, not just your own code, so the fix is still adding the key to your own <code class="mono">Info.plist</code> — you just have to go find which plugin pulled it in, usually by checking that plugin's own install notes or `Info.plist` requirements in its documentation.</p>
+
+    <h2>Write a real purpose string, not a placeholder</h2>
+    <p>Apple also rejects usage strings that are empty, generic, or clearly a placeholder ("This app needs your location" gets flagged more often than you'd expect). The string has to actually explain what the app does with the data, in user-facing language — write it like something a real person would read in the system permission prompt, because that's exactly where it appears.</p>
+
+    <div class="callout">
+      <p><b>If you're using a cross-platform framework</b> (Capacitor, Cordova, React Native, Flutter), add the key to the native <code class="mono">Info.plist</code> in your iOS project folder directly — not to a JS/Dart-side config file that may or may not get synced into it. A stale native project that hasn't picked up a config change is one of the more common reasons this error reappears after you thought you'd fixed it.</p>
+    </div>
+
+    <div class="cta-box">
+      <h2>This is covered end-to-end in the template</h2>
+      <p>I hit every one of these while building the CI pipeline behind <a href="https://citolex.com" target="_blank" rel="noopener">Citolex</a>. The Macless troubleshooting doc covers this and every other upload error the pipeline has actually produced.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
