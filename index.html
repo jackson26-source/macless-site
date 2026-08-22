@@ -164,6 +164,10 @@ done. no Mac involved, nothing spent.</pre>
       <p>Those are solid, polished services, and if you'd rather pay per build or a monthly fee for a fully managed GUI, they're a fine choice. This is different: a one-time $99 payment for the actual pipeline itself, running on GitHub's own free macOS minutes on public repos, so there's no recurring bill once it's set up. It's for people who'd rather own the setup once than keep paying for it build after build.</p>
     </div>
     <div class="faq-item">
+      <h3>I'm on Ionic Appflow — what do I switch to?</h3>
+      <p>Appflow shuts down December 31, 2027, and Ionic's already stopped selling it to new customers. If that's your current CI, <a href="/ionic-appflow-alternative.html">here's what to actually weigh</a> before picking a replacement, including the one-time-cost option most "Appflow alternative" writeups don't mention.</p>
+    </div>
+    <div class="faq-item">
       <h3>Why not just use Xcode Cloud, fastlane, or a free GitHub Action?</h3>
       <p>Xcode Cloud works if you already own a Mac — <a href="/xcode-cloud-vs-macless.html">full comparison here</a> — but setup happens inside Xcode itself, so it doesn't help if you don't have one. fastlane's <code>match</code> is free and handles signing well if you're willing to learn it. Free GitHub Marketplace actions can build and sign for free too, they just don't upload to TestFlight, and they don't stop you from hitting the same certificate and provisioning profile errors this pipeline's troubleshooting doc already has fixes for. This is for someone with no Mac access at all who doesn't want to spend a weekend finding that out.</p>
     </div>
