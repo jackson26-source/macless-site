@@ -120,6 +120,13 @@ blockquote.proof a{ display:inline-block; margin-top:10px; font-style:normal; fo
 .price-block-alt h3{ font-family: var(--serif); font-size: 19px; margin-bottom: 8px; }
 .price-block-alt .price-tag{ font-size: 32px; }
 .btn-secondary{ background: transparent; color: var(--text); border: 1px solid var(--text); }
+
+.ledger{ display:flex; gap:18px; margin: 4px 0 28px; flex-wrap:wrap; }
+.ledger-item{ flex:1; min-width:210px; padding:20px 22px; border:1px solid var(--border); border-radius:10px; background: var(--bg-panel); }
+.ledger-item-accent{ border-color: var(--accent); }
+.ledger-price{ font-family: var(--serif); font-size:30px; font-weight:700; margin-bottom:6px; }
+.ledger-price small{ font-size:14px; font-weight:400; color: var(--text-dim); font-family: var(--sans); }
+.ledger-label{ font-size:13.5px; color: var(--text-dim); }
 .btn-secondary:hover{ background: var(--text); color: #fdfcf9; }
 
 /* ---- FAQ ---- */
