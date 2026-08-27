@@ -21,7 +21,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://macless.dev/">
 <meta property="og:title" content="Macless — ship an iOS app without a Mac">
-<meta property="og:description" content="The GitHub Actions pipeline, signing scripts, and notes I used to build and submit an actual App Store app without owning a Mac. $99 one-time, no subscription.">
+<meta property="og:description" content="The GitHub Actions pipeline, signing scripts, and notes I used to build and submit an actual App Store app without owning a Mac. $1 for the next 24 hours, normally $99, no subscription.">
 <meta property="og:image" content="https://macless.dev/assets/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -43,7 +43,7 @@
               <a class="pricelink" href="/calculator.html">What are you paying now?</a>
       <a class="pricelink" href="/signing-doctor.html">Free signing checker</a>
       <a class="pricelink" href="/rejection-doctor.html">Free rejection decoder</a>
-      <a class="pricelink" href="#pricing">$99, one-time →</a>
+      <a class="pricelink" href="#pricing"><s>$99</s> $1 today →</a>
     </div>
   </div>
 </header>
@@ -54,10 +54,10 @@
     <h1>Ship an iOS app to the App Store without ever owning a Mac</h1>
     <p class="hero-sub">This is the automated build pipeline, signing scripts, and notes I used to build and submit an actual App Store app. I've run it against Apple's real signing and App Store systems, not just written it and assumed it works, the changelog has the specific bugs it caught along the way. It runs on GitHub Actions — GitHub's own free build servers — so all you need is a web browser. Nothing else.</p>
     <div class="cta-row">
-      <a class="btn btn-primary" href="#pricing">Get the pipeline — $99</a>
+      <a class="btn btn-primary" href="#pricing">Get the pipeline — <s>$99</s> $1 today</a>
       <a class="btn-text" href="#how">see how it works</a>
     </div>
-    <div class="hero-note">One-time payment. Instant download. 30-day money-back guarantee.</div>
+    <div class="hero-note">$1 for the next 24 hours (normally $99). Instant download. 30-day money-back guarantee.</div>
 
     <pre class="demo"><span class="dim">$</span> git push origin main
 <span class="dim">→ GitHub spins up a macOS build machine (free, public repo)</span>
@@ -118,21 +118,21 @@ done. no Mac involved, nothing spent.</pre>
   <div class="wrap">
     <h2>Price</h2>
     <div class="price-block">
-      <div class="price-tag">$99 <small>one-time</small></div>
+      <div class="price-tag"><s>$99</s> $1 <small>today only</small></div>
       <div class="price-note">No subscription. Part of the $99 pays for keeping this working as Apple changes things on its end, the changelog below is proof that's actually happening, not just a promise.</div>
       <ul class="plain" style="margin-bottom:22px;">
         <li><span>Workflow file, signing script, setup guide, App Store Connect guide, and troubleshooting doc</span></li>
         <li><span>Any future updates to the guide, included — <a href="/changelog.html">see what's shipped so far</a></span></li>
       </ul>
-      <a class="btn btn-primary" href="https://buy.stripe.com/00w00l1CGbH47zOfeCfbq00" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'ios_99'});}">Get the pipeline — $99</a>
+      <a class="btn btn-primary" href="https://buy.stripe.com/00w00l1CGbH47zOfeCfbq00" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'ios_99'});}">Get the pipeline — <s>$99</s> $1 today</a>
       <div class="guarantee">30-day money-back guarantee. If you can't get a signed build out, email me and I'll refund it — no back-and-forth.</div>
     </div>
 
     <div class="price-block-alt" id="android">
       <h3>Only need Android?</h3>
-      <div class="price-tag">$39 <small>one-time</small></div>
+      <div class="price-tag"><s>$39</s> $1 <small>today only</small></div>
       <div class="price-note">The Android-only cut of the same pipeline — build, sign, and upload a Play-Store-ready <code class="mono">.aab</code> via GitHub Actions, no monthly CI subscription. Android builds never needed a Mac in the first place, so this one's priced for just that.</div>
-      <a class="btn btn-secondary" href="https://buy.stripe.com/9B6dRbftw4eC6vKd6ufbq01" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'android_39'});}">Get the Android pipeline — $39</a>
+      <a class="btn btn-secondary" href="https://buy.stripe.com/9B6dRbftw4eC6vKd6ufbq01" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'android_39'});}">Get the Android pipeline — <s>$39</s> $1 today</a>
       <div class="guarantee">Same 30-day money-back guarantee.</div>
     </div>
 
@@ -161,7 +161,7 @@ done. no Mac involved, nothing spent.</pre>
     </div>
     <div class="faq-item">
       <h3>Why not just use Codemagic or Bitrise?</h3>
-      <p>Those are solid, polished services, and if you'd rather pay per build or a monthly fee for a fully managed GUI, they're a fine choice — but it's worth knowing what their own users flag most, in their own reviews: "very poor documentation for code signing" on Codemagic (a <a href="https://www.capterra.com/p/152573/Nevercode/reviews/" target="_blank" rel="noopener">Capterra reviewer</a>), and "setting up Apple builds for testing on my device took me more than a couple of hours" on Bitrise (a <a href="https://www.g2.com/products/bitrise/reviews" target="_blank" rel="noopener">G2 reviewer</a>) — the same signing setup this pipeline's troubleshooting doc already has fixes for. This is different: a one-time $99 payment for the actual pipeline itself, running on GitHub's own free macOS minutes on public repos, so there's no recurring bill once it's set up. It's for people who'd rather own the setup once than keep paying for it build after build. <a href="/codemagic-bitrise-vs-macless.html">Full comparison here</a> if you want the honest breakdown of when each one actually makes sense.</p>
+      <p>Those are solid, polished services, and if you'd rather pay per build or a monthly fee for a fully managed GUI, they're a fine choice — but it's worth knowing what their own users flag most, in their own reviews: "very poor documentation for code signing" on Codemagic (a <a href="https://www.capterra.com/p/152573/Nevercode/reviews/" target="_blank" rel="noopener">Capterra reviewer</a>), and "setting up Apple builds for testing on my device took me more than a couple of hours" on Bitrise (a <a href="https://www.g2.com/products/bitrise/reviews" target="_blank" rel="noopener">G2 reviewer</a>) — the same signing setup this pipeline's troubleshooting doc already has fixes for. This is different: a one-time payment for the actual pipeline itself (<s>$99</s> $1 for the next 24 hours), running on GitHub's own free macOS minutes on public repos, so there's no recurring bill once it's set up. It's for people who'd rather own the setup once than keep paying for it build after build. <a href="/codemagic-bitrise-vs-macless.html">Full comparison here</a> if you want the honest breakdown of when each one actually makes sense.</p>
     </div>
     <div class="faq-item">
       <h3>I'm on Ionic Appflow — what do I switch to?</h3>
@@ -189,7 +189,7 @@ done. no Mac involved, nothing spent.</pre>
     </div>
     <div class="faq-item">
       <h3>What if I only need Android, not iOS?</h3>
-      <p>There's a <a href="#android">separate $39 Android-only pipeline</a> — the same GitHub Actions workflow, already run against real Android build failures, just without the iOS signing and build steps you'd never use. Android builds never needed a Mac to begin with, so this one's priced for that.</p>
+      <p>There's a <a href="#android">separate Android-only pipeline</a> — <s>$39</s> $1 for the next 24 hours — the same GitHub Actions workflow, already run against real Android build failures, just without the iOS signing and build steps you'd never use. Android builds never needed a Mac to begin with, so this one's priced for that.</p>
     </div>
     <div class="faq-item">
       <h3>What if I get stuck?</h3>
@@ -201,7 +201,7 @@ done. no Mac involved, nothing spent.</pre>
 <div class="final-cta">
   <div class="wrap">
     <h2>Ready to give it a try?</h2>
-    <a class="btn btn-primary" href="#pricing">Get the pipeline — $99</a>
+    <a class="btn btn-primary" href="#pricing">Get the pipeline — <s>$99</s> $1 today</a>
   </div>
 </div>
 
