@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix "exportArchive: No signing certificate found" in CI — Macless</title>
+<meta name="description" content="The build succeeds, the archive succeeds, then export fails with 'No signing certificate found.' Here's why this specific step fails even when your certificate is installed.">
+<link rel="canonical" href="https://macless.dev/blog/exportarchive-no-signing-certificate-found.html">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>Fix "exportArchive: No signing certificate found" in CI</h1>
+    <p class="hero-sub">This is a different failure than "no signing certificate matching team ID" — the archive step already worked, which rules out most of the usual causes.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>This one is confusing specifically because of where it happens. Your <code class="mono">xcodebuild archive</code> step succeeds — Xcode built and signed the app fine. Then the separate <code class="mono">xcodebuild -exportArchive</code> step, which turns that archive into an actual <code class="mono">.ipa</code>, fails with something like:</p>
+    <pre class="demo">error: exportArchive: No signing certificate "iOS Distribution" found</pre>
+    <p>If the certificate weren't in the keychain at all, the archive step would have failed first. So the certificate is there — <code class="mono">exportArchive</code> is failing for a narrower reason.</p>
+
+    <h2>The usual cause: archive and export used different signing methods</h2>
+    <p>Archiving can succeed using automatic signing (Xcode or your build settings pick a certificate and profile on the fly), while your <code class="mono">exportOptions.plist</code> tells the export step to use manual signing with a specific certificate identity or profile — and that exact identity isn't what actually got used to sign the archive. Export re-validates against what you explicitly asked for, not against whatever worked during archiving.</p>
+    <p>Check your <code class="mono">exportOptions.plist</code> for a mismatch between:</p>
+    <ul class="plain">
+      <li><b><code class="mono">signingStyle</code></b><span>Should be <code class="mono">manual</code> in CI — <code class="mono">automatic</code> in a non-interactive environment is a common source of this exact error, since there's no UI for Xcode to resolve ambiguity through.</span></li>
+      <li><b><code class="mono">provisioningProfiles</code> dictionary</b><span>Each bundle ID key must map to a profile that's actually installed in the CI runner and actually signed with the certificate present in the keychain — not just a profile that exists in Apple's portal.</span></li>
+    </ul>
+
+    <h2>The other cause: the certificate has a private key issue</h2>
+    <p>A <code class="mono">.p12</code> can import into the keychain "successfully" and still not be usable for signing if the private key didn't come through with it — this happens when the certificate was exported from a machine that generated the key differently, or the export step dropped the key pairing. Archiving can sometimes get away with this depending on which signing path Xcode takes internally; exporting cannot. Confirm the identity has an actual private key attached:</p>
+    <pre class="demo">$ security find-identity -v -p codesigning</pre>
+    <p>If the certificate shows up here with a valid count, the key is attached. If it's missing or shows "0 valid identities found" despite the import step reporting success, re-export the <code class="mono">.p12</code> from the original source (Keychain Access, or wherever the certificate was generated) rather than reusing the existing file — a key pairing issue isn't something you can fix after the fact.</p>
+
+    <div class="callout">
+      <p><b>Quickest way to isolate which of these it is:</b> temporarily set <code class="mono">signingStyle</code> to <code class="mono">automatic</code> in a throwaway copy of <code class="mono">exportOptions.plist</code> and rerun just the export step. If that succeeds, the problem is a mismatch in your manual signing config, not the certificate itself.</p>
+    </div>
+
+    <div class="cta-box">
+      <h2>This exact export config is templated for you</h2>
+      <p>The <a href="/#pricing">$99 pipeline</a> ships a working <code class="mono">exportOptions.plist</code> generation step that fills in the right signing style and profile mapping automatically, so this mismatch never has a chance to happen. <a href="/signing-doctor.html">Signing Doctor</a> (free) also checks whether your certificate actually has a usable private key before you ever get to the export step.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>

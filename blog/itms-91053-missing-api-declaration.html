@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix ITMS-91053: "Missing API declaration" — Macless</title>
+<meta name="description" content="ITMS-91053 means a required-reason API somewhere in your app or a dependency isn't declared in your privacy manifest. Here's how to find which one and fix it in a CI build.">
+<link rel="canonical" href="https://macless.dev/blog/itms-91053-missing-api-declaration.html">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>Fix ITMS-91053: "Missing API declaration"</h1>
+    <p class="hero-sub">Apple's privacy manifest requirement rejects the upload, not the build — which is why this one blindsides people who never touched a signing setting.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>If App Store Connect rejects your upload with <code class="mono">ITMS-91053: Missing API declaration</code>, the build itself succeeded. This is a separate check Apple runs against the binary after it's uploaded, looking for use of a "required reason API" that isn't declared in a privacy manifest anywhere in the app.</p>
+
+    <p>It trips people up in CI specifically because it often isn't caused by your code at all — it's caused by a dependency.</p>
+
+    <h2>What a "required reason API" actually is</h2>
+    <p>Since May 2024, Apple requires apps to declare <em>why</em> they use certain privacy-sensitive APIs, even ones that don't touch personal data in any obvious way. The most common categories that trigger this error:</p>
+    <ul class="plain">
+      <li><b>File timestamps</b><span>Reading a file's creation or modification date — including from third-party libraries that log or cache to disk.</span></li>
+      <li><b>User defaults</b><span><code class="mono">UserDefaults</code> reads/writes, including ones buried inside an SDK you didn't write.</span></li>
+      <li><b>Disk space</b><span>Checking available storage before a download or cache write.</span></li>
+      <li><b>System boot time</b><span>Used surprisingly often by analytics and crash-reporting SDKs for session timing.</span></li>
+    </ul>
+    <p>Each category has a fixed set of Apple-approved "reason codes" (things like <code class="mono">1C8F.1</code>) — you can't invent your own justification text, you pick the code that matches your actual use case from Apple's list.</p>
+
+    <h2>Step 1: find which API and which dependency</h2>
+    <p>App Store Connect's rejection email names the API category but not the source. If you built with Xcode 15+, the fastest way to find the culprit is to check whether any of your CocoaPods/SPM dependencies shipped their own <code class="mono">PrivacyInfo.xcprivacy</code> — most major SDKs (Firebase, Facebook SDK, most ad/analytics libraries) added these over the past year specifically because of this rule. An outdated version of a dependency is the single most common cause: the SDK itself is fine, you're just running a version from before its maintainers added the manifest.</p>
+
+    <h2>Step 2: add or update PrivacyInfo.xcprivacy</h2>
+    <p>In Xcode: File → New File → search "privacy" → App Privacy. This creates a <code class="mono">PrivacyInfo.xcprivacy</code> file. Inside it, under <b>Privacy Accessed API Types</b>, add an entry for each API category you're actually using, matching the exact key Apple defines (e.g. <code class="mono">NSPrivacyAccessedAPICategoryUserDefaults</code>), then pick an approved reason code under <b>Privacy Accessed API Reasons</b> for each one.</p>
+
+    <div class="callout">
+      <p><b>In a headless CI build:</b> this file just needs to exist in your app target (or be bundled inside a framework target) before <code class="mono">xcodebuild archive</code> runs — there's no separate CI-specific step. If it's missing after archiving, check that the file is actually added to your target's "Copy Bundle Resources" build phase, not just sitting in the project navigator.</p>
+    </div>
+
+    <h2>Why this one is worse in CI than it sounds</h2>
+    <p>Locally, Xcode's own build won't flag this at all — it only surfaces as an upload-time rejection from Apple's servers, which means a CI pipeline can go green on every step (build, archive, export, upload) and still fail asynchronously a few minutes later when Apple's processing catches it. If your workflow doesn't poll for or alert on App Store Connect processing status after upload, this failure can go unnoticed for a while.</p>
+
+    <div class="cta-box">
+      <h2>Signing Doctor won't catch this one — a build monitor will</h2>
+      <p>This specific check happens after your app leaves CI, so no local tool (including <a href="/signing-doctor.html">Signing Doctor</a>) can catch it before upload. The Macless pipeline polls App Store Connect after upload and surfaces rejections like this one instead of leaving you to notice a silent failure.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
