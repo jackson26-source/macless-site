@@ -43,6 +43,7 @@
               <a class="pricelink" href="/calculator.html">What are you paying now?</a>
       <a class="pricelink" href="/signing-doctor.html">Free signing checker</a>
       <a class="pricelink" href="/rejection-doctor.html">Free rejection decoder</a>
+      <a class="pricelink" href="#compare">vs. competitors</a>
       <a class="pricelink" href="#pricing"><s>$99</s> $1 today →</a>
     </div>
   </div>
@@ -50,9 +51,9 @@
 
 <div class="hero">
   <div class="wrap">
-    <div class="eyebrow">No Mac. No rented Mac. No monthly CI bill.</div>
+    <div class="eyebrow">$99 once. No Mac, ever.</div>
     <h1>Ship an iOS app to the App Store without ever owning a Mac</h1>
-    <p class="hero-sub">This is the automated build pipeline, signing scripts, and notes I used to build and submit an actual App Store app. I've run it against Apple's real signing and App Store systems, not just written it and assumed it works, the changelog has the specific bugs it caught along the way. It runs on GitHub Actions — GitHub's own free build servers — so all you need is a web browser. Nothing else.</p>
+    <p class="hero-sub">This is the automated build pipeline — and the guided, browser-only wizard on top of it — that I used to build and submit an actual App Store app. Buy it, sign in with GitHub, pick a repo, and it connects, signs, builds, and uploads for you. I've run it against Apple's real signing and App Store systems, not just written it and assumed it works — the changelog has the specific bugs it caught along the way. It runs on GitHub Actions, GitHub's own free build servers, so all you need is a web browser. Nothing else.</p>
     <div class="cta-row">
       <a class="btn btn-primary" href="#pricing">Get the pipeline — <s>$99</s> $1 today</a>
       <a class="btn-text" href="#how">see how it works</a>
@@ -66,7 +67,7 @@
 done. no Mac involved, nothing spent.</pre>
 
     <div class="note">
-      I'm Jackson. I built <b>Citolex</b>, a speed-reading app, and wanted it on the App Store — but I don't own a Mac and wasn't going to rent one just to click a few buttons in Xcode. It turns out GitHub gives away free macOS build minutes on public repos. Normally that's used for running tests. I used it to build, sign, and upload the whole app instead. It worked, and Citolex actually shipped. This is that setup, cleaned up so you don't have to piece it together yourself.
+      I'm Jackson. I built <b>Citolex</b>, a speed-reading app, and wanted it on the App Store — but I don't own a Mac and wasn't going to rent one just to click a few buttons in Xcode. It turns out GitHub gives away free macOS build minutes on public repos. Normally that's used for running tests. I used it to build, sign, and upload the whole app instead. It worked, and Citolex actually shipped. This is that setup, cleaned up and wrapped in a wizard so you don't have to piece it together yourself.
       <div class="sig">— Jackson</div>
     </div>
   </div>
@@ -79,12 +80,12 @@ done. no Mac involved, nothing spent.</pre>
 
     <h2 style="margin-top:36px;">How it works</h2>
     <ol class="steps">
-      <li><span class="n">1</span><span><b>You push code</b> to GitHub — the same way you'd save any change to your project.</span></li>
-      <li><span class="n">2</span><span><b>GitHub spins up a free Mac in the cloud</b> for a few minutes and copies your project onto it.</span></li>
-      <li><span class="n">3</span><span><b>A script fills in your app's identity and signing info</b> — the identifiers and certificates that prove the app is really yours — using values you enter once and GitHub stores securely. No clicking through Xcode.</span></li>
-      <li><span class="n">4</span><span><b>The build tools package everything up</b> into the signed file format (<code class="mono">.ipa</code>) Apple's store expects.</span></li>
-      <li><span class="n">5</span><span><b>That file uploads straight to App Store Connect</b> (Apple's dashboard for managing your app) and shows up in TestFlight, Apple's beta-testing tool, a few minutes later.</span></li>
-      <li><span class="n">6</span><span>You never opened Xcode. You never touched a Mac.</span></li>
+      <li><span class="n">1</span><span><b>Buy once, then sign in with GitHub</b> — the same one-click popup you've used on any other site. No personal access token to create, no terminal.</span></li>
+      <li><span class="n">2</span><span><b>Pick a repo</b> — an existing project or a brand-new one — and the wizard adds only the pipeline files (workflows, signing scripts, docs). Anything already in your repo is left untouched.</span></li>
+      <li><span class="n">3</span><span><b>Enter your app's signing details once, right in the wizard.</b> It stores them as encrypted GitHub secrets for you — you never have to find GitHub's own secrets settings page yourself.</span></li>
+      <li><span class="n">4</span><span><b>Click connect</b>, and GitHub spins up a free Mac in the cloud, builds your app, and signs it with the identity you just gave it.</span></li>
+      <li><span class="n">5</span><span><b>The signed build uploads straight to TestFlight</b> (iOS) or <b>Google Play</b> (Android) a few minutes later — check your phone.</span></li>
+      <li><span class="n">6</span><span>You never opened Xcode. You never touched a Mac. You never touched a terminal.</span></li>
     </ol>
   </div>
 </section>
@@ -95,7 +96,8 @@ done. no Mac involved, nothing spent.</pre>
     <p class="lead">Not just a workflow file you copy and hope works. I've actually run every piece of this against Apple's real signing and build systems, the <a href="/changelog.html">changelog</a> has the dated, specific bugs it caught along the way, not just a claim that it's tested.</p>
 
     <ul class="plain">
-      <li><b>The GitHub Actions workflow</b><span>The actual build → sign → archive → upload pipeline, ready to drop into your project.</span></li>
+      <li><b>The guided setup wizard</b><span>Connect GitHub, pick a repo, enter your signing details once — the wizard pushes the pipeline and stores your secrets for you. No manual GitHub Secrets page, no copy-pasting.</span></li>
+      <li><b>The GitHub Actions workflow underneath it</b><span>The actual build → sign → archive → upload pipeline the wizard installs, ready to drop into your project by hand too if you'd rather.</span></li>
       <li><b>A Simulator-preview workflow</b><span>Builds your app and screenshots it running in the iOS Simulator, on GitHub's own servers — no signing setup, no Apple hardware, so you can see it before you've configured anything else.</span></li>
       <li><b>The signing script</b><span>Fills in your app's unique identifiers and signing certificates automatically — the fiddly part that normally means clicking through Xcode by hand.</span></li>
       <li><b>Scheduled expiry monitoring</b><span>A workflow that checks your signing certificate and keystore expiry dates on a schedule and warns you before a build silently starts failing because something quietly expired.</span></li>
@@ -110,7 +112,34 @@ done. no Mac involved, nothing spent.</pre>
       <a href="https://citolex.com" target="_blank" rel="noopener">→ citolex.com</a>
     </blockquote>
 
-    <p class="lead">Not ready to buy yet? <a href="/signing-doctor.html">Signing Doctor</a> is a free standalone tool — pulled straight out of this pipeline's own validation step — that tells you exactly why a signing setup is failing, on any project, any CI. If you've already got a build rejected instead, <a href="/rejection-doctor.html">Rejection Doctor</a> decodes what Apple's message actually means.</p>
+    <div class="callout">
+      <p><b>Not ready to buy? Start free — no purchase, no account.</b></p>
+      <p><a href="/signing-doctor.html">Signing Doctor</a> — a free, standalone tool pulled straight out of this pipeline's own validation step. Paste in your signing setup and it tells you exactly why it's failing, in plain English, on any project, any CI.</p>
+      <p><a href="/rejection-doctor.html">Rejection Doctor</a> — free. Paste in an App Store rejection message and it decodes what Apple's actually asking for, across 57 rejection categories, plus a starting point for your appeal.</p>
+    </div>
+  </div>
+</section>
+
+<section id="compare">
+  <div class="wrap">
+    <h2>How this compares</h2>
+    <p class="lead">The honest version, not the marketing version — every row below links to a full, sourced breakdown.</p>
+
+    <table class="compare">
+      <tr><th></th><th>Needs a Mac?</th><th>Handles signing setup?</th><th>Cost</th></tr>
+      <tr><td><b>Macless</b></td><td>No</td><td>Yes — the wizard walks you through it and stores it for you</td><td>$99 once, no subscription</td></tr>
+      <tr><td>Codemagic / Bitrise</td><td>No</td><td>Real reviewers flag rough signing setup and documentation</td><td>Per-build or monthly</td></tr>
+      <tr><td>Xcode Cloud</td><td>Yes, to configure it</td><td>Only from inside Xcode</td><td>Requires owning a Mac first</td></tr>
+      <tr><td>fastlane / free GitHub Actions</td><td>No</td><td>DIY — cert and profile errors are yours to debug alone</td><td>Free, your time isn't</td></tr>
+      <tr><td>A $20 Fiverr gig</td><td>No</td><td>No — needs an already-signed build from you first</td><td>Per submission, forever</td></tr>
+    </table>
+
+    <p class="lead" style="margin-top:8px; margin-bottom:0;">
+      <a href="/codemagic-bitrise-vs-macless.html">Macless vs. Codemagic &amp; Bitrise →</a><br>
+      <a href="/xcode-cloud-vs-macless.html">Macless vs. Xcode Cloud, fastlane &amp; free Actions →</a><br>
+      <a href="/fiverr-vs-macless.html">Macless vs. a Fiverr gig →</a><br>
+      <a href="/ionic-appflow-alternative.html">Coming from Ionic Appflow? →</a>
+    </p>
   </div>
 </section>
 
@@ -121,7 +150,7 @@ done. no Mac involved, nothing spent.</pre>
       <div class="price-tag"><s>$99</s> $1 <small>today only</small></div>
       <div class="price-note">No subscription. Part of the $99 pays for keeping this working as Apple changes things on its end, the changelog below is proof that's actually happening, not just a promise.</div>
       <ul class="plain" style="margin-bottom:22px;">
-        <li><span>Workflow file, signing script, setup guide, App Store Connect guide, and troubleshooting doc</span></li>
+        <li><span>The setup wizard, workflow file, signing script, setup guide, App Store Connect guide, and troubleshooting doc</span></li>
         <li><span>Any future updates to the guide, included — <a href="/changelog.html">see what's shipped so far</a></span></li>
       </ul>
       <a class="btn btn-primary" href="https://buy.stripe.com/00w00l1CGbH47zOfeCfbq00" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'ios_99'});}">Get the pipeline — <s>$99</s> $1 today</a>
@@ -165,7 +194,7 @@ done. no Mac involved, nothing spent.</pre>
     </div>
     <div class="faq-item">
       <h3>Why not just use Codemagic or Bitrise?</h3>
-      <p>Those are solid, polished services, and if you'd rather pay per build or a monthly fee for a fully managed GUI, they're a fine choice — but it's worth knowing what their own users flag most, in their own reviews: "very poor documentation for code signing" on Codemagic (a <a href="https://www.capterra.com/p/152573/Nevercode/reviews/" target="_blank" rel="noopener">Capterra reviewer</a>), and "setting up Apple builds for testing on my device took me more than a couple of hours" on Bitrise (a <a href="https://www.g2.com/products/bitrise/reviews" target="_blank" rel="noopener">G2 reviewer</a>) — the same signing setup this pipeline's troubleshooting doc already has fixes for. This is different: a one-time payment for the actual pipeline itself (<s>$99</s> $1 for the next 24 hours), running on GitHub's own free macOS minutes on public repos, so there's no recurring bill once it's set up. It's for people who'd rather own the setup once than keep paying for it build after build. <a href="/codemagic-bitrise-vs-macless.html">Full comparison here</a> if you want the honest breakdown of when each one actually makes sense.</p>
+      <p>Those are solid, polished services, and if you'd rather pay per build or a monthly fee for a fully managed GUI, they're a fine choice — but it's worth knowing what their own users flag most, in their own reviews: "very poor documentation for code signing" on Codemagic (a <a href="https://www.capterra.com/p/152573/Nevercode/reviews/" target="_blank" rel="noopener">Capterra reviewer</a>), and "setting up Apple builds for testing on my device took me more than a couple of hours" on Bitrise (a <a href="https://www.g2.com/products/bitrise/reviews" target="_blank" rel="noopener">G2 reviewer</a>) — the same signing setup this pipeline's troubleshooting doc, and its wizard, already have fixes for. This is different: a one-time payment for the actual pipeline itself (<s>$99</s> $1 for the next 24 hours), running on GitHub's own free macOS minutes on public repos, so there's no recurring bill once it's set up. It's for people who'd rather own the setup once than keep paying for it build after build. <a href="/codemagic-bitrise-vs-macless.html">Full comparison here</a> if you want the honest breakdown of when each one actually makes sense.</p>
     </div>
     <div class="faq-item">
       <h3>I'm on Ionic Appflow — what do I switch to?</h3>
@@ -173,7 +202,7 @@ done. no Mac involved, nothing spent.</pre>
     </div>
     <div class="faq-item">
       <h3>Isn't there a $20 Fiverr gig that does this?</h3>
-      <p>Those gigs upload an already-signed <code class="mono">.ipa</code> you hand them, signing itself is listed as your problem to solve first on most of them. Macless is the part before that, it sets up the actual build and signing pipeline from your source code, so you have a signed build to upload in the first place, and every update after this one ships the same way with a normal <code class="mono">git push</code>. <a href="/fiverr-vs-macless.html">Full comparison here</a> if you want the honest breakdown of when each one actually makes sense.</p>
+      <p>Those gigs upload an already-signed <code class="mono">.ipa</code> you hand them, signing itself is listed as your problem to solve first on most of them. Macless is the part before that, it sets up the actual build and signing pipeline from your source code, so you have a signed build to upload in the first place, and every update after this one ships the same way with a normal <code class="mono">git push</code> — or a click through the wizard. <a href="/fiverr-vs-macless.html">Full comparison here</a> if you want the honest breakdown of when each one actually makes sense.</p>
     </div>
     <div class="faq-item">
       <h3>Why not just use Xcode Cloud, fastlane, or a free GitHub Action?</h3>
