@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The most common reasons Apple rejects your app — Macless</title>
+<meta name="description" content="Apple rejected 1.93 million of the 7.77 million apps it reviewed in 2024. Here's what actually gets flagged, in the guidelines' own language, and what to check before you resubmit.">
+<link rel="canonical" href="https://macless.dev/blog/most-common-reasons-apple-rejects-your-app.html">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Guide</div>
+    <h1>The most common reasons Apple rejects your app</h1>
+    <p class="hero-sub">Apple reviewed 7.77 million app submissions in 2024 and rejected 1.93 million of them, about one in four. Here's what actually gets flagged, in the guidelines' own language.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>Getting a rejection email from App Review feels personal. It usually isn't. Apple runs the same review process against every submission, and most rejections trace back to a small number of guidelines that come up again and again. Knowing which ones, and what they actually mean, turns a vague rejection into a fixable checklist.</p>
+
+    <h2>How often this actually happens</h2>
+    <p>Apple's own 2024 App Store Transparency Report puts real numbers on this. Out of 7.77 million app submissions reviewed that year, 1.93 million were rejected, roughly 25%. Of those, 295,109 were fixed and approved on resubmission. Separately, 82,509 already-live apps were removed after the fact, most commonly for guideline or design violations (42,252), followed by fraud (38,315).</p>
+
+    <p>Apple hasn't published a breakdown of rejections by specific guideline number, so treat any listicle claiming "62% of rejections are X" as unsourced. What Apple has said, in its own commentary alongside the report, is that the most common drivers, in order, are performance and bugs, legal issues, design problems, business-model (payment) violations, and safety risks. That ordering lines up with the specific guidelines below.</p>
+
+    <h2>The guidelines that actually catch people</h2>
+    <p>These are pulled directly from Apple's current App Store Review Guidelines, not paraphrased from a third party.</p>
+
+    <ul class="plain">
+      <li><b>Guideline 2.1, App Completeness.</b><span>Covers crashes, obvious bugs, placeholder content, broken demo accounts, and non-functional in-app purchases. If a reviewer can't get past your login screen or your app crashes on launch, this is the line it gets cited under. It's the single most avoidable category, because it's the one you can actually test yourself before submitting.</span></li>
+      <li><b>Guideline 4.2, Minimum Functionality.</b><span>Your app has to be more than "a repackaged website." Apple wants "lasting entertainment value or adequate utility." A thin wrapper around a web view, with no native functionality added, gets flagged here. A sub-clause, 4.2.6, specifically targets apps built from commercialized app-generator templates unless the actual content provider is the one submitting.</span></li>
+      <li><b>Guideline 4.3, Spam.</b><span>4.3(a) bans duplicate submissions under different Bundle IDs, the classic example being the same app re-skinned per city. 4.3(b) targets near-clones in saturated categories (flashlights, simple timers, wallpaper apps, fortune-telling apps) unless yours is "meaningfully different" from what's already in the store.</span></li>
+      <li><b>Guideline 5.1.1, Data Collection and Storage.</b><span>Requires a working privacy policy link, explicit consent before collecting any data (including "anonymous" analytics), no forcing or tricking users into granting permissions they don't need, and account deletion if your app lets people create an account in the first place.</span></li>
+      <li><b>Guideline 3.1.1, In-App Purchase.</b><span>Any unlock of digital features or content inside your app has to go through Apple's own In-App Purchase system. License keys, QR codes, or crypto-based workarounds to unlock paid features get rejected here, and loot-box mechanics specifically require published odds.</span></li>
+    </ul>
+
+    <h2>What changed recently</h2>
+    <p>Two real, dated changes worth knowing about if you haven't submitted in a while:</p>
+
+    <ul class="plain">
+      <li><b>Privacy manifests, enforced since May 1, 2024.</b><span>Newly added third-party SDKs on Apple's commonly-used-SDK list now require a privacy manifest and, in many cases, a valid signature. An app missing one for a flagged SDK gets rejected before a human reviewer even looks at it. Apple has signaled this requirement will keep expanding to cover more of the binary, not less.</span></li>
+      <li><b>Guideline 1.2 now explicitly covers random or anonymous chat, as of February 2026.</b><span>If your app includes any kind of stranger-matching chat feature, Apple's guidelines were revised to state plainly that this falls under User-Generated Content rules, meaning you need real moderation in place, not just a report button as an afterthought.</span></li>
+    </ul>
+
+    <h2>What actually helps</h2>
+    <p>None of this is exotic. Most of it is just discipline about what you check before you hit submit.</p>
+
+    <ul class="plain">
+      <li><b>Read the actual rejection line, not just the guideline number.</b><span>App Review's message usually tells you specifically what triggered it, a missing purpose string, a specific screen that crashed, a mismatched screenshot. The guideline number is the category, not the diagnosis.</span></li>
+      <li><b>Give reviewers a working demo account.</b><span>If your app requires login, App Review needs a real account that actually works, with real data behind it, not a stub. A broken demo account is one of the most common and entirely self-inflicted 2.1 rejections.</span></li>
+      <li><b>Don't build a payment workaround.</b><span>If a feature unlocks with money, it has to go through Apple's In-App Purchase system. This is 3.1.1 and Apple checks for it specifically, including license keys and external payment links for digital content.</span></li>
+      <li><b>Check your privacy manifest before you add a new SDK, not after a rejection.</b><span>If you're pulling in a new third-party dependency, check whether it's on Apple's commonly-used-SDK list and whether it ships a manifest. Finding this out from a rejection costs you a review cycle you didn't need to spend.</span></li>
+    </ul>
+
+    <div class="callout">
+      <p><b>The pattern underneath all five categories:</b> Apple is checking whether your app does what it claims, respects the data it touches, and pays through the channel it's supposed to. Most rejections are one of those three things, stated in guideline language instead of plain English.</p>
+    </div>
+
+    <div class="cta-box">
+      <h2>I built a free tool for this</h2>
+      <p>I built <a href="/rejection-doctor.html">Rejection Doctor</a> (free) after seeing how often the same handful of guidelines come up. Paste in your actual rejection message and it matches it against 57 real rejection categories, tells you what's actually going on, and can draft an appeal letter if you think the rejection was a mistake. It's part of the same project as <a href="/#pricing">Macless</a>, which handles the signing and CI side of shipping an iOS app without a Mac.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
