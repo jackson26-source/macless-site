@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The iOS certificate problem nobody has actually solved — Macless</title>
+<meta name="description" content="fastlane's own maintainers admit certificate lifecycle management is still unsolved. Here's why, the specific Apple API errors that catch people off guard, and what actually helps.">
+<link rel="canonical" href="https://macless.dev/blog/ios-certificate-problem-nobody-has-solved.html">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Guide</div>
+    <h1>The iOS certificate problem nobody has actually solved</h1>
+    <p class="hero-sub">fastlane's own maintainers have said, on their own GitHub, that certificate lifecycle management is still unsolved. Here's what that actually means for your pipeline.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>If you have ever set up iOS code signing for a CI pipeline, you already know the feeling. Everything works for months, then one day a build fails with a certificate error, and you spend the next two hours relearning a system you thought you understood.</p>
+
+    <p>I want to write about why that keeps happening, because it is not a "you set it up wrong" problem. It is a problem the most popular tool in this space has openly said it has not solved.</p>
+
+    <h2>The admission</h2>
+    <p>fastlane is the standard way most teams manage iOS signing. It is free, open source, and has been around since 2015. Its own maintainers have said, on a public GitHub discussion, that certificate lifecycle management is one of the few things fastlane still has not figured out:</p>
+
+    <blockquote>"The problem of expiring certificates to me is one of the few fundamental signing features that fastlane has not yet solved... we all face again and again... I really hope we can put this issue to bed soon!"</blockquote>
+
+    <p>That is not a random forum comment. That is a maintainer, on the project's own GitHub, describing a problem that keeps coming back for everyone who uses the tool. If you search fastlane's issue tracker, you will find real, specific reports of what that looks like in practice. One developer described <code class="mono">fastlane match</code> hanging indefinitely on "Installing provisioning profile," and said outright: "I accidentally tried waiting for 2.5 hours." Another reported an expired WWDR intermediate certificate silently breaking their local keychain with no clear error pointing at the actual cause.</p>
+
+    <p>And when match genuinely gets stuck, the documented recovery path is <code class="mono">match nuke</code>, which deletes every certificate and profile of the affected type for your entire team, not just yours. One developer's reaction to that in the same thread sums it up: "does nuking remove all certificates &amp; profiles... including other people's... in your iOS team?" Yes. It does.</p>
+
+    <p>I am not writing this to pick on fastlane. It is a genuinely useful tool and a lot of serious iOS shops run on it successfully. I am writing this because if the tool built specifically to solve this problem says the problem is not solved, that tells you something real about how the underlying system works, not about who is using it wrong.</p>
+
+    <h2>Why the certificates themselves are the trap</h2>
+    <p>Apple caps how many active Distribution certificates you can have on an account. In practice this is usually two or three. That sounds generous until you see what actually exhausts it.</p>
+
+    <p>If your CI pipeline is set up to auto-provision (generate a fresh certificate on every run instead of reusing one you already created), you will hit that cap surprisingly fast. Bitrise's own documentation for their automatic provisioning steps says this plainly: without a certificate you pre-uploaded yourself, "steps with automatic provisioning will generate one on the fly every time." Run that pipeline a few dozen times and you can burn through your entire certificate allowance without ever manually creating one.</p>
+
+    <p>When you do hit the cap, the error from Apple's own API is not exactly friendly:</p>
+
+    <pre class="demo">"Could not create another Distribution certificate,
+reached the maximum number of available Distribution certificates."</pre>
+
+    <p>That message tells you what happened. It does not tell you which of your existing certificates is safe to revoke, or which apps depend on which certificate. If you have more than one app signed with certificates from the same account, you now have to go figure that out manually before you can unblock yourself, usually while a release is waiting.</p>
+
+    <h2>The errors that are not your fault</h2>
+    <p>A few other things I have hit, or seen well documented elsewhere, that are worth knowing before they happen to you at 11pm the night before a submission:</p>
+
+    <ul class="plain">
+      <li><b>A bare 500 on profile creation.</b><span><code class="mono">UNEXPECTED_ERROR</code> on a <code class="mono">POST</code> to the provisioning profiles endpoint is a real, recurring error reported directly on Apple's own developer forums. Sometimes it resolves on a plain retry with zero changes to your config. If you see this, try again before you start second-guessing your setup.</span></li>
+      <li><b>The wrong kind of API key.</b><span>App Store Connect API keys come in two flavors: Individual and Team. Provisioning-related endpoints specifically require a Team key. If you are using an Individual key, you will get a 403 on exactly those endpoints while everything else you try with that same key works fine, which makes it a lot more confusing to diagnose than a blanket permission error would be.</span></li>
+      <li><b>Enterprise vs. App Store account type is invisible to the API.</b><span>Apple's own documentation admits the API cannot automatically tell these two account types apart, so if you are generating certificates programmatically for an Enterprise (in-house distribution) account, you need to set the <code class="mono">in_house</code> flag manually. Nothing will warn you if you get this wrong until later.</span></li>
+      <li><b>Apple can change the API out from under you with no warning.</b><span>In 2025, Apple silently removed an undocumented parameter, <code class="mono">templateName</code>, from the App Store Connect API. That parameter was load-bearing for fastlane's automated provisioning-profile creation, and its removal broke automated signing industry-wide with no migration path and no changelog entry anyone could point to in advance. This is the part that is genuinely hard to defend against: the tool can be correct today and wrong next month because Apple changed something nobody announced.</span></li>
+    </ul>
+
+    <h2>What actually helps</h2>
+    <p>None of this means give up and do everything by hand. A few things that make a real, measurable difference:</p>
+
+    <ul class="plain">
+      <li><b>Check your certificate count first.</b><span>A simple <code class="mono">GET</code> on the certificates endpoint tells you exactly how many of your two or three slots are already in use, before you ever try to create a new one, so you can decide whether to reuse one or revoke an old one before you are blocked mid-release.</span></li>
+      <li><b>Never auto-provision on every CI run.</b><span>Generate your signing certificate and provisioning profile once, store them (encrypted) somewhere your pipeline can reach, and reuse them. This alone avoids most of the cap-exhaustion problem entirely.</span></li>
+      <li><b>Build retry logic around specific error codes, not a generic catch-all.</b><span>A 500 on profile creation deserves a retry with backoff. A 403 on provisioning specifically, when your key works everywhere else, deserves a message that says "check whether this is a Team key," not "permission denied."</span></li>
+      <li><b>Watch for expiry before it becomes an outage.</b><span>A scheduled check that looks at your certificate and profile expiration dates and pings you a few weeks out is a small thing to build, and it turns a surprise failure into a calendar reminder.</span></li>
+    </ul>
+
+    <div class="callout">
+      <p><b>The theme underneath all of this:</b> the tool can be correct today and wrong next month because Apple changed something nobody announced. Building in a retry-and-check-first habit around the specific errors above catches most of what actually goes wrong in practice.</p>
+    </div>
+
+    <div class="cta-box">
+      <h2>I built this into my own pipeline</h2>
+      <p>I ended up building the certificate-count check and the retry logic directly into <a href="/#pricing">Macless</a>, because I kept hitting exactly this set of problems while shipping <a href="https://citolex.com" target="_blank" rel="noopener">Citolex</a> without owning a Mac, and got tired of relearning the same lessons every few months. <a href="/signing-doctor.html">Signing Doctor</a> (free) checks certificate and profile expiry and cert-to-profile pairing before you ever get to a build failure.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
