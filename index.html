@@ -61,7 +61,7 @@
   <div class="wrap">
     <div class="eyebrow">$99 once. Ship in minutes.</div>
     <h1>Not owning a Mac won't stop you from shipping your app.</h1>
-    <p class="hero-sub">Push your code. GitHub's own free Mac builds, signs, and uploads your app to TestFlight or Google Play. You don't need Xcode. You don't need a $699 MacBook. You don't need a $20–100/month Mac rental just to click "Archive" once. Macless is $99, once. Same pipeline that shipped my own app, Citolex, to the App Store.</p>
+    <p class="hero-sub">Push your code. GitHub's own free Mac builds, signs, and uploads your app to TestFlight. You don't need Xcode. You don't need a $699 MacBook. You don't need a $20–100/month Mac rental just to click "Archive" once. Macless is $99, once. Same pipeline that shipped my own app, Citolex, to the App Store.</p>
     <div class="cta-row">
       <a class="btn btn-primary" href="#pricing">Ship it in minutes — $99</a>
       <a class="btn-text" href="#how">see how it works</a>
@@ -104,7 +104,7 @@ done. no Mac involved, nothing spent.</pre>
       <li><span class="n">2</span><span><b>Pick a repo</b>, an existing project or a brand-new one. The wizard adds only the pipeline files (workflows, signing scripts, docs). Anything already in your repo is left as is.</span></li>
       <li><span class="n">3</span><span><b>Enter your app's signing details once in the wizard.</b> It stores them as encrypted GitHub secrets for you, so you never have to find GitHub's own secrets settings page yourself. They never touch your repo or your build logs, and none of the workflows run on pull requests, which is the usual way a public repo leaks secrets.</span></li>
       <li><span class="n">4</span><span><b>Click connect</b>, and GitHub spins up a free Mac in the cloud, builds your app, and signs it with the identity you just gave it.</span></li>
-      <li><span class="n">5</span><span><b>The signed build uploads straight to TestFlight</b> (iOS) or <b>Google Play</b> (Android). A few minutes later it's there, ready to install on your phone.</span></li>
+      <li><span class="n">5</span><span><b>The signed build uploads straight to TestFlight.</b> A few minutes later it's there, ready to install on your phone.</span></li>
       <li><span class="n">6</span><span>You don't have to open Xcode on a Mac. The wizard means you never even open a terminal.</span></li>
     </ol>
   </div>
@@ -116,7 +116,7 @@ done. no Mac involved, nothing spent.</pre>
     <p class="lead">It's not just a workflow file you copy and hope works. I've run every piece of this against Apple's real signing and build systems. The <a href="/changelog.html">changelog</a> has the dated, specific bugs it caught along the way, not just a claim that it's tested.</p>
 
     <ul class="plain">
-      <li><b>The guided setup wizard</b><span>Connect GitHub, pick a repo, enter your signing details once — the wizard pushes the pipeline and stores your secrets for you. No manual GitHub Secrets page, no copy-pasting.</span></li>
+      <li><b>The guided setup wizard</b><span>Connect GitHub, pick a repo, enter your signing details once — the wizard pushes the pipeline and stores them as encrypted GitHub secrets for you. No manual GitHub Secrets page, no copy-pasting. They never appear in your repo or your build logs, and none of these workflows run on pull requests, which is the usual way a public repo leaks secrets.</span></li>
       <li><b>The GitHub Actions workflow underneath it</b><span>The actual build → sign → archive → upload pipeline the wizard installs, ready to drop into your project by hand too if you'd rather.</span></li>
       <li><b>A Simulator-preview workflow</b><span>Builds your app and screenshots it running in the iOS Simulator, on GitHub's own servers — no signing setup, no Apple hardware, so you can see it before you've configured anything else.</span></li>
       <li><b>The signing script</b><span>Fills in your app's unique identifiers and signing certificates automatically — the irritating part that normally means clicking through Xcode by hand.</span></li>
