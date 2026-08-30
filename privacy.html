@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Macless</title>
+<meta name="description" content="What Macless actually collects, why, and who it's shared with — no boilerplate, just the real answer for each thing this site and the wizard touch.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/calculator.html">What are you paying now?</a>
+      <a class="pricelink" href="/signing-doctor.html">Free signing checker</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <div class="eyebrow" style="margin-top:18px;">Privacy</div>
+    <h1>What this site actually collects</h1>
+    <p class="hero-sub">Written to be accurate about what Macless does today, not a copy-pasted template. If a future change adds or removes something below, this page gets updated the same day, not "eventually."</p>
+    <div class="byline">Jackson · last updated 2026-08-30</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <h2>The short version</h2>
+    <p>Macless never sees or stores your credit card number — Stripe handles that entirely. Macless never stores your Apple Developer / App Store Connect API key or <code class="mono">.p8</code> file — the auto-sign feature uses it once, in memory, to generate your certificate, and then discards it. What this site does collect is listed below, plainly, by feature.</p>
+
+    <h2>Site analytics</h2>
+    <p>macless.dev uses Google Analytics (GA4) to see aggregate traffic — which pages get visited, roughly how many people click toward pricing or checkout, and general geography/device/browser info that Google Analytics collects automatically. This is the same kind of tracking almost every website runs. It doesn't include your name or email, and Macless doesn't try to identify you personally from it. Google Analytics sets its own cookies to do this — see <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a> for how Google itself handles that data.</p>
+
+    <h2>Buying Macless</h2>
+    <p>Checkout runs entirely on Stripe's own hosted page — Macless never receives or stores your card number, expiration date, or CVC. After a real payment is confirmed directly with Stripe's API, Macless stores: which product you bought (iOS or Android), the email address Stripe passed along from checkout (if any), and Stripe's own session ID for that purchase, so a future visit or a support email can be matched back to a real, paid order. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe's privacy policy</a> for how Stripe itself handles your payment details.</p>
+
+    <h2>Connecting GitHub (the hosted wizard)</h2>
+    <p>If you use the hosted wizard at macless.dev/app, you sign in with GitHub's own OAuth login — Macless never sees your GitHub password. Macless stores your GitHub username, your numeric GitHub account ID, and an encrypted copy of the access token GitHub issues, so the wizard can push the pipeline files and your build secrets into the repo you choose. That token is encrypted at rest and is only ever used for the specific repo actions the wizard performs on your behalf — pushing files, setting encrypted GitHub Actions secrets, and reading build status. It is never used to read your other repos, your email, or anything outside what the wizard itself does for you.</p>
+
+    <h2>Signing details you enter in the wizard</h2>
+    <p>Certificates, provisioning profiles, and keystore passwords you paste into the wizard are pushed straight into GitHub's own encrypted Secrets store for your repo — the same place any GitHub Actions secret lives — and are not additionally stored in Macless's own database. If you use the optional "auto-sign" feature (generating a certificate directly from your Apple Developer account), your App Store Connect API key is used once, in memory, to call Apple's API, and is never written to any database, log, or file — this has been true since the feature was built, not added after the fact.</p>
+
+    <h2>Macless Autopilot (optional, recurring add-on)</h2>
+    <p>If you subscribe to Autopilot, Macless stores your Stripe customer and subscription IDs (to check whether your subscription is active) and a plain activity log of what the automated sweep checked or did on your project — not the contents of your repo or your signing credentials.</p>
+
+    <h2>The free tools (Signing Doctor, Rejection Doctor)</h2>
+    <p>These run entirely in your browser or inside your own GitHub Actions run — nothing you paste into them is sent to or stored by Macless. If you choose to sign up for update emails on either page, that email address is stored only for that purpose (via Buttondown, a third-party email service), and every email includes an unsubscribe link.</p>
+
+    <h2>What Macless never does</h2>
+    <ul class="plain">
+      <li><span>Never sells or rents your data to advertisers or data brokers.</span></li>
+      <li><span>Never stores your card number, CVC, or full payment details — that's Stripe's job, not this site's.</span></li>
+      <li><span>Never stores your Apple Developer API key or <code class="mono">.p8</code> file.</span></li>
+      <li><span>Never uses your connected GitHub token for anything beyond the wizard's own repo actions.</span></li>
+    </ul>
+
+    <h2>Who this data is shared with</h2>
+    <p>Only the services that make Macless work: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google</a> (site analytics), <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe</a> (payment processing), <a href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener">GitHub</a> (OAuth sign-in and where your own pipeline actually runs), and <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare</a> (hosting for macless.dev and the wizard backend). None of them are paid to receive your data beyond the normal service they provide.</p>
+
+    <h2>Deleting your data</h2>
+    <p>Email <a href="mailto:support@macless.dev">support@macless.dev</a> with the email or GitHub username on your purchase, and your buyer record, connected GitHub token, and purchase history will be deleted from Macless's database. This doesn't affect files the wizard already pushed into your own repo — those are yours, and Macless has no way to remove them for you even if it wanted to.</p>
+
+    <h2>Questions</h2>
+    <p>Email <a href="mailto:jackson@macless.dev">jackson@macless.dev</a> — a real person reads it, not a support queue.</p>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
