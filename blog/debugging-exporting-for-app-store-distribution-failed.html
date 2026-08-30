@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Debugging "Exporting for App Store Distribution failed" — Macless</title>
+<meta name="description" content="It's not one error — it's a generic banner Xcode and Xcode Cloud show when the export step fails for any reason. Here's what's actually behind it, with real diagnosed cases from Apple's own forums.">
+<link rel="canonical" href="https://macless.dev/blog/debugging-exporting-for-app-store-distribution-failed.html">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/#pricing">$99, one-time →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Debugging</div>
+    <h1>Debugging "Exporting for App Store Distribution failed"</h1>
+    <p class="hero-sub">It's not one error. It's a generic banner Xcode and Xcode Cloud show whenever the export step fails, for any reason. The real cause is always buried in the logs underneath it.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>If you've hit this exact banner, you already know it tells you almost nothing. "Exporting for App Store Distribution failed. Please download the logs artifact for more information" is the real wording from a live Apple Developer Forums thread, and that second sentence is the important one: the banner is a wrapper, not a diagnosis. Underneath it, Xcode is really just reporting that <code>xcodebuild -exportArchive</code> exited with a non-zero status, most commonly exit code 70. What actually caused that exit code is a completely different question every time, and it's sitting in the export logs, not in the banner text.</p>
+
+    <h2>What this error actually is</h2>
+    <p>Xcode Cloud shows this exact banner, and Xcode's own Distribute App flow in Organizer shows a version of the same thing, whenever the archive-to-.ipa export step fails for any underlying reason. It's the export equivalent of a generic "something went wrong" — genuinely useful only as a signal to go open the logs, not as a description of the problem itself.</p>
+
+    <h2>Real causes, pulled from real threads</h2>
+    <p>These aren't guesses. Each of these is a genuinely diagnosed case from Apple's own Developer Forums or fastlane's public issue tracker, not a paraphrase of "common wisdom."</p>
+
+    <ul class="plain">
+      <li><b>No valid distribution certificate.</b><span>The export fails with "No signing certificate 'iOS Distribution' found" when the cert Xcode expects is missing, expired, or revoked. In one Xcode Cloud case, the fix was revoking the Xcode-Cloud-managed "Distribution Managed" certificate to force it to regenerate a valid one.</span></li>
+      <li><b>Transient Apple backend failures.</b><span>Sometimes the underlying error really is "Communication with Apple failed" (a 502) or a backend authentication-context bug, with nothing wrong in your project at all. There's no project-side fix for these — they resolve when Apple's own systems recover, or need an actual support ticket.</span></li>
+      <li><b>An entitlement that doesn't match the provisioning profile.</b><span>One real case traced back to a typo in an entitlement key, which made the profile fail Apple's qualification check on export even though everything looked fine in Xcode's UI.</span></li>
+      <li><b>A shadowed system tool in your build environment.</b><span>Homebrew's <code>rsync</code> can shadow macOS's own <code>rsync</code> in <code>PATH</code>, breaking the file copy step during export with the same generic exit-70 failure — a build-environment bug that has nothing to do with signing at all.</span></li>
+      <li><b>An Xcode version regression.</b><span>Xcode 26.2 shipped an invalid App Store Connect API parameter for projects with a watchOS target, which broke automatic signing during export. Apple confirmed it as a real bug; the workaround was reverting to Xcode 26.1 until it's fixed.</span></li>
+    </ul>
+
+    <h2>What changed recently</h2>
+    <p>Two dated platform changes are worth knowing about, even though neither has a confirmed direct link to this specific error banner — they're real, recent changes to the surrounding signing and distribution landscape:</p>
+
+    <ul class="plain">
+      <li><b>Privacy manifests, enforced since May 1, 2024.</b><span>Newly added third-party SDKs on Apple's commonly-used-SDK list now require a privacy manifest. This is a separate, earlier gate than the export step, but it's part of the same broader "your binary has to check out before Apple will accept it" surface that's expanded in the last two years.</span></li>
+      <li><b>Xcode 26.2's export regression, August 2026.</b><span>The watchOS-target signing bug above is dated and Apple-acknowledged (filed as FB21322904 and FB21627607) — worth checking if you're on that exact Xcode version and your project has a watch target.</span></li>
+    </ul>
+
+    <h2>What actually helps</h2>
+    <p>The single most useful habit here is treating the banner as a prompt to go looking, not as the answer itself.</p>
+
+    <ul class="plain">
+      <li><b>Open the actual export logs, not the summary banner.</b><span>Xcode Cloud's logs artifact and Xcode Organizer's own distribution logs both contain the real underlying error. The banner text is identical across every one of the causes above — the logs are where they stop looking identical.</span></li>
+      <li><b>Verify your certificate and profile directly in the portals.</b><span>Don't trust what Xcode's local cache shows. Check the actual expiration and status of your distribution certificate and provisioning profile in Apple Developer and App Store Connect, since a locally-cached profile can look fine in Xcode while being invalid server-side.</span></li>
+      <li><b>Check every extension target has its own App ID and profile.</b><span>Widgets, share extensions, and Safari Web Extensions each need their own explicit App ID and provisioning profile — a mismatch or missing profile on just the extension target, while the main app target is fine, is a real and recurring cause of export failures.</span></li>
+      <li><b>Clean derived data and re-download profiles before assuming it's a code problem.</b><span>A stale local cache of a since-revoked or since-renewed certificate or profile causes failures that have nothing to do with your actual project configuration.</span></li>
+      <li><b>If nothing project-side is wrong, consider that it might just be Apple's backend.</b><span>Some of these failures are genuinely transient server-side issues. If the logs point at a communication or authentication error rather than a signing mismatch, retrying later is a legitimate first move, not giving up.</span></li>
+    </ul>
+
+    <div class="callout">
+      <p><b>The pattern underneath all of this:</b> the banner text is the same no matter which of these five things actually happened. Every real fix starts with going past it into the logs, not with guessing based on the banner alone.</p>
+    </div>
+
+    <div class="cta-box">
+      <h2>I built a free tool for this</h2>
+      <p>I built <a href="/signing-doctor.html">Signing Doctor</a> (free) specifically because this class of error is so generic on its face and so specific underneath. Paste in your actual error output and it helps you figure out which of the real underlying causes you're actually looking at, rather than guessing from the banner text alone. It's part of the same project as <a href="/#pricing">Macless</a>, which handles the signing and CI side of shipping an iOS app to TestFlight without a Mac.</p>
+      <a class="btn" href="/#pricing">See what's included — $99</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
