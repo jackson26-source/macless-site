@@ -36,6 +36,9 @@
 .wizard-shot{ margin: 28px 0 6px; }
 .wizard-shot img{ display:block; width:100%; max-width:560px; border:1px solid var(--border); border-radius:10px; box-shadow: 0 2px 14px rgba(36,33,28,0.10); }
 .wizard-shot figcaption{ margin-top:10px; font-size:13px; color: var(--text-faint); }
+.build-proof{ margin: 22px 0 6px; }
+.build-proof img{ display:block; width:100%; max-width:620px; border:1px solid var(--border); border-radius:10px; box-shadow: 0 2px 14px rgba(36,33,28,0.10); }
+.build-proof-caption{ margin-top:10px; font-size:13px; color: var(--text-faint); max-width:620px; }
 </style>
 </head>
 <body>
@@ -70,6 +73,13 @@
 <span class="dim">→ signs the app, archives it, exports a .ipa</span>
 <span class="dim">→ uploads to TestFlight</span>
 done. no Mac involved, nothing spent.</pre>
+
+    <div class="build-proof">
+      <a href="https://github.com/jackson26-source/macless-rn-livetest/actions/runs/32147880137" target="_blank" rel="noopener">
+        <img src="/assets/build-proof.jpg" alt="A real GitHub Actions run of this pipeline's build steps, checkout, Xcode select, dependency install, and a genuine 6m58s archive step, all green">
+      </a>
+      <p class="build-proof-caption">Not a mockup. A real run of this pipeline's build steps, on GitHub's own macOS servers, checkout, Xcode, dependencies, and a genuine 6m58s archive step, all real, all green. (This specific run stops at an unsigned archive since it's a public demo repo with nobody's real Apple certs in it. The signing and TestFlight upload steps are the same workflow, just with your own signing details filled in.) <a href="https://github.com/jackson26-source/macless-rn-livetest/actions/runs/32147880137" target="_blank" rel="noopener">See the actual log</a> or <a href="https://github.com/jackson26-source/macless-rn-livetest/actions/runs/32147880137/workflow" target="_blank" rel="noopener">read the real workflow file</a>.</p>
+    </div>
 
     <div class="note">
       I'm Jackson. I built <b>Citolex</b>, a speed-reading app, and wanted it on the App Store — but I don't own a Mac and wasn't going to rent one just to click a few buttons in Xcode. It turns out GitHub gives away free macOS build minutes on public repos. Normally that's used for running tests. I used it to build, sign, and upload the whole app instead. It worked, and Citolex actually shipped. This is that setup, cleaned up and wrapped in a wizard so you don't have to piece it together yourself.
