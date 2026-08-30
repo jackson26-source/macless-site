@@ -91,7 +91,7 @@ done. no Mac involved, nothing spent.</pre>
 <section id="how">
   <div class="wrap">
     <h2>What this replaces</h2>
-    <p class="lead">Normally, shipping an iOS app means owning a Mac (starting around $799) or renting one in the cloud (usually $20–100+ a month) just to run Xcode — Apple's own app-building software — long enough to sign and upload a build. This replaces that with an automated workflow that runs on GitHub's own servers (a free feature called GitHub Actions) and does the same steps, for free, because GitHub doesn't charge for its macOS build servers on public repositories.</p>
+    <p class="lead">Normally, shipping an iOS app means owning a Mac (starting around $699) or renting one in the cloud (usually $20–100+ a month) just to run Xcode, Apple's own app-building software, long enough to sign and upload a build. That's $699 for a step that takes a few minutes. This replaces it with an automated workflow that runs on GitHub's own servers (a free feature called GitHub Actions) and does the same steps, for free, because GitHub doesn't charge for its macOS build servers on public repositories.</p>
 
     <figure class="wizard-shot">
       <img src="/assets/wizard-screenshot.jpg" alt="The Macless wizard's Connect your project step — signed in with GitHub, picking a repo to ship">
@@ -101,11 +101,11 @@ done. no Mac involved, nothing spent.</pre>
     <h2 style="margin-top:36px;">How it works</h2>
     <ol class="steps">
       <li><span class="n">1</span><span><b>Buy once, then sign in with GitHub</b> — the same one-click popup you've used on any other site. No personal access token to create, no terminal.</span></li>
-      <li><span class="n">2</span><span><b>Pick a repo</b> — an existing project or a brand-new one — and the wizard adds only the pipeline files (workflows, signing scripts, docs). Anything already in your repo is left untouched.</span></li>
-      <li><span class="n">3</span><span><b>Enter your app's signing details once, right in the wizard.</b> It stores them as encrypted GitHub secrets for you — you never have to find GitHub's own secrets settings page yourself.</span></li>
+      <li><span class="n">2</span><span><b>Pick a repo</b>, an existing project or a brand-new one. The wizard adds only the pipeline files (workflows, signing scripts, docs). Anything already in your repo is left as is.</span></li>
+      <li><span class="n">3</span><span><b>Enter your app's signing details once in the wizard.</b> It stores them as encrypted GitHub secrets for you, so you never have to find GitHub's own secrets settings page yourself. They never touch your repo or your build logs, and none of the workflows run on pull requests, which is the usual way a public repo leaks secrets.</span></li>
       <li><span class="n">4</span><span><b>Click connect</b>, and GitHub spins up a free Mac in the cloud, builds your app, and signs it with the identity you just gave it.</span></li>
-      <li><span class="n">5</span><span><b>The signed build uploads straight to TestFlight</b> (iOS) or <b>Google Play</b> (Android) a few minutes later — check your phone.</span></li>
-      <li><span class="n">6</span><span>You never opened Xcode. You never touched a Mac. You never touched a terminal.</span></li>
+      <li><span class="n">5</span><span><b>The signed build uploads straight to TestFlight</b> (iOS) or <b>Google Play</b> (Android). A few minutes later it's there, ready to install on your phone.</span></li>
+      <li><span class="n">6</span><span>You don't have to open Xcode on a Mac. The wizard means you never even open a terminal.</span></li>
     </ol>
   </div>
 </section>
