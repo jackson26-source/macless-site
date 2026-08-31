@@ -1,5 +1,5 @@
 (function () {
-  var MACLESS_PRICE = 99;
+  var MACLESS_PRICE = 299;
 
   var monthlyInput = document.getElementById('monthlyCost');
   var monthsInput = document.getElementById('monthsPaying');
@@ -87,7 +87,7 @@
     var yearlyCost = Math.round(monthly * 12);
 
     var text = "I've spent " + fmtMoney(spentSoFar) + " on Mac rental/CI to ship iOS apps ("
-      + fmtMoney(yearlyCost) + "/year at this rate). Could've paid $99 once instead — macless.dev";
+      + fmtMoney(yearlyCost) + "/year at this rate). Could've paid $299 once instead — macless.dev";
 
     function showCopied() {
             copyStatus.textContent = 'Copied.';
