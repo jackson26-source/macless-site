@@ -91,6 +91,10 @@ footer a:focus-visible{
 
     <div class="plans">
 
+      <div class="price-note" style="border:1px solid var(--accent,#a8461e);border-radius:8px;padding:14px 16px;margin-bottom:22px;">
+      <b>Checkout is paused for a few hours.</b> I changed the pricing today and I haven't finished wiring the new plans through to account setup yet. Rather than take your money and hand you a broken link, the buy buttons are off until it's verified end to end — back the morning of September 1. The free Signing Doctor and Rejection Doctor are unaffected, and everything below is accurate about what you'd be buying.
+    </div>
+
       <div class="price-block-alt plan" id="plan-free">
         <h3>Free forever</h3>
         <div class="price-tag">$0</div>
@@ -116,7 +120,7 @@ footer a:focus-visible{
           <li><b>The Doctors' extras</b> — saved projects, check history, and batch checks on top of the free core.</li>
           <li><b>Ongoing updates as Apple changes its requirements</b> — the <a href="/changelog.html">changelog</a> is the public record of whether that's actually happening.</li>
         </ul>
-        <a class="btn btn-primary" href="https://buy.stripe.com/bJe6oJftweTg8DSc2qfbq02" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'monthly_20'});}">Start monthly — $19.99/mo</a>
+        <span class="btn btn-primary" aria-disabled="true" style="opacity:.5;cursor:not-allowed;pointer-events:none;">Checkout reopens in the morning</span>
         <div class="plan-fine">Billed monthly through Stripe. Cancel from your own Stripe receipt, no email to me required.</div>
       </div>
 
@@ -130,7 +134,7 @@ footer a:focus-visible{
           <li>No renewal date and nothing to cancel.</li>
           <li>For people who'd rather settle a tool once than carry another line item.</li>
         </ul>
-        <a class="btn btn-primary" href="https://buy.stripe.com/fZu8wRftw9yWdYcd6ufbq03" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'onetime_299'});}">Buy once — $299</a>
+        <span class="btn btn-primary" aria-disabled="true" style="opacity:.5;cursor:not-allowed;pointer-events:none;">Checkout reopens in the morning</span>
         <div class="plan-fine">One Stripe charge. Same product as the monthly, same updates.</div>
       </div>
 
@@ -227,7 +231,7 @@ footer a:focus-visible{
   <div class="wrap">
     <h2>Start with the free tools if you'd rather.</h2>
     <div class="cta-row">
-      <a class="btn btn-primary" href="https://buy.stripe.com/bJe6oJftweTg8DSc2qfbq02" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'monthly_20'});}">Start monthly — $19.99/mo</a>
+      <span class="btn btn-primary" aria-disabled="true" style="opacity:.5;cursor:not-allowed;pointer-events:none;">Checkout reopens in the morning</span>
       <a class="btn-text" href="/signing-doctor.html">or run Signing Doctor, free</a>
     </div>
   </div>
