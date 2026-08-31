@@ -14,7 +14,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Macless vs. Codemagic, Bitrise, Xcode Cloud — real cost over time</title>
-<meta name="description" content="A pipeline you can own outright vs. the subscription CI services — what each actually costs over 1 and 3 years, with current pricing.">
+<meta name="description" content="A pipeline you own outright vs. the metered CI services — what each actually costs over 1 and 3 years, with current pricing.">
 <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
@@ -33,8 +33,8 @@
 <div class="hero compact">
   <div class="wrap">
     <div class="eyebrow" style="margin-top:18px;">Comparison</div>
-    <h1>Macless vs. the subscription CI services</h1>
-    <p class="hero-sub">Codemagic, Bitrise, and Xcode Cloud all do something similar to this pipeline — but they bill monthly or per-build, forever. Here's what each actually costs over 1 and 3 years, using their current published pricing.</p>
+    <h1>Macless vs. the metered CI services</h1>
+    <p class="hero-sub">Codemagic, Bitrise, and Xcode Cloud all do something similar to this pipeline — but they meter every build, on their platform, for as long as you ship. Here's what each actually costs over 1 and 3 years, using their current published pricing.</p>
     <div class="byline">Jackson · August 2026</div>
   </div>
 </div>
@@ -82,7 +82,7 @@
     </div>
 
     <h2>Why the gap is this big</h2>
-    <p>Macless isn't cheaper because it does less — it runs the same build-sign-archive-upload steps, on the same category of macOS runner. The difference is the business model: Codemagic, Bitrise, and Xcode Cloud sell you their infrastructure and charge for every minute you use it, indefinitely. Macless sells you the pipeline itself, once, running on GitHub's own free-for-public-repos macOS minutes — there's no usage meter because there's no ongoing service to meter. Part of what you pay still covers keeping the pipeline working as Apple changes things on its end, that part just isn't metered per build the way the subscription services are, the <a href="/changelog.html">changelog</a> is the actual record of it happening.</p>
+    <p>Macless isn't cheaper because it does less — it runs the same build-sign-archive-upload steps, on the same category of macOS runner. The difference is the business model: Codemagic, Bitrise, and Xcode Cloud sell you their infrastructure and charge for every minute you use it, indefinitely. Macless sells you the pipeline itself — it lives in your repo and runs on GitHub's own free-for-public-repos macOS minutes, so there's no usage meter and nothing stops building if you stop paying. Part of what you pay still covers keeping the pipeline working as Apple changes things on its end, that part just isn't metered per build the way the CI services are, the <a href="/changelog.html">changelog</a> is the actual record of it happening.</p>
 
     <p style="font-size:14px; color:var(--muted);">More specific comparisons: <a href="/xcode-cloud-vs-macless.html">Xcode Cloud vs Macless</a> · <a href="/ionic-appflow-alternative.html">Ionic Appflow alternative</a></p>
 
