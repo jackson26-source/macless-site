@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing — Macless</title>
+<meta name="description" content="Free forever for the Doctors. $20/month or $299 once for everything. The pipeline lives in your own GitHub repo either way — cancel and your builds keep running.">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://macless.dev/pricing.html">
+<meta property="og:title" content="Pricing — Macless">
+<meta property="og:description" content="Free forever for the Doctors. $20/month or $299 once for everything. The pipeline lives in your own GitHub repo either way — cancel and your builds keep running.">
+<meta property="og:image" content="https://macless.dev/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pricing — Macless">
+<meta name="twitter:description" content="Free forever for the Doctors. $20/month or $299 once for everything. The pipeline lives in your own GitHub repo either way.">
+<meta name="twitter:image" content="https://macless.dev/assets/og-image.jpg">
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.plans{ margin-top: 18px; }
+.plan{ margin-top: 20px; }
+.plan:first-child{ margin-top: 12px; }
+.plan-featured{ border-color: var(--accent); }
+.plan-flag{
+  font-size: 12px; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 6px;
+}
+.plan .price-tag{ margin-top: 2px; }
+ul.plan-features{ list-style:none; margin: 16px 0 20px; padding-left: 0; }
+ul.plan-features li{
+  position: relative; padding: 7px 0 7px 20px; font-size: 15px; color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+}
+ul.plan-features li:last-child{ border-bottom: none; }
+ul.plan-features li::before{
+  content: "—"; position:absolute; left:0; top:7px; color: var(--text-faint);
+}
+ul.plan-features li b{ color: var(--text); font-weight: 600; }
+.plan .btn{ display:block; text-align:center; }
+.plan-fine{ margin-top: 14px; font-size: 13px; color: var(--text-faint); }
+a.btn:focus-visible,
+a.pricelink:focus-visible,
+a.btn-text:focus-visible,
+footer a:focus-visible{
+  outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px;
+}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/calculator.html">What are you paying now?</a>
+      <a class="pricelink" href="/signing-doctor.html">Free signing checker</a>
+      <a class="pricelink" href="/rejection-doctor.html">Free rejection decoder</a>
+      <a class="pricelink" href="/pricing.html">Pricing →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <div class="eyebrow">Pricing</div>
+    <h1>The pipeline is in your repo, either way.</h1>
+    <p class="hero-sub">Macless installs a GitHub Actions pipeline into <em>your</em> repository. It runs on <em>your</em> GitHub Actions minutes, with <em>your</em> Apple and Google credentials. Macless is not in the build path — nothing routes through my servers. That means the pipeline is yours whether you're paying me or not.</p>
+    <div class="byline">Jackson · updated 2026-08-31</div>
+  </div>
+</div>
+
+<section id="plans">
+  <div class="wrap">
+    <h2>Three ways to use it</h2>
+    <p class="lead">The free tools stay free and need no account. The paid plans are the same product at two payment shapes — pick whichever you'd rather live with.</p>
+
+    <div class="plans">
+
+      <div class="price-block-alt plan" id="plan-free">
+        <h3>Free forever</h3>
+        <div class="price-tag">$0</div>
+        <div class="price-note">No account, no card, no expiry. These are public tools and they stay that way.</div>
+        <ul class="plan-features">
+          <li><b>Signing Doctor</b> — core checks. Paste in a provisioning profile and certificate and it tells you why signing is failing, in plain English, on any project and any CI.</li>
+          <li><b>Rejection Doctor</b> — core checks. Paste in an App Store rejection and it decodes what Apple is actually asking for, across 57 rejection categories.</li>
+          <li>Works whether or not you ever use the Macless pipeline.</li>
+        </ul>
+        <a class="btn btn-secondary" href="/signing-doctor.html">Open Signing Doctor</a>
+        <div class="plan-fine">No sign-up step to skip past. It just runs.</div>
+      </div>
+
+      <div class="price-block-alt plan plan-featured" id="plan-monthly">
+        <div class="plan-flag">Everything, monthly</div>
+        <h3>$20 per month</h3>
+        <div class="price-tag">$20 <small>/ month</small></div>
+        <div class="price-note">Cancel any time. The pipeline in your repo keeps running after you do — see <a href="#faq-cancel">what happens if you cancel</a>.</div>
+        <ul class="plan-features">
+          <li><b>The guided setup wizard</b> — sign in with GitHub, pick a repo, enter your signing details once. It pushes the pipeline and stores your credentials as encrypted GitHub secrets for you.</li>
+          <li><b>iOS and Android pipelines</b> — build, sign, archive, and upload to TestFlight; build, sign, and upload a Play-Store-ready <code class="mono">.aab</code>. Both included, not separate products.</li>
+          <li><b>Certificate and profile expiry monitoring, and renewal</b> — scheduled checks against your iOS certs, profiles, and Android keystore, so a build doesn't fail one morning because something quietly expired.</li>
+          <li><b>The Doctors' extras</b> — saved projects, check history, and batch checks on top of the free core.</li>
+          <li><b>Ongoing updates as Apple changes its requirements</b> — the <a href="/changelog.html">changelog</a> is the public record of whether that's actually happening.</li>
+        </ul>
+        <a class="btn btn-primary" href="STRIPE_MONTHLY_LINK" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'monthly_20'});}">Start monthly — $20/mo</a>
+        <div class="plan-fine">Billed monthly through Stripe. Cancel from your own Stripe receipt, no email to me required.</div>
+      </div>
+
+      <div class="price-block-alt plan" id="plan-once">
+        <div class="plan-flag">Everything, once</div>
+        <h3>$299 one time</h3>
+        <div class="price-tag">$299 <small>once</small></div>
+        <div class="price-note">Identical to the monthly plan, permanently. Roughly fifteen months of the monthly, and then it stops costing anything.</div>
+        <ul class="plan-features">
+          <li>Everything in the $20/month plan — the wizard, iOS and Android, expiry monitoring and renewal, the Doctors' extras, ongoing updates.</li>
+          <li>No renewal date and nothing to cancel.</li>
+          <li>For people who'd rather settle a tool once than carry another line item.</li>
+        </ul>
+        <a class="btn btn-primary" href="STRIPE_ONETIME_LINK" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'onetime_299'});}">Buy once — $299</a>
+        <div class="plan-fine">One Stripe charge. Same product as the monthly, same updates.</div>
+      </div>
+
+    </div>
+
+    <div class="guarantee">30-day money-back guarantee on either paid plan. If you can't get a signed build out, email me and I'll refund it — no back-and-forth.</div>
+  </div>
+</section>
+
+<section id="ownership">
+  <div class="wrap">
+    <h2>What you're actually buying</h2>
+    <p class="lead">This is the part worth being precise about, because it's the one thing that genuinely differs from every hosted CI service.</p>
+
+    <p class="lead"><b>The pipeline is a set of files in your own GitHub repository.</b> A workflow file, signing scripts, and docs. When it runs, it runs on GitHub's macOS and Linux runners, billed to your GitHub account — free on public repos, and out of your monthly allowance on private ones. It signs with certificates you generated under your own Apple Developer account, stored as encrypted GitHub secrets in your repo. There is no Macless server between your code and Apple. If macless.dev went dark tomorrow, your builds would still run tonight.</p>
+
+    <p class="lead"><b>So you own the pipeline whether you're subscribed or not.</b> Cancel the monthly and your builds keep working exactly as they did the day before — same workflow file, same secrets, same green runs.</p>
+
+    <p class="lead"><b>What the payment covers is the hosted side of it:</b> the setup wizard that installs and configures all of that for you, the certificate and profile expiry monitoring and renewal, the extras in Signing Doctor and Rejection Doctor, and the work of keeping the pipeline current as Apple shifts its signing and submission requirements — which it does, without warning, on its own schedule.</p>
+
+    <table class="compare">
+      <tr><th></th><th>Where the pipeline lives</th><th>Whose minutes it burns</th><th>If you stop paying</th></tr>
+      <tr><td><b>Macless</b></td><td>Your GitHub repo</td><td>Yours (free on public repos)</td><td>Builds keep running; you lose the wizard, monitoring, and updates</td></tr>
+      <tr><td>Codemagic / Bitrise</td><td>Their platform</td><td>Theirs, metered</td><td>Builds stop</td></tr>
+      <tr><td>Xcode Cloud</td><td>Apple's platform</td><td>Theirs, metered</td><td>Builds stop</td></tr>
+    </table>
+
+    <p class="lead" style="margin-bottom:0;">Those are good services and I'd point a team at them without hesitating. But access is the only thing they sell — there's no price at which Codemagic, Bitrise, or Xcode Cloud hand you the pipeline to keep. <a href="/codemagic-bitrise-vs-macless.html">Full comparison here.</a></p>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>Before you ask</h2>
+
+    <div class="faq-item" id="faq-cancel">
+      <h3>What happens to my pipeline if I cancel the monthly?</h3>
+      <p>Nothing happens to it. The workflow files, signing scripts, and docs are committed in your repository, your credentials are in your repository's encrypted secrets, and the builds run on your GitHub Actions minutes. None of that is checked against a subscription, and none of it phones home. Your next <code class="mono">git push</code> after cancelling builds and uploads exactly like the one before it. What you stop getting is the hosted side: the wizard for setting up new repos, certificate and profile expiry monitoring and renewal, the Doctors' extras, and updates when Apple changes something. The free Signing Doctor and Rejection Doctor core checks stay available to you like they do to everyone.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Is Android included, or is that extra?</h3>
+      <p>Included, in both paid plans. iOS and Android are one product now — the same wizard, the same secrets handling, the same expiry monitoring across your iOS certificates and your Android keystore. Android never needed a Mac in the first place; it needed the same signing setup nobody wants to hand-assemble twice.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>What does the $20 a month actually pay for, if I already own the pipeline?</h3>
+      <p>Three things, honestly stated. First, the wizard — the difference between reading a setup guide and clicking through six steps, including pushing your signing secrets into GitHub for you. Second, monitoring and renewal — a certificate or profile expiring is the single most common way a working pipeline breaks months later, and that watching has to keep happening on a schedule. Third, maintenance — Apple changes its signing rules, its Xcode versions, and its App Store Connect requirements, and the pipeline has to be re-tested and fixed against those changes. The <a href="/changelog.html">changelog</a> is the public, dated record of that third one, so you can judge it before you pay for it rather than after.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Is the Apple Developer Program fee included?</h3>
+      <p>No, and to be unambiguous about it: Apple charges <b>$99 per year</b> for the Apple Developer Program, you pay that directly to Apple, and it has nothing to do with Macless. You need it to put an app on the App Store or TestFlight at all, regardless of what tool you build with. Macless removes the Mac requirement, not Apple's fee.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Which plan should I pick?</h3>
+      <p>They're the same product. $299 is about fifteen months of the monthly, so if you expect to be shipping this app for longer than that, the one-time is cheaper; if you're not sure the project will outlive the year, the monthly costs you less to find out. Neither one changes what lands in your repo.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Do the free tools have a catch?</h3>
+      <p>No account, no card, no usage cap, no trial clock. Signing Doctor and Rejection Doctor's core checks are public tools and they stay that way — they're the part of this I'd want to exist even if nobody ever bought anything. The paid tier adds saved projects, history, and batch checks on top; it doesn't take anything away from the free version.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Are there build costs on top of this?</h3>
+      <p>Not from me. The builds run on GitHub Actions under your account: public repositories get unlimited free macOS minutes, and private repositories get a monthly allowance before GitHub bills you per minute past it. Either way that's your bill with GitHub, at GitHub's rates, and Macless doesn't mark it up or sit in the middle of it.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Can I start monthly and switch to the one-time later?</h3>
+      <p>They're two separate purchases through Stripe, so nothing switches automatically. Email me before you buy the one-time rather than buying blind, and I'll tell you where you stand.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>I already bought the old $99 or $39 one-time. Where does that leave me?</h3>
+      <p>Nothing is taken away from you. What you downloaded is in your repo and keeps running, the same as it did the day you bought it. If you want to know how the new plans apply to you, email me.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Is this against Apple's or GitHub's rules?</h3>
+      <p>No. You're using GitHub's own free macOS minutes to build your own app, on your own repo, under your own Apple Developer account — exactly what they're for. This isn't reselling compute or running anyone else's builds.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>What if I get stuck?</h3>
+      <p>Email me. The troubleshooting doc covers the errors this pipeline has actually produced, and if you can't get a build out within 30 days, I'll refund you.</p>
+    </div>
+  </div>
+</section>
+
+<div class="final-cta">
+  <div class="wrap">
+    <h2>Start with the free tools if you'd rather.</h2>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="STRIPE_MONTHLY_LINK" onclick="if(window.gtag){gtag('event','stripe_checkout_click',{sku:'monthly_20'});}">Start monthly — $20/mo</a>
+      <a class="btn-text" href="/signing-doctor.html">or run Signing Doctor, free</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    Questions before buying? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026 · <a href="/privacy.html">Privacy</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var plansEl = document.getElementById('plans');
+  if (!plansEl || !window.IntersectionObserver) return;
+  var fired = false;
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting && !fired) {
+        fired = true;
+        if (window.gtag) gtag('event', 'view_pricing');
+        obs.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+  obs.observe(plansEl);
+})();
+</script>
+
+</body>
+</html>
