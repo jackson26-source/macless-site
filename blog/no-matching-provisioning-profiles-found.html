@@ -13,8 +13,8 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fix "No matching provisioning profiles found" in GitHub Actions — Macless</title>
-<meta name="description" content="The three actual causes of 'No matching provisioning profiles found' in a headless GitHub Actions iOS build, and how to tell which one you've hit before you start regenerating things.">
+<title>Fix "No matching profiles found for bundle identifier" — Macless</title>
+<meta name="description" content="Xcode says no profiles were found for your bundle identifier. Three causes, in the order worth checking — and why the message is misleading in CI, where the profile is usually not the problem.">
 <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
@@ -68,6 +68,11 @@
     <div class="callout">
       <p><b>Quick sanity check</b> if you're not sure which of the three you've hit: run <code class="mono">security cms -D -i /path/to/profile.mobileprovision</code> in the CI job right after installing it. It prints the profile's actual App ID, team ID, and expiry as plain XML — compare that against your build settings directly instead of guessing.</p>
     </div>
+
+    <h2>The exact wording Xcode uses</h2>
+    <p>This error has several phrasings and they all land here. <code class="mono">No matching profiles found for bundle identifier</code>, <code class="mono">No profiles for 'com.you.yourapp' were found</code>, and <code class="mono">Xcode couldn't find any iOS App Development provisioning profiles matching 'com.you.yourapp'</code> are the same failure described three ways, depending on whether it came from Xcode's UI, <code class="mono">xcodebuild</code>, or a CI log.</p>
+    <p>The bundle identifier in the message is a useful clue, not an accusation. Xcode names the bundle ID it was looking for, which tells you what it thinks it's building — and when that string doesn't match what you expected (a stale scheme, an extension target's ID rather than the app's, a configuration-specific suffix like <code class="mono">.debug</code>), you've found the problem without touching a single profile.</p>
+    <p>Extension targets are the case that catches people repeatedly: a widget, share extension, or notification service extension each needs its own App ID and its own profile. The app target signs fine, the extension doesn't, and the error names a bundle identifier you don't recognise because it belongs to the extension.</p>
 
     <h2>Why this trips people up more in CI than locally</h2>
     <p>Xcode's automatic signing is designed to be invisible when it works — it silently regenerates and matches profiles in the background so you never see the mechanism. CI has none of that; every piece has to be handed to it explicitly, so the first missing piece surfaces as a hard failure with a message that reads like a profile problem even when the profile was never the issue.</p>

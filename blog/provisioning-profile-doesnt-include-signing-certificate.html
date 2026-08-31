@@ -78,6 +78,10 @@ FAIL  Your certificate's fingerprint does NOT match any certificate
       <p><b>If you manage certificates for a team,</b> this is the exact failure mode that "automatically manage signing" in Xcode's GUI papers over — it silently regenerates mismatched profiles for you. CI has no equivalent, so a certificate rotation that Xcode would have absorbed invisibly becomes a hard failure in a headless pipeline. Worth regenerating the relevant profiles as a matter of course any time a Distribution certificate is rotated, rather than waiting for a build to fail first.</p>
     </div>
 
+    <div class="callout">
+      <p><b>Also written as:</b> <code class="mono">provisioning profile doesn t include signing certificate</code>, <code class="mono">provisioning profile doesnt include signing certificate</code>, or <code class="mono">profile doesn't include the selected signing certificate</code>. Apple's own tooling renders the apostrophe inconsistently depending on where the message surfaces, so all four forms describe this same failure.</p>
+    </div>
+
     <div class="cta-box">
       <h2>This is covered end-to-end in the template</h2>
       <p>Certificate/profile mismatches were one of the sharper edges I hit building the CI pipeline behind <a href="https://citolex.com" target="_blank" rel="noopener">Citolex</a>. The signing script and troubleshooting doc in Macless walk through generating certificates and profiles so they match the first time, plus every error message this pipeline has actually produced.</p>

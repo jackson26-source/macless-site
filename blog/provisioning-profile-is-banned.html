@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix "The provisioning profile is banned" (0xE8008024) — Macless</title>
+<meta name="description" content="0xE8008024 is not a project configuration error. It means Apple has stopped trusting the signing identity behind the profile — here's how to tell which identity, and why rebuilding won't help.">
+<link rel="canonical" href="https://macless.dev/blog/provisioning-profile-is-banned.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/pricing.html">Pricing →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>"The provisioning profile is banned." (0xE8008024)</h1>
+    <p class="hero-sub">The one iOS signing error you can't fix by changing your project. It's an account problem wearing a build error's clothes.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+
+    <p>You'll see this at <b>install time</b>, not build time — the app compiles, archives, and exports without complaint, and then the device refuses it:</p>
+
+    <pre class="demo">Unable to install "YourApp"
+Domain: MIVirtualDeviceUnknownErrorDomain
+Failure Reason: The provisioning profile is banned. (0xE8008024)</pre>
+
+    <p>Almost every other signing error on this blog is a mismatch you can correct — a bundle ID that doesn't line up, a certificate that isn't in the keychain, an entitlement the profile doesn't carry. This one isn't. <b>0xE8008024 means Apple has stopped trusting the signing identity the profile was built on.</b> The profile is structurally fine. The device checked who signed it, asked Apple, and got told no.</p>
+
+    <p>That distinction matters because it changes what you should do next. Cleaning derived data, regenerating the profile, bumping the build number, switching Xcode versions — none of that touches the actual cause, and people burn hours on it before working out why nothing helps.</p>
+
+    <h2>Work out which identity got revoked</h2>
+
+    <p>Three things sit behind a profile, and any of them being revoked produces this. Check them in this order, since the first is the most common and the fastest to confirm.</p>
+
+    <h3>1. The signing certificate was revoked</h3>
+    <p>Open <b>Apple Developer → Certificates, Identifiers &amp; Profiles → Certificates</b> and find the certificate the profile references. If it's gone from the list, or shows as revoked, that's your answer. This happens more easily than people expect — revoking a certificate in the portal (to clean up, or because a laptop was lost) invalidates <i>every</i> profile that references it, including ones already installed on devices and already-distributed builds.</p>
+
+    <h3>2. The account or membership is no longer in good standing</h3>
+    <p>An expired, suspended, or terminated Apple Developer Program membership takes its certificates with it. Check the membership status on your account page. If a team's membership lapsed and was renewed, the certificates issued under the old term don't necessarily come back — you may need to issue new ones and rebuild.</p>
+
+    <h3>3. The build was signed by someone else's certificate</h3>
+    <p>If the IPA came from a re-signing service, a sideloading tool, or an enterprise (in-house) distribution certificate that isn't yours, then the identity that got revoked isn't under your control at all. Apple actively revokes enterprise certificates that are used to distribute apps outside the issuing organization, and when that happens every app signed with that certificate stops installing at once — often for a lot of people simultaneously, which is a useful tell. If your app installed fine yesterday and today it doesn't, and nothing about your project changed, this is the likely cause.</p>
+
+    <div class="callout">
+      <p><b>A quick diagnostic:</b> does the same IPA fail on <i>every</i> device you try, including a freshly reset one? A banned profile fails everywhere, immediately. A profile that's merely missing a device UDID fails only on the devices it doesn't list. If one device works and another doesn't, you're looking at a different problem — most likely <a href="/blog/no-matching-provisioning-profiles-found.html">no matching provisioning profile</a>.</p>
+    </div>
+
+    <h2>What actually fixes it</h2>
+
+    <p>Only one thing: sign with an identity Apple still trusts.</p>
+
+    <p>If the certificate was revoked under your own account, issue a new signing certificate, generate a fresh provisioning profile against it, re-sign, and reinstall. The old build is dead — you can't rehabilitate an existing IPA, it has to be signed again.</p>
+
+    <p>If the certificate belonged to an enterprise account or a third-party service, there is no fix on your side. The resolution is between the certificate's owner and Apple. Distributing through TestFlight or the App Store instead sidesteps the problem entirely, because Apple re-signs those builds with its own identity rather than relying on yours to stay valid.</p>
+
+    <h2>How to not be here again</h2>
+
+    <p>The realistic protection is knowing before your users do. A revoked or expiring certificate gives no warning — the build that worked last month simply stops installing, and the first signal is usually someone telling you the app won't open. A scheduled check against your certificates and profiles turns that into a notification a week early instead of a support message.</p>
+
+    <p>Worth saying plainly: this specific error usually isn't preventable, because you don't control when Apple revokes something. What's preventable is finding out late.</p>
+
+    <div class="cta-box">
+      <h2>The pipeline watches your certificates for you</h2>
+      <p>Macless ships a scheduled expiry check that runs on your own GitHub Actions minutes and tells you before a certificate or profile lapses, plus a free <a href="/signing-doctor.html">Signing Doctor</a> for reading what a signing failure actually means.</p>
+      <a class="btn" href="/pricing.html">See pricing — from $19.99/mo</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
