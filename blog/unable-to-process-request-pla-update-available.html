@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix "Unable to process request - PLA Update available" — Macless</title>
+<meta name="description" content="Nothing is wrong with your certificates or your project. Apple has published a new Program License Agreement and is refusing API requests until the Account Holder accepts it.">
+<link rel="canonical" href="https://macless.dev/blog/unable-to-process-request-pla-update-available.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/pricing.html">Pricing →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>"Unable to process request - PLA Update available"</h1>
+    <p class="hero-sub">Nothing in your project changed. Apple published a new agreement, and only one specific person can accept it.</p>
+    <div class="byline">Jackson · September 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+    <p>Your build was fine yesterday. Today Xcode or your CI job stops with:</p>
+    <pre class="demo">Unable to process request - PLA Update available</pre>
+
+    <p>Read it as what it is: <b>PLA means Program License Agreement.</b> Apple has published a new version of the agreement your developer account operates under, and until someone accepts it, Apple's developer APIs refuse to do useful work — fetching profiles, creating certificates, uploading builds.</p>
+
+    <p>Nothing is wrong with your certificates, your profiles, your entitlements, or your project. This is Apple's side, waiting on a signature.</p>
+
+    <h2>Only the Account Holder can accept it</h2>
+    <p>This is the part that turns a two-minute fix into a two-day one. Admins can't accept it. Developers can't accept it. Only the <b>Account Holder</b> — the single Apple ID that owns the membership — can. If that's a founder who's on holiday, or a former colleague, or an account nobody has logged into for a year, your releases are blocked until you reach them.</p>
+
+    <p>Worth knowing before you need it: find out who your Account Holder is <i>now</i>, while nothing is broken.</p>
+
+    <h2>Accepting it</h2>
+    <ol>
+      <li>Sign in to <a href="https://developer.apple.com/account" target="_blank" rel="noopener">developer.apple.com/account</a> as the Account Holder.</li>
+      <li>A banner or a "Review Agreement" prompt appears at the top. Accept it.</li>
+      <li>If you sell paid apps or use in-app purchase, also check <b>App Store Connect → Business</b> for a separate Paid Applications agreement waiting on the same person.</li>
+      <li>Re-run the build. No code change, no clean, no certificate regeneration.</li>
+    </ol>
+
+    <div class="callout">
+      <p><b>It often shows up wearing a disguise.</b> Because the agreement block breaks profile and certificate lookups, the error you actually see can be something further downstream — <a href="/blog/exportarchive-no-signing-certificate-found.html">"No signing certificate 'iOS Distribution' found"</a> is a common one. If a signing error appears suddenly with no change on your side, check for a pending agreement before you start regenerating anything. Regenerating certificates you didn't need to regenerate is how a bad afternoon becomes a bad week.</p>
+    </div>
+
+    <h2>Why CI makes it worse</h2>
+    <p>Locally, you're signed in, and Xcode often surfaces the prompt where you'll see it. A CI runner is signed in as nobody — it has an API key and no way to be shown a dialog. So the pipeline just fails, and the message it prints doesn't contain the words "go accept an agreement." Apple publishes these periodically and without warning, which is why a pipeline that hasn't changed in months can break on a Tuesday.</p>
+
+    <p>There's no way to pre-empt it from inside a build. The only real mitigation is knowing what the message means, so the fix takes minutes instead of an afternoon spent suspecting your own setup.</p>
+
+    <div class="cta-box">
+      <h2>One of the failures a pipeline can’t fix for you</h2>
+      <p>Macless’s troubleshooting doc covers the errors that look like build problems but aren’t — the ones where the fix is in a browser, not in your code.</p>
+      <a class="btn" href="/pricing.html">See pricing — from $19.99/mo</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>

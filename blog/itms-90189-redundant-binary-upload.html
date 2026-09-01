@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix ITMS-90189 "Redundant Binary Upload" in CI — Macless</title>
+<meta name="description" content="You already uploaded a build with that build number. Locally you bump it by hand; in CI nothing bumps it unless you make it, which is why this error is nearly CI-exclusive.">
+<link rel="canonical" href="https://macless.dev/blog/itms-90189-redundant-binary-upload.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/pricing.html">Pricing →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>ITMS-90189: "Redundant Binary Upload"</h1>
+    <p class="hero-sub">Two numbers, and the one that matters is the one nobody looks at. Almost exclusively a CI problem.</p>
+    <div class="byline">Jackson · September 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+    <pre class="demo">ERROR ITMS-90189: "Redundant Binary Upload. You've already uploaded
+a build with build number '1' for version number '1.0'. Make sure you
+increment the build string before you upload."</pre>
+
+    <p>App Store Connect requires every upload to carry a build number it hasn't seen before for that version. You sent one it already has.</p>
+
+    <h2>The two numbers</h2>
+    <p>iOS apps carry two version strings and they do different jobs:</p>
+    <ul>
+      <li><code class="mono">CFBundleShortVersionString</code> — the marketing version, <code class="mono">1.0</code>. Users see it. Changes rarely.</li>
+      <li><code class="mono">CFBundleVersion</code> — the build number, <code class="mono">1</code>. Users never see it. Must be unique for every single upload.</li>
+    </ul>
+    <p>This error is about the second one. Bumping the marketing version to <code class="mono">1.0.1</code> does resolve it, but for the wrong reason — you've changed what the number is unique <i>against</i> rather than making the build number unique.</p>
+
+    <h2>Why it's a CI problem specifically</h2>
+    <p>Uploading from Xcode by hand, you bump the build number as part of the ritual. In CI, nobody does. The number sits in <code class="mono">Info.plist</code> or a build setting, checked into git, identical on every run — so the first upload succeeds and every one after fails, including a re-run of the exact same job after a flaky network failure.</p>
+
+    <p>That last case is the confusing one: the build genuinely uploaded the first time, the step failed later for an unrelated reason, and the retry now collides with the upload that partially succeeded.</p>
+
+    <h2>The fix</h2>
+    <p>Derive the build number from something that always increases and that you never have to think about. In GitHub Actions, that's <code class="mono">github.run_number</code>:</p>
+    <pre class="demo">- name: Set build number from the run number
+  run: |
+    agvtool new-version -all ${{ github.run_number }}</pre>
+
+    <p>It increments on every run of that workflow, forever, survives failed runs and manual re-runs, and needs no state you have to store or remember.</p>
+
+    <div class="callout">
+      <p><b>One sharp edge.</b> <code class="mono">github.run_number</code> is per-workflow-file. Create a second workflow, or rename the file, and the counter starts again at 1 — producing this exact error on a build that "should" have a higher number than anything you've uploaded. If you split or rename a workflow, expect one collision and set an offset, or move to a scheme that can't reset.</p>
+    </div>
+
+    <h2>If you're already stuck above every number you've used</h2>
+    <p>Build numbers only need to be unique and increasing within a version, so you can jump. Setting the build number to a timestamp — <code class="mono">date +%Y%m%d%H%M</code> — steps over anything you've previously uploaded and stays monotonic. It's ugly in the build list, and it's the fastest way out of a collision when you need a release now.</p>
+
+    <p>Related: if the upload succeeded and the build still isn't visible to testers, the number wasn't the problem — see <a href="/blog/testflight-build-not-showing-up.html">the build never shows up in TestFlight</a>.</p>
+
+    <div class="cta-box">
+      <h2>The pipeline derives the build number for you</h2>
+      <p>Macless’s workflow sets the build number from the GitHub Actions run number, so every upload is unique without you tracking anything.</p>
+      <a class="btn" href="/pricing.html">See pricing — from $19.99/mo</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
