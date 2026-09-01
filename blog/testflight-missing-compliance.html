@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix "Missing Compliance" in TestFlight — Macless</title>
+<meta name="description" content="Your build uploaded fine but testers can’t install it, because App Store Connect is waiting on an export compliance answer. Here’s the Info.plist key that stops it asking every time.">
+<link rel="canonical" href="https://macless.dev/blog/testflight-missing-compliance.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/pricing.html">Pricing →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>Fix "Missing Compliance" in TestFlight</h1>
+    <p class="hero-sub">The build is there. Nobody can install it. One Info.plist key ends this permanently — but read what you’re declaring before you set it.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+    <p>Your build uploads, processing finishes, and then it just sits there. In App Store Connect the build shows <b>Missing Compliance</b>, and your testers see nothing at all — the build exists but isn’t installable until you answer a question.</p>
+
+    <p>That question is export compliance. US export regulations require Apple to know whether your app uses encryption, and Apple asks per build. Answer it in the web UI and that one build unblocks. Answer it in your <code class="mono">Info.plist</code> and it never asks again.</p>
+
+    <h2>Why this hits CI builds harder</h2>
+    <p>Locally you notice immediately — you’re already in App Store Connect looking at the build. In an automated pipeline nobody is watching, so the release completes, the workflow goes green, and the build sits in limbo until someone happens to check. The pipeline reports success because from its side the upload genuinely succeeded.</p>
+
+    <h2>The key</h2>
+    <p>Add this to your app’s <code class="mono">Info.plist</code>:</p>
+    <pre class="demo">&lt;key&gt;ITSAppUsesNonExemptEncryption&lt;/key&gt;
+&lt;false/&gt;</pre>
+    <p>With that present, App Store Connect stops asking and builds go straight to testable.</p>
+
+    <div class="callout">
+      <p><b>Read this before you set it to false.</b> That key is a declaration you are making, not a checkbox to silence a warning. <code class="mono">false</code> says your app uses no non-exempt encryption. Apps that only use standard HTTPS/TLS through Apple’s own networking APIs are normally in exempt territory — which covers most apps — but if you ship proprietary or non-standard cryptography, the answer is different and there may be documentation you’re required to file. If you’re not certain what your dependencies do, that’s worth an hour of checking rather than a guess. Apple’s export compliance documentation is the authority here, not this page.</p>
+    </div>
+
+    <h2>Where the key actually has to live</h2>
+    <p>It has to be in the <code class="mono">Info.plist</code> that ends up inside the built app bundle, not a copy sitting somewhere in your project. Cross-platform frameworks are where this goes wrong: in Capacitor the file is at <code class="mono">ios/App/App/Info.plist</code>, in React Native at <code class="mono">ios/&lt;YourApp&gt;/Info.plist</code>, and in Flutter at <code class="mono">ios/Runner/Info.plist</code>. Editing the wrong one produces exactly the same symptom as not editing anything.</p>
+
+    <h2>Confirming it worked</h2>
+    <p>Upload one build. If it goes straight to testable without a compliance prompt, the key is in the right place. If it still says Missing Compliance, the key isn’t in the bundle that was uploaded — check the built <code class="mono">.app</code> rather than the source file.</p>
+
+    <div class="cta-box">
+      <h2>The pipeline sets this once and stops asking</h2>
+      <p>Macless ships the export-compliance key as part of the setup so automated TestFlight releases don’t stall on a question nobody is there to answer.</p>
+      <a class="btn" href="/pricing.html">See pricing — from $19.99/mo</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>

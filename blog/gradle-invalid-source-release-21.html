@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix Gradle "invalid source release: 21" on Capacitor Android — Macless</title>
+<meta name="description" content="Capacitor 7’s Android template compiles against Java 21, but most CI runners default to JDK 17. The build fails partway through gradlew bundleRelease with a message that never mentions your JDK.">
+<link rel="canonical" href="https://macless.dev/blog/gradle-invalid-source-release-21.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/pricing.html">Pricing →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>Gradle: "invalid source release: 21"</h1>
+    <p class="hero-sub">The build gets a long way in before dying. Capacitor 7 wants Java 21; your runner gave it 17.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+    <p>Gradle runs, resolves dependencies, compiles for a while, and then:</p>
+    <pre class="demo">&gt; Task :app:compileReleaseJavaWithJavac FAILED
+error: invalid source release: 21</pre>
+
+    <p>The message reads like a Gradle configuration problem. It isn’t. <b>The JDK running the build is older than the Java version the project targets.</b> Java 17 has no idea what source release 21 means, so it refuses before compiling anything.</p>
+
+    <h2>Why this appears out of nowhere on Capacitor 7</h2>
+    <p>Capacitor 7’s Android template compiles against Java 21. Most CI images still default to JDK 17 — a sensible default that was correct until it wasn’t. So a project that builds fine on a developer machine with a newer JDK installed dies on the runner, and nothing in the error mentions either version except the bare number 21.</p>
+
+    <p>It also explains why upgrading Capacitor can break a pipeline that hasn’t otherwise changed. Nothing in your workflow file changed; the template you regenerate from did.</p>
+
+    <h2>The fix</h2>
+    <p>Pin the JDK explicitly rather than relying on the runner default. In GitHub Actions:</p>
+    <pre class="demo">- uses: actions/setup-java@v4
+  with:
+    distribution: temurin
+    java-version: '21'</pre>
+    <p>That step has to run <b>before</b> any Gradle step. Setting <code class="mono">JAVA_HOME</code> after Gradle has already started won’t help.</p>
+
+    <h2>Check what you’re actually targeting</h2>
+    <p>Before assuming 21, confirm what the project wants — look in <code class="mono">android/app/build.gradle</code>:</p>
+    <pre class="demo">compileOptions {
+    sourceCompatibility JavaVersion.VERSION_21
+    targetCompatibility JavaVersion.VERSION_21
+}</pre>
+    <p>Match your CI JDK to that number. Installing a newer JDK than the target is generally fine; installing an older one is what produces this error.</p>
+
+    <div class="callout">
+      <p><b>Found the hard way.</b> This surfaced during a live end-to-end test of the Macless Android pipeline, a few steps after <a href="/blog/capacitor-could-not-find-the-android-platform.html">the missing platform package</a>. Two failures, one test run — which is a reasonable argument for running any pipeline start to finish on a throwaway repo before trusting it with a real release.</p>
+    </div>
+
+    <div class="cta-box">
+      <h2>The workflow already pins the right JDK</h2>
+      <p>Macless’s Android pipeline sets up JDK 21 rather than the runner default, because a real end-to-end test failed exactly here first.</p>
+      <a class="btn" href="/pricing.html">See pricing — from $19.99/mo</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix "Could not find the android platform" in Capacitor — Macless</title>
+<meta name="description" content="Capacitor 5 and later ship each platform as its own npm package. If you set up iOS first, @capacitor/android isn’t installed — and installing the wrong major version fails differently.">
+<link rel="canonical" href="https://macless.dev/blog/capacitor-could-not-find-the-android-platform.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/pricing.html">Pricing →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>Capacitor: "Could not find the android platform"</h1>
+    <p class="hero-sub">Hit while wiring the Android pipeline. The message points at the platform; the cause is a package that was never installed — and the obvious fix breaks in a second way.</p>
+    <div class="byline">Jackson · August 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+    <p>You run the command that every guide tells you to run, and it refuses:</p>
+    <pre class="demo">npx cap add android
+[error] Could not find the android platform</pre>
+
+    <p>Nothing is corrupt. <b>Capacitor 5 and later ship each platform as a separate npm package</b>, and <code class="mono">@capacitor/android</code> simply isn’t installed. Older Capacitor bundled the platforms into the CLI, which is why so much of the advice you’ll find doesn’t mention installing anything.</p>
+
+    <p>This bites hardest if you set iOS up first — a very normal order for anyone shipping to the App Store before Google Play. You install <code class="mono">@capacitor/ios</code>, everything works, and months later Android fails on a message that sounds like a missing folder rather than a missing dependency.</p>
+
+    <h2>The fix, and the trap inside it</h2>
+    <p>The obvious move is <code class="mono">npm install @capacitor/android</code>. That installs the <i>latest</i> major, which fails a second way if your project is on an older core:</p>
+    <pre class="demo">npm error ERESOLVE could not resolve
+peer @capacitor/core@"^7.0.0" from @capacitor/android@7.x</pre>
+
+    <p>The platform package’s major version has to match <code class="mono">@capacitor/core</code>. Check what you actually have, then install that major:</p>
+    <pre class="demo"># what core version is this project on?
+npm ls @capacitor/core
+
+# install the matching major, e.g. core 6.x:
+npm install @capacitor/android@^6.0.0
+npx cap add android</pre>
+
+    <div class="callout">
+      <p><b>Found the hard way.</b> This is one of two bugs a live end-to-end test of the Macless Android pipeline caught on a throwaway repo — the other being a <a href="/blog/gradle-invalid-source-release-21.html">JDK version mismatch</a> that surfaces a few steps later. Both are the kind of thing you only meet by running the whole thing start to finish rather than reading the docs.</p>
+    </div>
+
+    <h2>After it succeeds</h2>
+    <p>Run <code class="mono">npx cap sync android</code> to copy your web build in and update native dependencies. If you’re doing this in CI, both commands need to run on a runner with the Android SDK available, and <code class="mono">npx cap add android</code> should be treated as idempotent setup — it fails if the <code class="mono">android/</code> directory already exists, so guard it or commit the platform directory and skip it entirely.</p>
+
+    <div class="cta-box">
+      <h2>The pipeline handles this automatically</h2>
+      <p>Macless’s Android workflow detects your installed Capacitor core version and installs the matching platform package before it builds — this was found and fixed during a real end-to-end test.</p>
+      <a class="btn" href="/pricing.html">See pricing — from $19.99/mo</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
