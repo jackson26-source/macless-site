@@ -102,6 +102,26 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://macless.dev/blog/testflight-missing-compliance.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://macless.dev/blog/errsecinternalcomponent-codesign-ci.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://macless.dev/blog/capacitor-could-not-find-the-android-platform.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://macless.dev/blog/gradle-invalid-source-release-21.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://macless.dev/blog/provisioning-profile-is-banned.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
