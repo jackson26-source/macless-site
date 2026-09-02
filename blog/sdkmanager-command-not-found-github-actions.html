@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>"sdkmanager: command not found" on GitHub Actions (exit 127) — Macless</title>
+<meta name="description" content="sdkmanager isn't on PATH on GitHub's Ubuntu runners. Worse, the usual licence-acceptance line ends in || true, so it has probably been failing silently in your workflow for months.">
+<link rel="canonical" href="https://macless.dev/blog/sdkmanager-command-not-found-github-actions.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/pricing.html">Pricing →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>"sdkmanager: command not found" on GitHub Actions</h1>
+    <p class="hero-sub">Exit 127 on a line that looks fine. The more interesting question is why the identical line one step earlier reported success.</p>
+    <div class="byline">Jackson · September 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+    <p>I added a step to install a specific SDK platform and got this:</p>
+    <pre class="demo">Run sdkmanager "platforms;android-36" &gt; /dev/null
+/home/runner/work/_temp/....sh: line 1: sdkmanager: command not found
+Error: Process completed with exit code 127.</pre>
+
+    <p><code class="mono">sdkmanager</code> is not on <code class="mono">PATH</code> on <code class="mono">ubuntu-latest</code>. The Android SDK is installed — <code class="mono">$ANDROID_SDK_ROOT</code> points at <code class="mono">/usr/local/lib/android/sdk</code> and the tools are all there — but the command-line tools directory isn't added to <code class="mono">PATH</code>, so the bare command resolves to nothing.</p>
+
+    <h2>The part that actually matters</h2>
+    <p>The step immediately above this one had been in the workflow since it was written, and looked like this:</p>
+    <pre class="demo">- name: Accept Android SDK licenses
+  run: yes | sdkmanager --licenses &gt; /dev/null || true</pre>
+
+    <p>Same missing command. Same exit 127. And that <code class="mono">|| true</code> on the end swallowed it, so <b>the step had been reporting success while doing absolutely nothing on every run the workflow had ever had</b>. Months of green checkmarks on a step that never executed. The only reason I found out is that my new step called the same binary <i>without</i> the <code class="mono">|| true</code> and failed loudly.</p>
+
+    <p>The builds still worked, incidentally — the runner image ships with the common platform licences already accepted, so nothing depended on that step succeeding. Which is exactly why nobody notices. A no-op step that guards against a problem you don't currently have looks identical to a step that works.</p>
+
+    <h2>Finding the binary properly</h2>
+    <p>It lives under <code class="mono">$ANDROID_SDK_ROOT/cmdline-tools/&lt;version&gt;/bin/sdkmanager</code>, and the version directory name isn't stable across runner images, so don't hardcode <code class="mono">latest</code>:</p>
+    <pre class="demo">SDK_ROOT="\${ANDROID_SDK_ROOT:-$ANDROID_HOME}"
+
+SDKMANAGER="$(command -v sdkmanager || true)"
+if [ -z "$SDKMANAGER" ] && [ -d "$SDK_ROOT/cmdline-tools" ]; then
+  SDKMANAGER="$(find "$SDK_ROOT/cmdline-tools" -name sdkmanager -type f 2>/dev/null | sort | tail -n 1)"
+fi
+
+if [ -z "$SDKMANAGER" ]; then
+  echo "::warning::sdkmanager not found under \${SDK_ROOT}. Skipping."
+  exit 0
+fi
+
+yes | "$SDKMANAGER" --licenses &gt; /dev/null 2>&amp;1 || true
+"$SDKMANAGER" "platforms;android-36"</pre>
+
+    <p>The <code class="mono">command -v</code> check first means this keeps working on any runner or container where it <i>is</i> on PATH. The warning-and-exit-0 fallback is deliberate: the Android Gradle plugin will usually download a missing platform itself, so a hard failure here would be worse than a note in the log.</p>
+
+    <h2>A mistake worth repeating so you don't make it</h2>
+    <p>My first version of that <code class="mono">find</code> was written across two lines with a backslash continuation. By the time it went through YAML block-scalar parsing and into <code class="mono">bash -c</code>, the continuation arrived as a literal backslash argument. <code class="mono">find</code> ran with no <code class="mono">-name</code> predicate at all, cheerfully listed every file in the SDK tree, and <code class="mono">tail -n 1</code> picked an arbitrary one to try to execute:</p>
+    <pre class="demo">find: '\\': No such file or directory
+Using /usr/local/lib/android/sdk/cmdline-tools
+/usr/local/lib/android/sdk/cmdline-tools/latest/bin/apkanalyzer
+/usr/local/lib/android/sdk/cmdline-tools/latest/bin/avdmanager
+...</pre>
+    <p>Keep shell continuations out of YAML <code class="mono">run:</code> blocks. Put the command on one line even when it's ugly.</p>
+
+    <h2>Also worth checking: build-tools</h2>
+    <p>Build-tools for a brand-new API level sometimes land weeks after the platform does, so a combined install can fail on a package that doesn't exist yet. Ask for both, fall back to the platform alone — that's the part Gradle actually needs to compile against:</p>
+    <pre class="demo">"$SDKMANAGER" "platforms;android-36" "build-tools;36.0.0" || "$SDKMANAGER" "platforms;android-36"</pre>
+
+    <div class="callout">
+      <p><b>Go and grep your own workflows for <code class="mono">|| true</code>.</b> Every one is a step that cannot fail, which means it's a step you have no evidence works. Mine had been lying for months. The ones worth keeping are where you genuinely don't care about the outcome; the rest should fail loudly or not be there.</p>
+    </div>
+
+    <div class="cta-box">
+      <h2>Android builds without the archaeology</h2>
+      <p>Macless's Android pipeline resolves the real <code class="mono">sdkmanager</code> path and installs the platform Play requires — added after this exact failure on a real run.</p>
+      <a class="btn" href="/pricing.html">See pricing — from $19.99/mo</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
