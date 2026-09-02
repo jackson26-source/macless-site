@@ -127,6 +127,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://macless.dev/blog/google-play-target-api-level-36.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://macless.dev/blog/sdkmanager-command-not-found-github-actions.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://macless.dev/blog/gradle-invalid-source-release-21.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
