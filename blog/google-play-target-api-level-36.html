@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Play rejects your AAB: "must target at least API level 36" (Capacitor) — Macless</title>
+<meta name="description" content="Google Play refuses an upload that targets API 35. On a Capacitor project the number you need to change lives in a file that gets regenerated on every build, so editing it by hand does nothing.">
+<link rel="canonical" href="https://macless.dev/blog/google-play-target-api-level-36.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="wordmark" href="/">Macless</a>
+    <div class="nav-links">
+      <a class="pricelink" href="/blog/">Blog</a>
+      <a class="pricelink" href="/pricing.html">Pricing →</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero compact">
+  <div class="wrap">
+    <a class="back-link" href="/blog/">← All posts</a>
+    <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+    <h1>"Your app currently targets API level 35 and must target at least API level 36"</h1>
+    <p class="hero-sub">Play Console rejects the bundle after it uploads. On Capacitor, the file holding that number is regenerated on every build.</p>
+    <div class="byline">Jackson · September 2026</div>
+  </div>
+</div>
+
+<article>
+  <div class="wrap">
+    <p>The upload itself works. Play chews through the bundle, shows you the size and the ABI list, and then puts a red error at the top of the release page:</p>
+    <pre class="demo">Your app currently targets API level 35 and must target at
+least API level 36 to ensure it is built on the latest APIs
+optimized for security and performance.</pre>
+
+    <p>You can't publish the release until that number moves. There's no override, no "I'll do it next time" checkbox.</p>
+
+    <h2>Where the number actually lives on a Capacitor project</h2>
+    <p>Not in <code class="mono">AndroidManifest.xml</code>, which is where most search results will send you. Capacitor puts it in <code class="mono">android/variables.gradle</code>:</p>
+    <pre class="demo">ext {
+    minSdkVersion = 23
+    compileSdkVersion = 35
+    targetSdkVersion = 35
+    ...
+}</pre>
+
+    <p>Change both numbers to 36 and the next build targets 36. On a laptop that's the whole fix.</p>
+
+    <h2>Why the same fix does nothing in CI</h2>
+    <p>Here is the part that cost me a build cycle. If your pipeline runs <code class="mono">npx cap add android</code>, that command <b>recreates the entire <code class="mono">android/</code> directory from Capacitor's template every time it runs</b>. Your edit to <code class="mono">variables.gradle</code> is discarded before Gradle ever sees it. The build goes green, the AAB comes out targeting 35 again, and Play rejects it again — with no indication that anything you changed was thrown away.</p>
+
+    <p>So the patch has to happen <i>after</i> the platform is generated and <i>before</i> Gradle runs:</p>
+    <pre class="demo">- name: Target the API level Google Play requires
+  run: |
+    cd android
+    sed -i -E "s/(compileSdkVersion|targetSdkVersion)([[:space:]]*=[[:space:]]*)[0-9]+/\\1\\236/" variables.gradle
+    grep -E "(compile|target)SdkVersion" variables.gradle</pre>
+
+    <p>That <code class="mono">grep</code> at the end isn't decoration. <code class="mono">sed</code> exits 0 whether or not it matched anything, so if a future Capacitor release renames those keys, a silent no-op sails through the build and you find out twenty minutes later from Play. I ended up turning it into a hard assertion:</p>
+    <pre class="demo">for KEY in compileSdkVersion targetSdkVersion; do
+  if ! grep -qE "\${KEY}[[:space:]]*=[[:space:]]*36([^0-9]|$)" variables.gradle; then
+    echo "::error::Could not set \${KEY} in android/variables.gradle."
+    exit 1
+  fi
+done</pre>
+
+    <h2>The AGP warning you'll hit next</h2>
+    <p>Capacitor's pinned Android Gradle Plugin version is usually a little behind whatever API level Play has just started demanding, so bumping <code class="mono">compileSdkVersion</code> produces a loud warning about compiling against an untested SDK. Adding this to <code class="mono">android/gradle.properties</code> acknowledges it rather than leaving a scary block in every customer's build log:</p>
+    <pre class="demo">android.suppressUnsupportedCompileSdk=36</pre>
+
+    <p>You may also need the platform itself. GitHub's Ubuntu runners ship a handful of SDK platforms and not necessarily the newest one, so install it explicitly — though be warned that <code class="mono">sdkmanager</code> <a href="/blog/sdkmanager-command-not-found-github-actions.html">isn't on PATH there</a>, which is its own separate afternoon.</p>
+
+    <h2>Don't hardcode 36</h2>
+    <p>Google has raised this floor roughly every August for years, and it will be 37 before long. Reading the level from a repo variable with a sane default means the next bump is a one-line change in a settings page instead of a code change:</p>
+    <pre class="demo">env:
+  TARGET_SDK: \${{ vars.ANDROID_TARGET_SDK || '36' }}</pre>
+
+    <div class="callout">
+      <p><b>While you're in there: versionCode.</b> Capacitor hardcodes <code class="mono">versionCode 1</code> in <code class="mono">android/app/build.gradle</code>, and Play permanently refuses any versionCode it has already seen. That means a pipeline can upload exactly once — every run after the first dies at the final step, after a full build. Same fix, same reason: patch the generated file, not the repo. Tying it to the CI run number gets you a unique, increasing number for free.</p>
+    </div>
+
+    <div class="cta-box">
+      <h2>The Android pipeline handles both of these</h2>
+      <p>Macless patches the generated project for the API level Play currently requires and gives every build a unique versionCode — both added after a real Play upload rejected a real bundle.</p>
+      <a class="btn" href="/pricing.html">See pricing — from $19.99/mo</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+    Built by Jackson · 2026
+  </div>
+</footer>
+
+</body>
+</html>
