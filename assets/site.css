@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap');
 :root{
   --bg: #faf8f3;
   --bg-panel: #f2efe6;
@@ -8,9 +9,9 @@
   --accent: #a8461e;
   --accent-ink: #ffffff;
   --code-bg: #eeeae0;
-  --serif: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
-  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --mono: 'SF Mono', Menlo, Consolas, monospace;
+  --serif: 'Familjen Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --sans: 'Familjen Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --mono: 'Spline Sans Mono', 'SF Mono', Menlo, Consolas, monospace;
 }
 *{ box-sizing:border-box; margin:0; padding:0; }
 html{ scroll-behavior:smooth; }
