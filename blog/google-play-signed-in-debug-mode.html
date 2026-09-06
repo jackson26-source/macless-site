@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix "You uploaded an APK or Android App Bundle that was signed in debug mode" — Macless</title>
+<meta name="description" content="Play Console rejects your upload as debug-signed even though you ran a release build. Gradle falls back to the debug key instead of failing, and the build log never says so.">
+<link rel="canonical" href="https://macless.dev/blog/google-play-signed-in-debug-mode.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+<div class="site-inner">
+<a class="wordmark" href="/">Macless</a>
+<div class="nav-links">
+<a class="pricelink" href="/blog/">Blog</a>
+<a class="pricelink" href="/pricing.html">Pricing →</a>
+</div>
+</div>
+</header>
+
+<div class="hero compact">
+<div class="wrap">
+<a class="back-link" href="/blog/">← All posts</a>
+<div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+<h1>"Signed in debug mode" on upload</h1>
+<p class="hero-sub">You ran a release build. Gradle signed it with the debug key anyway, and said nothing.</p>
+<div class="byline">Jackson · September 2026</div>
+</div>
+</div>
+
+<article>
+<div class="wrap">
+<p>The build succeeds. You drag the file into Play Console and get:</p>
+<pre class="demo">You uploaded an APK or Android App Bundle that was signed in
+debug mode. You need to sign your APK or Android App Bundle
+in release mode.</pre>
+
+<p>The confusing part is that you did run a release build. <b>Gradle does not fail when a release build has no signing config. It signs with the debug key instead.</b> Nothing in the build output flags it, so the first thing that notices is Play Console.</p>
+
+<h2>Confirm it in ten seconds</h2>
+<p>Do not guess at this. Read the signature off the artifact you actually uploaded:</p>
+<pre class="demo">keytool -printcert -jarfile app-release.aab</pre>
+<p>Look at the <code class="mono">Owner</code> line. A debug-signed build says exactly this, on every machine in the world:</p>
+<pre class="demo">Owner: CN=Android Debug, O=Android, C=US</pre>
+<p>If you see that, the diagnosis is done. If you see your own name or organisation instead, the upload was signed with a real key and your problem is a different one, usually the wrong key rather than a debug key.</p>
+
+<h2>Why a release build uses the debug key</h2>
+<p>Gradle picks the debug signing config for any build type that has no signing config of its own. That is a convenience for local debug builds and a trap for release builds. The three usual versions of it:</p>
+
+<p><b>No release signing config exists.</b> The <code class="mono">signingConfigs</code> block was never added, or a <code class="mono">release</code> config was added but never attached to the release build type. Defining it is not enough. The <code class="mono">buildTypes.release</code> block has to reference it.</p>
+
+<p><b>The keystore file is not on the runner.</b> This is the CI-specific one. The config is correct, the <code class="mono">.jks</code> is gitignored (correctly), and it was never written to the machine doing the build. Locally it works, in CI it silently produces a debug-signed bundle.</p>
+
+<p><b>You built the wrong task.</b> <code class="mono">assembleDebug</code> and <code class="mono">bundleDebug</code> produce debug artifacts by definition. Check that the task in your pipeline is <code class="mono">bundleRelease</code>, and that you are uploading the file from <code class="mono">build/outputs/bundle/release/</code>, not the debug folder next to it.</p>
+
+<h2>The fix</h2>
+<p>Keep the passwords out of <code class="mono">build.gradle</code>. Put them in a properties file that is gitignored, and read it:</p>
+<pre class="demo">def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android {
+signingConfigs {
+release {
+storeFile file(keystoreProperties['storeFile'])
+storePassword keystoreProperties['storePassword']
+keyAlias keystoreProperties['keyAlias']
+keyPassword keystoreProperties['keyPassword']
+}
+}
+buildTypes {
+release {
+signingConfig signingConfigs.release
+}
+}
+}</pre>
+
+<p>In CI, base64 the keystore into a secret and write it back out before the Gradle step runs:</p>
+<pre class="demo">- run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/release.jks</pre>
+
+<h2>Make it fail loudly next time</h2>
+<p>The real problem here is the silence. A release build that quietly signs itself with a throwaway key is worse than one that stops. Add the guard:</p>
+<pre class="demo">if (!keystorePropertiesFile.exists()) {
+throw new GradleException("No keystore.properties. Release build would be debug-signed.")
+}</pre>
+<p>Ten seconds of setup, and the failure moves from Play Console back into the build log where it belongs.</p>
+
+<h2>One thing this is not</h2>
+<p>Play App Signing does not remove the requirement. Google re-signs your app with the app signing key it holds, but you still sign the upload artifact yourself with your upload key, and that key can never be the debug key. The debug certificate is self-signed, generated automatically, and insecure by design. Play also requires an upload key valid past 22 October 2033, which the debug certificate will not satisfy in any case.</p>
+
+<div class="cta-box">
+<h2>The Android pipeline signs release builds properly</h2>
+<p>Macless wires the keystore into CI as a secret and fails the build if it is missing, so a release never leaves the runner debug-signed.</p>
+<a class="btn" href="/pricing.html">See pricing — from $19.99/mo</a>
+</div>
+
+</div>
+</article>
+
+<footer>
+<div class="wrap">
+Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+Built by Jackson · 2026
+</div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix ITMS-90035: "Invalid Signature. A sealed resource is missing or invalid" — Macless</title>
+<meta name="description" content="The headline says your signature is invalid, so people re-sign the app and upload again. The file path in brackets is the actual diagnosis, and it usually points at a framework, not the app.">
+<link rel="canonical" href="https://macless.dev/blog/itms-90035-invalid-signature.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+<div class="site-inner">
+<a class="wordmark" href="/">Macless</a>
+<div class="nav-links">
+<a class="pricelink" href="/blog/">Blog</a>
+<a class="pricelink" href="/pricing.html">Pricing →</a>
+</div>
+</div>
+</header>
+
+<div class="hero compact">
+<div class="wrap">
+<a class="back-link" href="/blog/">← All posts</a>
+<div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+<h1>ITMS-90035: "A sealed resource is missing or invalid"</h1>
+<p class="hero-sub">Almost nobody reads past the headline. The path in brackets is the whole answer.</p>
+<div class="byline">Jackson · September 2026</div>
+</div>
+</div>
+
+<article>
+<div class="wrap">
+<p>Upload finishes, then the rejection email arrives:</p>
+<pre class="demo">ERROR ITMS-90035: "Invalid Signature. A sealed resource is
+missing or invalid. The file at path [MyApp.app/Frameworks/
+SomeSDK.framework/SomeSDK] is not properly signed."</pre>
+
+<p>The headline sends people off to check their distribution certificate, regenerate a provisioning profile, and upload the same broken binary again. <b>Your app signature is usually fine. Something inside the app bundle is not.</b> The bracketed path names it exactly, and that path is the only part of the message worth reading first.</p>
+
+<h2>What "sealed resource" means</h2>
+<p>When you sign a bundle, codesign records a hash of everything inside it. That set of hashes is the seal. At upload, Apple recomputes it. If any file inside the bundle is missing, added, altered, or itself an unsigned piece of code, the recomputed seal no longer matches and the whole thing is rejected. So the error fires for two different situations that need opposite fixes: something inside was never signed, or something inside changed after signing.</p>
+
+<h2>Check the path it named</h2>
+<p>Unzip the exact <code class="mono">.ipa</code> you uploaded and look at the offending item directly:</p>
+<pre class="demo">unzip -q MyApp.ipa -d out
+codesign -dv --verbose=4 out/Payload/MyApp.app/Frameworks/SomeSDK.framework</pre>
+<p><code class="mono">code object is not signed at all</code> means nothing signed it. An <code class="mono">Authority</code> line naming a different team or a development certificate means it was signed, with the wrong identity.</p>
+<p>Then verify the whole bundle the way Apple does:</p>
+<pre class="demo">codesign --verify --deep --strict --verbose=2 out/Payload/MyApp.app</pre>
+<p>Run this on the archive before you upload, not after the rejection. It catches the same problem in a few seconds instead of an hour.</p>
+
+<h2>Cause 1: a framework nothing is signing</h2>
+<p>A third-party framework or <code class="mono">.dylib</code> that gets copied into the bundle by a Copy Files build phase never gets signed, because copying is not embedding. Frameworks have to be listed under <b>Embed &amp; Sign</b> in the target's General tab. If a framework is set to Do Not Embed and a script drops it in anyway, the app signs cleanly and the framework inside it does not.</p>
+<p>The same applies to anything nested deeper. A binary framework that ships its own bundled dylibs can leave those unsigned even when the outer framework is embedded correctly, which is why the path in the error is sometimes several levels down.</p>
+
+<h2>Cause 2: something touched the bundle after signing</h2>
+<p>This is the CI version, and it is almost always ordering. Signing happens during <code class="mono">xcodebuild -exportArchive</code>. Any step that writes into the <code class="mono">.app</code> after that point breaks the seal, even if the change looks harmless. Copying in a config file, swapping an icon, patching an <code class="mono">Info.plist</code> value, rewriting a build number, all of it.</p>
+<p>The fix is order, not re-signing. Make the modification before the export step, so the signature is computed over the final contents. If a pipeline genuinely has to alter the app afterwards, it has to re-sign afterwards too, and that is a worse pipeline.</p>
+
+<h2>Cause 3: files that should not be in there</h2>
+<p>Stray files inside the bundle can invalidate the seal on their own. Extended attributes and resource forks picked up from macOS are the common ones, along with <code class="mono">.DS_Store</code> files that get swept in by an overly broad copy phase. Clear them before archiving:</p>
+<pre class="demo">xattr -cr path/to/MyApp.app</pre>
+<p>Also check that no build phase is copying an entire source directory into the bundle. If a copy phase uses a wildcard, it will happily include things you never meant to ship.</p>
+
+<h2>Why "just re-sign with --deep" is bad advice</h2>
+<p>It shows up in every thread about this error, and it does sometimes make the upload go through. Apple's own guidance is against it. <code class="mono">--deep</code> re-signs everything inside the bundle with your identity, including code that was signed by someone else for a reason, and it papers over a build configuration that is still wrong. The next SDK update brings the error straight back. Fix the embed setting or the phase order instead.</p>
+
+<div class="cta-box">
+<h2>Signing errors, in plain English</h2>
+<p>Signing Doctor reads a provisioning profile or certificate and tells you what is actually wrong with it. Free, no signup.</p>
+<a class="btn" href="/signing-doctor.html">Try Signing Doctor</a>
+</div>
+
+</div>
+</article>
+
+<footer>
+<div class="wrap">
+Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+Built by Jackson · 2026
+</div>
+</footer>
+
+</body>
+</html>
