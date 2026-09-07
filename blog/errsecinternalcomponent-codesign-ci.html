@@ -13,7 +13,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fix errSecInternalComponent when codesign runs in CI — Macless</title>
+<title>Fix errSecInternalComponent when codesign runs in CI</title>
 <meta name="description" content="errSecInternalComponent and "User interaction is not allowed" are the same problem: the keychain holding your signing identity won’t hand it to a headless process. The fix is one command most guides omit.">
 <link rel="canonical" href="https://macless.dev/blog/errsecinternalcomponent-codesign-ci.html">
 <link rel="stylesheet" href="/assets/site.css">
@@ -34,7 +34,7 @@
   <div class="wrap">
     <a class="back-link" href="/blog/">← All posts</a>
     <div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
-    <h1>errSecInternalComponent when codesign runs in CI</h1>
+    <h1>Fix errSecInternalComponent when codesign runs in CI</h1>
     <p class="hero-sub">It builds on your machine and dies on the runner. The certificate is there — the keychain just won’t let a headless process touch it.</p>
     <div class="byline">Jackson · August 2026</div>
   </div>
