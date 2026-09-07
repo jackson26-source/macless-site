@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix "Couldn't find preset metro-react-native-babel-preset"</title>
+<meta name="description" content="A scaffold trimmed down to skip the test files can carry off a package Jest never touches but Metro needs at every bundle, including the one your archive step runs.">
+<link rel="canonical" href="https://macless.dev/blog/metro-react-native-babel-preset-not-found.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+<div class="site-inner">
+<a class="wordmark" href="/">Macless</a>
+<div class="nav-links">
+<a class="pricelink" href="/blog/">Blog</a>
+<a class="pricelink" href="/pricing.html">Pricing →</a>
+</div>
+</div>
+</header>
+
+<div class="hero compact">
+<div class="wrap">
+<a class="back-link" href="/blog/">← All posts</a>
+<div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+<h1>Fix "Couldn't find preset metro-react-native-babel-preset"</h1>
+<p class="hero-sub">Metro fails right before the archive step, because a package that looked test-only wasn't.</p>
+<div class="byline">Jackson · September 2026</div>
+</div>
+</div>
+
+<article>
+<div class="wrap">
+<p>The build has been running for a while, everything looked normal, and then it stops with:</p>
+<pre class="demo">Couldn't find preset "module:metro-react-native-babel-preset"
+relative to directory "/path/to/project"</pre>
+<p>On iOS this rarely shows up on its own. It usually surfaces one step later, more confusingly, as:</p>
+<pre class="demo">error: File main.jsbundle does not exist. This must be a bug with
+React Native, please report it here: ...</pre>
+<p>That second message is a red herring. <b>Nothing is wrong with React Native.</b> Metro never produced a bundle at all, because the very first file it tried to transform needed a Babel preset that isn't in <code class="mono">node_modules</code>, and an empty bundle output means the later copy step has nothing to find.</p>
+
+<h2>Why this fires at archive time specifically</h2>
+<p>Babel transformation isn't a test-only step. Every time Metro bundles JavaScript — the dev server, a manual <code class="mono">react-native bundle</code>, and critically the "Bundle React Native code and images" build phase that Xcode runs during <code class="mono">xcodebuild archive</code> (Android's equivalent is the <code class="mono">bundleReleaseJsAndAssets</code> Gradle task) — it runs your code through whatever <code class="mono">babel.config.js</code> specifies. If the preset named there isn't installed, the transform fails immediately, and it fails identically whether that bundle was headed for a test run or a real production archive.</p>
+
+<h2>How a "trimmed" scaffold does this</h2>
+<p>A stock React Native <code class="mono">package.json</code> keeps its Babel preset in <code class="mono">devDependencies</code>, sitting right next to <code class="mono">jest</code> and <code class="mono">@testing-library/react-native</code>. That's an accurate description of when it's <i>installed</i>, and a completely misleading one for what it's <i>for</i>. A setup script built to generate a lean starter project — drop the <code class="mono">__tests__</code> folder, drop <code class="mono">jest.config.js</code>, drop anything that reads as test scaffolding — can treat the whole neighborhood of that <code class="mono">devDependencies</code> block as fair game and take the Babel preset with it. Nothing about where a package lives in <code class="mono">package.json</code> says whether the bundler needs it; <code class="mono">devDependencies</code> just means "not needed in the shipped app," and Metro's transform step runs long before anything ships.</p>
+
+<div class="callout">
+<b>Found the hard way.</b> Our changelog for 2026-08-18 records exactly this: live-testing the React Native variant of our pipeline template, a scaffold-generation step trimmed to skip Jest also carried off a package the bundler itself depends on. It didn't surface until the archive step tried to produce the actual <code class="mono">.ipa</code>, several minutes into a build that had looked fine up to that point.
+</div>
+
+<h2>The fix</h2>
+<p>Reinstall the preset your project's <code class="mono">babel.config.js</code> actually references. Current React Native uses the scoped package:</p>
+<pre class="demo">npm install --save-dev @react-native/babel-preset</pre>
+<p>Older projects (pre-0.71-era, matching the unscoped RNGP package from the plugin-resolution post above) use the original name instead:</p>
+<pre class="demo">npm install --save-dev metro-react-native-babel-preset</pre>
+<p>Then confirm <code class="mono">babel.config.js</code> points at whichever one you actually installed:</p>
+<pre class="demo">module.exports = {
+  presets: ['module:@react-native/babel-preset'],
+};</pre>
+<p>Clear Metro's cache before the next build so a stale transform result doesn't mask whether the fix actually worked:</p>
+<pre class="demo">npx react-native start --reset-cache</pre>
+
+<h2>The real fix is in the trimming step, not the reinstall</h2>
+<p>Reinstalling the preset gets one build working again. The structural problem is a scaffold-trimming step that decides what to remove based on which <code class="mono">package.json</code> block a dependency sits in, rather than whether anything in the project's actual build config — <code class="mono">babel.config.js</code>, <code class="mono">metro.config.js</code>, any Gradle or Xcode script — references it. Before any automated cleanup step deletes a "testing" dependency, it's worth actually grepping the build config for its name first.</p>
+
+<div class="cta-box">
+<h2>Live-tested, not just reviewed</h2>
+<p>We found this by actually running our own generated templates end to end, not by reading the code and assuming it works. The pipeline Macless generates for you has already been through this once.</p>
+<a class="btn" href="/pricing.html">See pricing — from $19.99/mo</a>
+</div>
+
+</div>
+</article>
+
+<footer>
+<div class="wrap">
+Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+Built by Jackson · 2026
+</div>
+</footer>
+
+</body>
+</html>

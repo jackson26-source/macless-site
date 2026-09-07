@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix "Could not find react-native-gradle-plugin"</title>
+<meta name="description" content="Two error messages, one root cause: the React Native Gradle Plugin your build references doesn't exist for the React Native version you actually have installed.">
+<link rel="canonical" href="https://macless.dev/blog/react-native-gradle-plugin-not-found.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+<div class="site-inner">
+<a class="wordmark" href="/">Macless</a>
+<div class="nav-links">
+<a class="pricelink" href="/blog/">Blog</a>
+<a class="pricelink" href="/pricing.html">Pricing →</a>
+</div>
+</div>
+</header>
+
+<div class="hero compact">
+<div class="wrap">
+<a class="back-link" href="/blog/">← All posts</a>
+<div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+<h1>Fix "Could not find react-native-gradle-plugin"</h1>
+<p class="hero-sub">Two different-looking errors, same cause: the plugin version doesn't match the React Native you actually have installed.</p>
+<div class="byline">Jackson · September 2026</div>
+</div>
+</div>
+
+<article>
+<div class="wrap">
+<p>This shows up in one of two forms, and Gradle never gets past the sync step to build anything:</p>
+<pre class="demo">Could not find com.facebook.react:react-native-gradle-plugin:0.72.0.
+Searched in the following locations:
+  - https://dl.google.com/dl/android/maven2/...
+  - https://repo.maven.apache.org/maven2/...
+Required by:
+    project :</pre>
+<p>or, on a newer template:</p>
+<pre class="demo">Included build '/path/to/node_modules/@react-native/gradle-plugin'
+does not exist.</pre>
+<p>Both mean the same thing. <b>Whatever reference to the React Native Gradle Plugin (RNGP) your build is using points at something that doesn't exist for the React Native release actually sitting in your <code class="mono">node_modules</code>.</b></p>
+
+<h2>Why the version has to match</h2>
+<p>RNGP isn't a general-purpose Gradle plugin versioned on its own schedule. It ships inside the <code class="mono">react-native</code> package itself and is published in lockstep with RN core — plugin version 0.73.0 exists because RN core 0.73.0 exists, not on any independent release cadence. A build script that hardcodes a plugin version or path is really hardcoding an assumption about which RN release the project is on. That assumption is fine right up until someone runs the same script against a project one or two releases behind, at which point the plugin reference simply has nothing to resolve to.</p>
+
+<h2>The Maven classpath version (older templates)</h2>
+<p>Pre-0.72-era <code class="mono">android/build.gradle</code> files pull the plugin as an ordinary Maven dependency:</p>
+<pre class="demo">dependencies {
+    classpath("com.facebook.react:react-native-gradle-plugin:0.72.0")
+}</pre>
+<p>If the installed <code class="mono">react-native</code> version is older than the pinned number, Gradle searches Google's Maven and Maven Central, finds nothing published at that version for this project's actual toolchain, and fails before a single Java or Kotlin file compiles.</p>
+
+<h2>The includeBuild version (RN 0.72 and later)</h2>
+<p>Current templates don't fetch RNGP from Maven at all. <code class="mono">settings.gradle</code> includes it directly from the installed package:</p>
+<pre class="demo">includeBuild('../node_modules/@react-native/gradle-plugin')</pre>
+<p>The package itself was renamed at 0.72 — it used to be the unscoped <code class="mono">react-native-gradle-plugin</code>. A <code class="mono">settings.gradle</code> written for one side of that rename and run against a project on the other side references a folder that genuinely never gets created by <code class="mono">npm install</code>, which is exactly what "Included build ... does not exist" is reporting. It isn't a permissions or install problem — the path is just wrong for this project's RN version.</p>
+
+<div class="callout">
+<b>Found the hard way.</b> Our own changelog for 2026-08-18 records live-testing the React Native variant of our Android pipeline template and hitting exactly this: the template's plugin reference didn't exist for any React Native release before 0.85, because it had been written against the newest core we'd tested and never checked against an older-but-still-supported one. It failed at the first Gradle sync, before any of the rest of the workflow ran.
+</div>
+
+<h2>The fix</h2>
+<p>Stop pinning a version or a package name at all, and let the plugin resolve from whatever React Native is actually installed. Current RN templates do this with a small Node resolution instead of a literal path:</p>
+<pre class="demo">pluginManagement { includeBuild(new File(
+  providers.exec {
+    workingDir(rootDir)
+    commandLine("node", "--print", "require.resolve('@react-native/gradle-plugin/package.json')")
+  }.standardOutput.asText.get().trim()
+).getParentFile().toString()) }</pre>
+<p>If your <code class="mono">build.gradle</code> still carries an explicit <code class="mono">classpath("com.facebook.react:react-native-gradle-plugin:X.X.X")</code> line, that's usually a leftover from an older template. Modern RNGP is picked up by <code class="mono">pluginManagement</code>/<code class="mono">includeBuild</code>, so the versioned classpath entry can be removed entirely rather than kept in sync by hand.</p>
+
+<h2>Checking which era your project is on</h2>
+<p>Run this before touching anything:</p>
+<pre class="demo">node -p "require('react-native/package.json').version"
+ls node_modules/@react-native/gradle-plugin 2>/dev/null && echo "scoped package present"
+ls node_modules/react-native-gradle-plugin 2>/dev/null && echo "unscoped package present"</pre>
+<p>Whichever package actually exists on disk is the one your <code class="mono">settings.gradle</code> or <code class="mono">build.gradle</code> needs to reference. A template copied from a newer or older project is the single most common way these two get out of sync.</p>
+
+<div class="cta-box">
+<h2>The pipeline resolves this by installed version, not a hardcoded one</h2>
+<p>We hit this exact class of bug live-testing our own React Native template, which is why Macless's generated Gradle config reads the plugin from your project's actual <code class="mono">node_modules</code> instead of a version baked in at template time.</p>
+<a class="btn" href="/pricing.html">See pricing — from $19.99/mo</a>
+</div>
+
+</div>
+</article>
+
+<footer>
+<div class="wrap">
+Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+Built by Jackson · 2026
+</div>
+</footer>
+
+</body>
+</html>
