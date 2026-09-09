@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix "Version code X has already been used" on Google Play</title>
+<meta name="description" content="Google Play rejects the version code baked into your bundle, not the one your CI tool thinks it sent. Why fastlane's own version parameters can't fix this after the fact, and where the bump actually has to happen.">
+<link rel="canonical" href="https://macless.dev/blog/google-play-version-code-already-used.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+<div class="site-inner">
+<a class="wordmark" href="/">Macless</a>
+<div class="nav-links">
+<a class="pricelink" href="/blog/">Blog</a>
+<a class="pricelink" href="/pricing.html">Pricing →</a>
+</div>
+</div>
+</header>
+
+<div class="hero compact">
+<div class="wrap">
+<a class="back-link" href="/blog/">← All posts</a>
+<div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+<h1>Fix "Version code X has already been used" on Google Play</h1>
+<p class="hero-sub">Your CI tool can tell Play Console whatever version it wants. Play Console only believes the number actually compiled into the bundle.</p>
+<div class="byline">Jackson · September 2026</div>
+</div>
+</div>
+
+<article>
+<div class="wrap">
+<pre class="demo">Google Api Error: Invalid request - Version code 7 has already been used.</pre>
+<p>This lands after upload, from Google's servers, not your build tool. It means the exact <code class="mono">versionCode</code> embedded in the AAB or APK you just uploaded has already been published for this app, even a version you shipped weeks ago. Play Console doesn't care what version your commit message says, or what your CI dashboard says it deployed. It reads the number baked into the artifact.</p>
+
+<h2>Why this happens even when your tooling says the version is right</h2>
+<p>The usual setup: fastlane's <code class="mono">upload_to_play_store</code> action accepts a <code class="mono">version_code</code> parameter, so it looks like you can just increment that and move on. The catch is that parameter tells fastlane what to <i>report</i>, it doesn't reach into an already-built AAB and change the number compiled inside it. If your Gradle build ran with the old <code class="mono">versionCode</code> before fastlane ever got involved, the bundle fastlane uploads still carries the old number, whatever you pass as a parameter afterward.</p>
+<p>This is exactly the failure documented in <a href="https://github.com/fastlane/fastlane/issues/21642">a real fastlane issue</a>: fastlane correctly identified the intended new version code, but Play Console rejected the upload because the bundle itself still contained the previous one. The override happened at the wrong layer, after the artifact was already built.</p>
+
+<h2>The fix has to happen before the build, not at upload</h2>
+<p>The version code has to be correct in <code class="mono">build.gradle</code> (or wherever your Gradle config reads it from) at the moment <code class="mono">./gradlew bundleRelease</code> actually runs. Two ways that reliably works in CI:</p>
+<pre class="demo">// build.gradle — read from a value CI controls before the build starts
+versionCode System.getenv("BUILD_VERSION_CODE")?.toInteger() ?: 1</pre>
+<p>or, if you'd rather not touch the Gradle file at all, inject it at invocation time and make sure it lands before compilation:</p>
+<pre class="demo">./gradlew bundleRelease -PVERSION_CODE=$BUILD_VERSION_CODE</pre>
+<p>with <code class="mono">build.gradle</code> reading <code class="mono">project.hasProperty('VERSION_CODE') ? VERSION_CODE.toInteger() : 1</code>. Either way, the number has to exist before the archive step, not get patched on afterward by whatever uploads the result.</p>
+
+<h2>A CI guard that catches this before Play Console does</h2>
+<p>Since the bundle is the source of truth, read the version code back out of it after building and compare, instead of trusting whatever your CI thinks it set:</p>
+<pre class="demo">unzip -p app-release.aab base/manifest/AndroidManifest.xml | \
+grep -a -o 'versionCode="[0-9]*"'</pre>
+<p>For an APK, <code class="mono">aapt dump badging app-release.apk | grep versionCode</code> does the same thing. Running this right after the build and failing loudly if it doesn't match the number you intended turns a rejected Play Console upload, discovered minutes later, into a build failure discovered immediately, with the actual mismatch printed in the log instead of a bare "already been used."</p>
+
+<h2>The other way this bites people</h2>
+<p>Auto-incrementing schemes that derive the version code from something that isn't monotonic across every branch (a commit count on a feature branch, a timestamp that gets reset by a rebase, a counter stored somewhere that doesn't survive a fresh CI runner) can also produce a number lower than, or equal to, one already published. The fix is the same: verify the number in the built artifact against Play Console's last known version before uploading, don't just trust that your counter always goes up.</p>
+
+<div class="cta-box">
+<h2>Version bumps happen before the build in Macless's Android pipeline</h2>
+<p>Our Android workflow template increments the version code from CI itself, before <code class="mono">bundleRelease</code> runs, specifically so the number in the built AAB and the number you think you're shipping can't drift apart.</p>
+<a class="btn" href="/pricing.html">See pricing — from $19.99/mo</a>
+</div>
+
+</div>
+</article>
+
+<footer>
+<div class="wrap">
+Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+Built by Jackson · 2026
+</div>
+</footer>
+
+</body>
+</html>
