@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Play's 12-tester, 14-day testing rule, explained</title>
+<meta name="description" content="A closed test with 12 continuously opted-in testers for 14 straight days, before you can request production access. Who it applies to, what resets the clock, and the fastest legitimate way through it.">
+<link rel="canonical" href="https://macless.dev/blog/google-play-12-testers-14-days-explained.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+<div class="site-inner">
+<a class="wordmark" href="/">Macless</a>
+<div class="nav-links">
+<a class="pricelink" href="/blog/">Blog</a>
+<a class="pricelink" href="/pricing.html">Pricing →</a>
+</div>
+</div>
+</header>
+
+<div class="hero compact">
+<div class="wrap">
+<a class="back-link" href="/blog/">← All posts</a>
+<div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+<h1>Google Play's 12-tester, 14-day testing rule, explained</h1>
+<p class="hero-sub">Not a build error. A policy gate that shows up as a greyed-out "Release to production" button with no obvious next step.</p>
+<div class="byline">Jackson · September 2026</div>
+</div>
+</div>
+
+<article>
+<div class="wrap">
+<p>You finish your first build, upload it, go to push it to production, and the button won't let you. There's no error code, no red banner in your CI log, just a Play Console screen telling you to run a closed test first. This has nothing to do with your app or your pipeline. It's a policy Google applies to the account, not the build.</p>
+
+<h2>Who this actually applies to</h2>
+<p>Personal Google Play Console accounts created after November 13, 2023. If your account predates that and was already in good standing, this doesn't apply to you, which is exactly why the developer helping you on a forum from three years ago has no idea what you're talking about. Existing organization accounts are also generally exempt. This is specifically the gate for brand-new personal accounts.</p>
+
+<h2>What actually counts toward the 14 days</h2>
+<p>You need 12 testers opted in continuously for the 14 days immediately before you apply for production access. Both numbers matter, and "continuously" is doing more work than it looks like:</p>
+<ul>
+<li>A tester who opts in, tests for 9 days, then opts out does not count toward the requirement at all, not even partial credit for the 9 days.</li>
+<li>If a tester opts out and later opts back in, the clock restarts for them. The 14 days have to be consecutive, not cumulative.</li>
+<li>The requirement is checked at the moment you apply, against the trailing 14 days from that moment. There's no fixed calendar window you're racing against.</li>
+</ul>
+
+<h2>The one mistake that resets people to zero</h2>
+<p>Removing a tester from the list, or pausing the testing track itself, breaks continuity for everyone still counting toward that period. If you're at day 11 of 14 and pause the track to fix an unrelated bug, you don't resume at day 11 when you unpause it. The clock for every tester restarts. This is the single most common way people who thought they were three days from done end up two weeks further out.</p>
+
+<h2>The fastest legitimate way to get 12 testers</h2>
+<p>You don't need 12 people who actually use the app meaningfully, you need 12 people who opt in and stay opted in. Play Console lets you generate a public opt-in link for a closed testing track from the Testers tab. Sharing that link (a testing-focused subreddit, a Discord for indie devs, a "test my app, I'll test yours" thread) gets you real Google accounts opting in without needing existing users. The bar is continuous enrollment, not engagement, so don't over-engineer this into a beta program when what you need is 12 people clicking one link and leaving it alone for two weeks.</p>
+
+<h2>After the 14 days</h2>
+<p>Once the requirement is met, you apply for production access from the Play Console dashboard. The application covers three sections: testing details, app information, and production readiness. Google's stated review window is seven days or less. This is a one-time gate, not a recurring requirement, once an app clears it and reaches production, later updates to that app don't need to repeat the closed test.</p>
+
+<div class="cta-box">
+<h2>If you're automating the upload, automate the wait too</h2>
+<p>Macless's Android pipeline pushes builds straight to your Play Console track via fastlane. If your account is still inside the 12-tester window, that's a Play Console account state, not something any pipeline can bypass, but the same automated upload step that gets your closed test build out is the one that pushes your eventual production release once the gate clears.</p>
+<a class="btn" href="/pricing.html">See pricing — from $19.99/mo</a>
+</div>
+
+</div>
+</article>
+
+<footer>
+<div class="wrap">
+Questions? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+Built by Jackson · 2026
+</div>
+</footer>
+
+</body>
+</html>
