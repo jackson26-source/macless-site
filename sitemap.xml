@@ -133,6 +133,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://macless.dev/blog/google-play-12-testers-14-days-explained.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://macless.dev/blog/google-play-version-code-already-used.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://macless.dev/blog/react-native-gradle-plugin-not-found.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
