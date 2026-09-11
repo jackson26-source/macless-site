@@ -12,6 +12,16 @@
   --serif: 'Familjen Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   --sans: 'Familjen Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   --mono: 'Spline Sans Mono', 'SF Mono', Menlo, Consolas, monospace;
+
+  /* dark product hero (homepage only, see .hero:not(.compact) below) */
+  --hero-bg: #1b1712;
+  --hero-bg-2: #221d16;
+  --hero-border: #3a3226;
+  --hero-text: #f5f1e6;
+  --hero-text-dim: #c2b8a4;
+  --hero-text-faint: #8f8672;
+  --hero-accent: #e2703a;
+  --hero-code-bg: #14110d;
 }
 *{ box-sizing:border-box; margin:0; padding:0; }
 html{ scroll-behavior:smooth; }
@@ -71,6 +81,52 @@ button.btn-text:hover{ background:none; }
 .back-link{ display:block; margin: 28px 0 0; font-size: 14px; color: var(--text-faint); text-decoration:none; }
 .back-link:hover{ color: var(--accent); }
 
+/* ---- dark product hero, homepage only ----
+   Every other page reuses .hero.compact for a plain post header, so this
+   whole block is scoped to :not(.compact) to avoid touching them. */
+.hero:not(.compact){
+  background: var(--hero-bg);
+  background-image: radial-gradient(ellipse 900px 420px at 15% -10%, var(--hero-bg-2), transparent);
+  color: var(--hero-text);
+  padding: 64px 0 48px;
+  border-bottom: 1px solid var(--hero-border);
+}
+.hero:not(.compact) .eyebrow{
+  display:inline-block; color: var(--hero-accent); font-weight:600; font-size:13px;
+  letter-spacing:.04em; text-transform:uppercase; margin-bottom: 18px;
+  padding: 5px 12px; border: 1px solid var(--hero-border); border-radius: 20px;
+  background: rgba(226,112,58,0.08);
+}
+.hero:not(.compact) h1{ color: var(--hero-text); }
+.hero:not(.compact) .hero-sub{ color: var(--hero-text-dim); max-width: 600px; }
+.hero:not(.compact) .hero-note{ color: var(--hero-text-faint); }
+.hero:not(.compact) .btn-primary{ background: var(--hero-accent); color: #1b1712; }
+.hero:not(.compact) .btn-primary:hover{ background: #f08556; }
+.hero:not(.compact) .btn-text{ color: var(--hero-text-dim); border-color: var(--hero-border); }
+.hero:not(.compact) .btn-text:hover{ color: var(--hero-accent); border-color: var(--hero-accent); }
+.hero:not(.compact) pre.demo{
+  background: var(--hero-code-bg); border-color: var(--hero-border); color: #d8d0bf;
+}
+.hero:not(.compact) pre.demo .dim{ color: var(--hero-text-faint); }
+.hero:not(.compact) .build-proof-caption{ color: var(--hero-text-faint); }
+.hero:not(.compact) .build-proof-caption a{ color: var(--hero-accent); }
+.hero:not(.compact) .note{
+  border-left-color: var(--hero-border); color: var(--hero-text-dim);
+}
+.hero:not(.compact) .note b{ color: var(--hero-text); }
+.hero:not(.compact) .sig{ color: var(--hero-text-faint); }
+
+/* trust strip: short, true, checkable claims right under the CTA */
+.trust-strip{
+  list-style:none; display:flex; flex-wrap:wrap; gap: 10px 22px; margin: 22px 0 0; padding:0;
+}
+.trust-strip li{
+  font-size: 13.5px; color: var(--hero-text-dim); display:flex; align-items:center; gap:7px;
+}
+.trust-strip li::before{
+  content: "✓"; color: var(--hero-accent); font-weight:700; font-size: 12px;
+}
+
 /* ---- code block ---- */
 pre.demo{
   margin: 40px 0 0; background: var(--code-bg); border:1px solid var(--border); border-radius: 8px;
@@ -108,6 +164,32 @@ blockquote.proof{
 }
 blockquote.proof a{ display:inline-block; margin-top:10px; font-style:normal; font-size:14px; }
 
+/* ---- sourced negative-review pull-quotes (used inside the FAQ's
+   Codemagic/Bitrise answer, so the reviews read as evidence, not a
+   sentence buried in a paragraph) ---- */
+.review-quotes{ display:flex; flex-wrap:wrap; gap:14px; margin: 14px 0; }
+.review-quote{
+  flex: 1 1 220px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px;
+  padding: 14px 16px; font-size: 14.5px; color: var(--text); font-style: italic;
+}
+.review-quote cite{
+  display:block; margin-top:8px; font-style:normal; font-size:12.5px; color: var(--text-faint);
+}
+.review-quote cite a{ color: var(--text-faint); }
+.review-quote cite a:hover{ color: var(--accent); }
+
+/* ---- ownership argument, pulled out of the price note into its own
+   badge so "cancel any time, it's your repo" reads as a headline
+   claim rather than a paragraph footnote ---- */
+.ownership-badge{
+  display:flex; gap:14px; align-items:flex-start; margin: 22px 0; padding: 16px 18px;
+  background: var(--bg-panel); border: 1px solid var(--border); border-left: 3px solid var(--accent);
+  border-radius: 8px;
+}
+.ownership-badge .mark{ font-family: var(--serif); font-size: 22px; color: var(--accent); line-height:1; flex-shrink:0; }
+.ownership-badge b{ display:block; color: var(--text); font-size: 15px; margin-bottom: 3px; }
+.ownership-badge span{ color: var(--text-dim); font-size: 14px; }
+
 /* ---- pricing ---- */
 .price-block{ margin-top: 12px; }
 .price-tag{ font-family: var(--serif); font-size:44px; font-weight:700; margin: 6px 0 2px; }
@@ -123,11 +205,22 @@ blockquote.proof a{ display:inline-block; margin-top:10px; font-style:normal; fo
 .btn-secondary{ background: transparent; color: var(--text); border: 1px solid var(--text); }
 .btn-secondary:hover{ background: var(--text); color: #fdfcf9; }
 
-/* ---- FAQ ---- */
-.faq-item{ padding: 20px 0; border-bottom: 1px solid var(--border); }
+/* ---- FAQ (accordion, built on native <details>/<summary>) ---- */
+.faq-item{ padding: 4px 0; border-bottom: 1px solid var(--border); }
 .faq-item:last-child{ border-bottom:none; }
+.faq-item summary{
+  list-style:none; cursor:pointer; padding: 16px 28px 16px 0; position:relative;
+  font-size:16px; font-weight:700; font-family: var(--sans); color: var(--text);
+}
+.faq-item summary::-webkit-details-marker{ display:none; }
+.faq-item summary::after{
+  content:"+"; position:absolute; right:2px; top:50%; transform:translateY(-50%);
+  font-family: var(--serif); font-size:20px; color: var(--text-faint); transition: transform .15s ease;
+}
+.faq-item[open] summary::after{ content:"\2212"; }
+.faq-item summary:hover::after{ color: var(--accent); }
+.faq-item p{ font-size:15px; color: var(--text-dim); padding-bottom: 18px; }
 .faq-item h3{ font-size:16px; font-weight:700; margin-bottom:6px; font-family: var(--sans); }
-.faq-item p{ font-size:15px; color: var(--text-dim); }
 
 .final-cta{ text-align:left; padding: 50px 0 60px; }
 
