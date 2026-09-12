@@ -66,12 +66,17 @@ footer a:focus-visible{
   <div class="site-inner">
     <a class="wordmark" href="/">Macless</a>
     <div class="nav-links">
-      <a class="pricelink" href="/blog/">Blog</a>
-      <a class="pricelink" href="/calculator.html">What are you paying now?</a>
       <a class="pricelink" href="/signing-doctor.html">Free signing checker</a>
-      <a class="pricelink" href="/rejection-doctor.html">Free rejection decoder</a>
       <a class="pricelink" href="/pricing.html">Pricing</a>
-      <a class="pricelink" href="/ship-my-app.html">Ship it for me →</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-toggle" type="button" aria-expanded="false">More <span class="nav-caret">&#9662;</span></button>
+        <div class="nav-dropdown-menu">
+          <a href="/blog/">Blog</a>
+          <a href="/calculator.html">What are you paying now?</a>
+          <a href="/rejection-doctor.html">Free rejection decoder</a>
+          <a href="/ship-my-app.html">Ship it for me &rarr;</a>
+        </div>
+      </div>
     </div>
   </div>
 </header>
@@ -259,5 +264,29 @@ footer a:focus-visible{
 })();
 </script>
 
+<script>
+document.querySelectorAll('.nav-dropdown-toggle').forEach(function(btn){
+  var dd = btn.closest('.nav-dropdown');
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    var isOpen = dd.classList.toggle('open');
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+});
+document.addEventListener('click', function(){
+  document.querySelectorAll('.nav-dropdown.open').forEach(function(dd){
+    dd.classList.remove('open');
+    dd.querySelector('.nav-dropdown-toggle').setAttribute('aria-expanded', 'false');
+  });
+});
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape'){
+    document.querySelectorAll('.nav-dropdown.open').forEach(function(dd){
+      dd.classList.remove('open');
+      dd.querySelector('.nav-dropdown-toggle').setAttribute('aria-expanded', 'false');
+    });
+  }
+});
+</script>
 </body>
 </html>
