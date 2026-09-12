@@ -19,5 +19,5 @@ jobs:
           echo "Submitting $(echo "$URLS" | jq 'length') URLs to IndexNow"
           curl -s -X POST "https://api.indexnow.org/indexnow" \
             -H "Content-Type: application/json; charset=utf-8" \
-            -d "{\"host\":\"macless.dev\",\"key\":\"a6b7743a5681Page_Down3bd5e635bbc874ae5d80\",\"keyLocation\":\"https://macless.dev/a6b7743a56813bd5e635bbc874ae5d80.txt\",\"urlList\":${URLS}}" \
+            -d "{\"host\":\"macless.dev\",\"key\":\"a6b7743a56813bd5e635bbc874ae5d80\",\"keyLocation\":\"https://macless.dev/a6b7743a56813bd5e635bbc874ae5d80.txt\",\"urlList\":${URLS}}" \
             -w "\nIndexNow response: %{http_code}\n"
