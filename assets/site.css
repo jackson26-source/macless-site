@@ -46,6 +46,19 @@ header.site{ padding: 28px 0; border-bottom: 1px solid var(--border); }
 .site-inner a.pricelink{ font-size:14px; color: var(--text-dim); text-decoration:none; border-bottom:1px solid var(--border); }
 .site-inner a.pricelink:hover{ color: var(--accent); border-color: var(--accent); }
 
+/* ---- nav "More" dropdown (keeps Pricing + Free signing checker visible,
+   tucks the rest away so the wordmark and first link stop crowding each
+   other on pages with a lot of nav links) ---- */
+.nav-dropdown{ position:relative; }
+.nav-dropdown-toggle{ font-family:inherit; font-size:14px; color:var(--text-dim); background:none; border:none; border-bottom:1px solid var(--border); padding:0 0 1px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; }
+.nav-dropdown-toggle:hover, .nav-dropdown.open .nav-dropdown-toggle{ color:var(--accent); border-color:var(--accent); }
+.nav-caret{ font-size:10px; line-height:1; transition:transform .15s ease; }
+.nav-dropdown.open .nav-caret{ transform:rotate(180deg); }
+.nav-dropdown-menu{ display:none; position:absolute; top:calc(100% + 14px); right:0; min-width:220px; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:8px; box-shadow:0 8px 24px rgba(0,0,0,0.14); z-index:50; flex-direction:column; }
+.nav-dropdown.open .nav-dropdown-menu{ display:flex; }
+.nav-dropdown-menu a{ font-size:14px; color:var(--text-dim); text-decoration:none; padding:8px 10px; border-radius:6px; white-space:nowrap; }
+.nav-dropdown-menu a:hover{ background:var(--border); color:var(--accent); }
+
 /* ---- responsive header ----
    The header row (wordmark + nav links) doesn't fit on phone-width
    screens at its default single-row layout, which was overflowing
@@ -54,6 +67,7 @@ header.site{ padding: 28px 0; border-bottom: 1px solid var(--border); }
 @media (max-width: 640px){
   .site-inner{ flex-wrap: wrap; row-gap: 10px; }
   .nav-links{ width: 100%; flex-wrap: wrap; gap: 10px 20px; row-gap: 8px; }
+  .nav-dropdown-menu{ position:static; box-shadow:none; border:none; padding:4px 0 0 16px; margin-top:4px; min-width:0; }
 }
 
 /* ---- hero (landing page + post/index heroes) ---- */
