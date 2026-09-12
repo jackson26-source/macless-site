@@ -38,10 +38,10 @@
 .wizard-shot figcaption{ margin-top:10px; font-size:13px; color: var(--text-faint); }
 .build-proof{ margin: 22px 0 6px; }
 .build-proof img{ display:block; width:100%; max-width:620px; aspect-ratio: 800 / 434; height:auto; border:1px solid var(--border); border-radius:10px; box-shadow: 0 2px 14px rgba(36,33,28,0.10); }
-.build-proof-caption{ margin-top:10px; font-size:13px; color: var(--text-faint); max-width:620px; }
+.build-proof-caption{ margin-top:10px; font-size:13px; color: var(--text-faint); max-width:620px; } body.dark-home{ --bg:#12161c; --bg-panel:#171d26; --border:#2a323d; --text:#f2f4f7; --text-dim:#b6bfc9; --text-faint:#808a96; --accent:#4f8fe0; --accent-ink:#0c0f14; --code-bg:#0c0f14; } body.dark-home .btn{ background: var(--accent); color: var(--accent-ink); } body.dark-home .btn:hover{ background:#74aae8; } body.dark-home .btn-primary{ background: var(--accent); color: var(--accent-ink); } body.dark-home .btn-primary:hover{ background:#74aae8; } body.dark-home .btn-secondary{ background:transparent; color:var(--text); border-color:var(--text); } body.dark-home .btn-secondary:hover{ background:var(--text); color:#12161c; } body.dark-home .wizard-shot img, body.dark-home .build-proof img{ box-shadow: 0 2px 14px rgba(0,0,0,0.45); }
 </style>
 </head>
-<body>
+<body class="dark-home">
 
 <header class="site">
   <div class="site-inner">
@@ -78,7 +78,7 @@
 <span class="dim">→ GitHub spins up a macOS build machine (free, public repo)</span>
 <span class="dim">→ signs the app, archives it, exports a .ipa</span>
 <span class="dim">→ uploads to TestFlight</span>
-done. no Mac involved, nothing spent.</pre>
+done. no Mac involved, nothing spent.</pre> <div style="margin:40px 0 0;"> <h2 style="font-size:22px; margin-bottom:10px;">What you get that nothing else does</h2> <p style="color:var(--text-dim); margin-bottom:16px; font-size:15px;">Not a hype claim — every row here is backed up further down this page and in the <a href="#compare">full comparison</a>.</p> <div style="overflow-x:auto;"> <table class="compare"> <tr><th></th><th>One-time option, yours to keep</th><th>Still works if you stop paying</th><th>Free signing &amp; rejection tools</th></tr> <tr><td><b>Macless</b></td><td>Yes — $299 once</td><td>Yes — it's a workflow file sitting in your own repo</td><td>Yes — <a href="/signing-doctor.html">Signing Doctor</a> &amp; <a href="/rejection-doctor.html">Rejection Doctor</a>, free, no account</td></tr> <tr><td>Codemagic / Bitrise</td><td>No — monthly or per-build</td><td>No — hosted on their platform</td><td>No</td></tr> <tr><td>Xcode Cloud</td><td>No — you need to already own a Mac</td><td>No — tied to your Xcode setup</td><td>No</td></tr> <tr><td>Cloud Mac rental <span class="mono" style="font-size:12.5px;">(MacinCloud, AWS Mac, etc.)</span></td><td>No — $20–100+/month</td><td>No — you're renting the machine itself</td><td>No</td></tr> <tr><td>Fiverr gig</td><td>No — pay per submission, forever</td><td>No — needs a person again next time</td><td>No</td></tr> </table> </div> </div>
 
     <div class="build-proof">
       <a href="https://github.com/jackson26-source/macless-rn-livetest/actions/runs/32147880137" target="_blank" rel="noopener">
@@ -94,7 +94,7 @@ done. no Mac involved, nothing spent.</pre>
   </div>
 </div>
 
-<section id="different"> <div class="wrap"> <h2>What you get that nothing else does</h2> <p class="lead">Not a hype claim — every row here is backed up further down this page and in the <a href="#compare">full comparison</a>.</p> <div style="overflow-x:auto;"> <table class="compare"> <tr><th></th><th>One-time option, yours to keep</th><th>Still works if you stop paying</th><th>Free signing &amp; rejection tools</th></tr> <tr><td><b>Macless</b></td><td>Yes — $299 once</td><td>Yes — it's a workflow file sitting in your own repo</td><td>Yes — <a href="/signing-doctor.html">Signing Doctor</a> &amp; <a href="/rejection-doctor.html">Rejection Doctor</a>, free, no account</td></tr> <tr><td>Codemagic / Bitrise</td><td>No — monthly or per-build</td><td>No — hosted on their platform</td><td>No</td></tr> <tr><td>Xcode Cloud</td><td>No — you need to already own a Mac</td><td>No — tied to your Xcode setup</td><td>No</td></tr> <tr><td>Cloud Mac rental <span class="mono" style="font-size:12.5px;">(MacinCloud, AWS Mac, etc.)</span></td><td>No — $20–100+/month</td><td>No — you're renting the machine itself</td><td>No</td></tr> <tr><td>Fiverr gig</td><td>No — pay per submission, forever</td><td>No — needs a person again next time</td><td>No</td></tr> </table> </div> </div> </section>
+
   <section id="how">
   <div class="wrap">
     <h2>What this replaces</h2>
