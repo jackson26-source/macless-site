@@ -1,0 +1,23 @@
+name: Notify IndexNow
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Submit sitemap URLs to IndexNow
+        run: |
+          set -e
+          URLS=$(grep -oP '(?<=<loc>)[^<]+' sitemap.xml | jq -R -s -c 'split("\n")[:-1]')
+          echo "Submitting $(echo "$URLS" | jq 'length') URLs to IndexNow"
+          curl -s -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d "{\"host\":\"macless.dev\",\"key\":\"a6b7743a5681Page_Down3bd5e635bbc874ae5d80\",\"keyLocation\":\"https://macless.dev/a6b7743a56813bd5e635bbc874ae5d80.txt\",\"urlList\":${URLS}}" \
+            -w "\nIndexNow response: %{http_code}\n"
