@@ -47,25 +47,28 @@
   <div class="site-inner">
     <div class="wordmark">Macless</div>
     <div class="nav-links">
-      <a class="pricelink" href="/blog/">Blog</a>
-              <a class="pricelink" href="/calculator.html">What are you paying now?</a>
       <a class="pricelink" href="/signing-doctor.html">Free signing checker</a>
-      <a class="pricelink" href="/rejection-doctor.html">Free rejection decoder</a>
-      <a class="pricelink" href="#compare">vs. competitors</a>
       <a class="pricelink" href="/pricing.html">Pricing</a>
-      <a class="pricelink" href="/ship-my-app.html">Ship it for me →</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-toggle" type="button" aria-expanded="false">More <span class="nav-caret">&#9662;</span></button>
+        <div class="nav-dropdown-menu">
+          <a href="/blog/">Blog</a>
+          <a href="/calculator.html">What are you paying now?</a>
+          <a href="/rejection-doctor.html">Free rejection decoder</a>
+          <a href="#compare">vs. competitors</a>
+          <a href="/ship-my-app.html">Ship it for me &rarr;</a>
+        </div>
+      </div>
     </div>
   </div>
 </header>
 
 <div class="hero">
   <div class="wrap">
-    <div class="eyebrow">From $19.99/month. Ship in minutes.</div>
     <h1>Not owning a Mac won't stop you from shipping your app.</h1>
-    <p class="hero-sub">Push your code. GitHub's own free Mac builds, signs, and uploads your app to TestFlight. You don't need Xcode. You don't need a $699 MacBook. You don't need a $20–100/month Mac rental just to click "Archive" once. Macless is $19.99/month, or $299 once and it’s yours. Same pipeline that shipped my own app, Citolex, to the App Store.</p>
+    <p class="hero-sub">Push your code. GitHub's own free Mac builds, signs, and uploads your app to TestFlight. You don't need Xcode. You don't need a $699 MacBook. You don't need a $20–100/month Mac rental just to click "Archive" once.</p>
     <div class="cta-row">
       <a class="btn btn-primary" href="#pricing">Ship it in minutes — from $19.99/mo</a>
-      <a class="btn-text" href="#how">see how it works</a>
     </div>
     <div class="hero-note">30-day money-back guarantee if you can't get a signed build out.</div>
     <ul class="trust-strip">
@@ -78,7 +81,7 @@
 <span class="dim">→ GitHub spins up a macOS build machine (free, public repo)</span>
 <span class="dim">→ signs the app, archives it, exports a .ipa</span>
 <span class="dim">→ uploads to TestFlight</span>
-done. no Mac involved, nothing spent.</pre> <div style="margin:40px 0 0;"> <h2 style="font-size:22px; margin-bottom:10px;">What you get that nothing else does</h2> <p style="color:var(--text-dim); margin-bottom:16px; font-size:15px;">Not a hype claim — every row here is backed up further down this page and in the <a href="#compare">full comparison</a>.</p> <div style="overflow-x:auto;"> <table class="compare"> <tr><th></th><th>One-time option, yours to keep</th><th>Still works if you stop paying</th><th>Free signing &amp; rejection tools</th></tr> <tr><td><b>Macless</b></td><td>Yes — $299 once</td><td>Yes — it's a workflow file sitting in your own repo</td><td>Yes — <a href="/signing-doctor.html">Signing Doctor</a> &amp; <a href="/rejection-doctor.html">Rejection Doctor</a>, free, no account</td></tr> <tr><td>Codemagic / Bitrise</td><td>No — monthly or per-build</td><td>No — hosted on their platform</td><td>No</td></tr> <tr><td>Xcode Cloud</td><td>No — you need to already own a Mac</td><td>No — tied to your Xcode setup</td><td>No</td></tr> <tr><td>Cloud Mac rental <span class="mono" style="font-size:12.5px;">(MacinCloud, AWS Mac, etc.)</span></td><td>No — $20–100+/month</td><td>No — you're renting the machine itself</td><td>No</td></tr> <tr><td>Fiverr gig</td><td>No — pay per submission, forever</td><td>No — needs a person again next time</td><td>No</td></tr> </table> </div> </div>
+done. no Mac involved, nothing spent.</pre> <div style="margin:40px 0 0;"> <h2 style="font-size:22px; margin-bottom:10px;">What you get that nothing else does</h2> <p style="color:var(--text-dim); margin-bottom:16px; font-size:15px;">Not a hype claim — every row here is backed up further down this page and in the <a href="#compare">full comparison</a>.</p> <div style="overflow-x:auto;"> <table class="compare"> <tr><th></th><th>Monthly payments</th><th>One time payment</th><th>Hosted by you, the developer</th><th>Signing Doctor</th><th>Rejection Doctor</th></tr> <tr><td><b>Macless</b></td><td>Yes — $19.99/mo</td><td>Yes — $299 once</td><td>Yes — it's a workflow file sitting in your own repo</td><td>Yes — free, no account</td><td>Yes — free, no account</td></tr> <tr><td>Codemagic / Bitrise</td><td>Yes — per-build or monthly</td><td>No</td><td>No — hosted on their platform</td><td>No</td><td>No</td></tr> <tr><td>Xcode Cloud</td><td>No</td><td>No — you need to already own a Mac</td><td>No — tied to your Xcode setup</td><td>No</td><td>No</td></tr> <tr><td>Cloud Mac rental <span class="mono" style="font-size:12.5px;">(MacinCloud, AWS Mac, etc.)</span></td><td>Yes — $20–100+/month</td><td>No</td><td>No — you're renting the machine itself</td><td>No</td><td>No</td></tr> <tr><td>Fiverr gig</td><td>No</td><td>No — pay per submission, forever</td><td>No — needs a person again next time</td><td>No</td><td>No</td></tr> </table> </div> </div>
 
     <div class="build-proof">
       <a href="https://github.com/jackson26-source/macless-rn-livetest/actions/runs/32147880137" target="_blank" rel="noopener">
@@ -307,5 +310,29 @@ done. no Mac involved, nothing spent.</pre> <div style="margin:40px 0 0;"> <h2 s
 })();
 </script>
 
+<script>
+document.querySelectorAll('.nav-dropdown-toggle').forEach(function(btn){
+  var dd = btn.closest('.nav-dropdown');
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    var isOpen = dd.classList.toggle('open');
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+});
+document.addEventListener('click', function(){
+  document.querySelectorAll('.nav-dropdown.open').forEach(function(dd){
+    dd.classList.remove('open');
+    dd.querySelector('.nav-dropdown-toggle').setAttribute('aria-expanded', 'false');
+  });
+});
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape'){
+    document.querySelectorAll('.nav-dropdown.open').forEach(function(dd){
+      dd.classList.remove('open');
+      dd.querySelector('.nav-dropdown-toggle').setAttribute('aria-expanded', 'false');
+    });
+  }
+});
+</script>
 </body>
 </html>
