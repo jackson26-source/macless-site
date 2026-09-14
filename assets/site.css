@@ -160,6 +160,7 @@ article pre.demo{ margin: 18px 0 22px; }
 /* ---- sections (landing page) ---- */
 section{ padding: 44px 0; border-top: 1px solid var(--border); }
 h2{ font-size: 25px; margin-bottom: 16px; }
+.section-eyebrow{ font-family: var(--mono); font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color: var(--accent); margin-bottom:10px; }
 section > .wrap > p.lead{ color: var(--text-dim); margin-bottom: 20px; }
 
 ol.steps, ul.plain{ list-style:none; margin-top: 8px; }
@@ -249,7 +250,7 @@ article li{ margin-bottom: 8px; font-size: 15.5px; }
 
 table.compare{ width:100%; border-collapse: collapse; margin: 18px 0 28px; font-size: 14.5px; }
 table.compare th, table.compare td{ text-align:left; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-dim); }
-table.compare th{ color: var(--text); font-weight:700; }
+table.compare th{ color: var(--accent); font-weight:700; border-bottom: 2px solid var(--accent); }
 table.compare td b{ color: var(--text); }
 
 .callout{
