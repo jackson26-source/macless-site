@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Can Base44 publish your app to the App Store and Google Play?</title>
+<meta name="description" content="Base44 can give you a file. It cannot submit your app, take subscription money on iPhone, or stop Apple rejecting it for looking like a website. Base44&#x27;s own docs say so.">
+<link rel="canonical" href="https://macless.dev/blog/can-base44-publish-to-app-store.html">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+<div class="site-inner">
+<a class="wordmark" href="/">Macless</a>
+<div class="nav-links">
+<a class="pricelink" href="/blog/">Blog</a>
+<a class="pricelink" href="/pricing.html">Pricing &rarr;</a>
+</div>
+</div>
+</header>
+
+<div class="hero compact">
+<div class="wrap">
+<a class="back-link" href="/blog/">&larr; All posts</a>
+<div class="eyebrow" style="margin-top:18px;">App builders</div>
+<h1>Can Base44 publish your app to the App Store and Google Play?</h1>
+<p class="hero-sub">Base44 can give you a file. It can't put your app in the App Store, and it can't make your app work on an iPhone once it's there. Base44's own documentation says this.</p>
+<div class="byline">Jackson &middot; October 2026</div>
+</div>
+</div>
+
+<article>
+<div class="wrap">
+<h2>The $80 a month doesn't buy you a published app</h2>
+<p>Base44 paywalls app store files behind its Builder plan, currently $80 a month. People assume that's the "publish my app" tier. It isn't. A builder plan unlocks permission to download your files.</p>
+<p>After you pay, here's what Base44's own documentation says you're responsible for: creating and paying for an Apple Developer account ($99 a year) and a Google Play account ($25), generating something called an Issuer ID, a Key ID, a Team ID and a .p8 key file, writing your own privacy policy and terms of service, preparing your listing and screenshots, submitting the app, checking its status, answering Apple's emails, and resubmitting when they say no. Base44 isn't going to explain to you how to find or use these files.</p>
+<p>We don't care what plan you're on. Hand us your Base44 app and we build and submit the real thing, that's our job.</p>
+<h2>Your app can't take subscription money, and Base44 says so</h2>
+<p>This is the one that ruins plans, so read it even if you skip the rest.</p>
+<p>Base44's own docs: it does not support Apple In-App Purchase or Google Play Billing. You cannot sell subscriptions, digital content, or virtual currency inside the mobile app. And third-party workarounds don't work either.</p>
+<p>Apple does not let you charge for a digital subscription in an iPhone app through Stripe or anything else. Apple's own payment system is the only legal route and Base44 can't use it. So if your business model is a subscription, the app model Base44 builds you, cannot make money on iPhone. Not "with difficulty." At all.</p>
+<p>Most people find this after building the entire product. With an Apple rejection.</p>
+<p>It's likely we can wire real Apple subscriptions into your specific app depending on how it's built and what your backend does, so that's the first conversation to have with us. What isn't in question is that Base44 can't do it at all, and that Apple won't let you work around it.</p>
+<h2>Apple will probably reject you for looking like a website</h2>
+<p>Apple has a rule, Guideline 4.2, that exists to reject apps that aren't meaningfully different from visiting your website in a browser.</p>
+<p>Here's the actual rejection list: a loading bar that looks like Safari's, a login that forgets you between sessions, a website-style menu instead of a real app menu along the bottom of the screen, no push notifications, no location features, and the browser's own "you're not connected" error page showing up inside your app when the phone loses signal.</p>
+<p>Read that list again. It's a direct description of a web app in a wrapper. Exactly what you'll get from Base44.</p>
+<p>What Apple wants instead: real navigation along the bottom with your main sections in it, a header that stays put while content scrolls, screens that slide between each other instead of reloading, working push notifications, the phone's real share and camera and file-upload functions, your own branded "no internet" screen with a retry button, a proper splash screen, and outside links opening inside your app instead of kicking people to Safari.</p>
+<p>One detail most people get wrong: adding push notifications alone will not save you. Reviewers reject what are called push-plus-website. It has to come with real app navigation.</p>
+<p>That's the work we do. Not "we'll submit it and hope." Building the specific things on Apple's list so a reviewer sees an app instead of a bookmark.</p>
+<h2>Login dumps your users in Safari and leaves them there</h2>
+<p>Base44's sign-in sends people out to a web page to log in, then tries to send them back. In a wrapped app that return to the app frequently doesn't happen. Your user taps sign in, lands in Safari, logs in fine, and then sits there, outside your app, with no way back except closing everything and starting over.</p>
+<p>You won't catch this in testing, because it only shows up once the app is installed from the App Store rather than running in a browser.</p>
+<p>We fix the round trip so signing in starts and finishes inside your app. Every time, not most of the time.</p>
+<h2>It also just opens to a grey screen</h2>
+<p>A wrapped Base44 app typically launches to a blank grey screen. Not a crash, not an error, just grey. The reason is invisible from the outside: the app no longer knows its own address, so it can't load any of your data.</p>
+<p>We've already fixed this exact thing on an app that's live right now. Two settings and one corrected line. We know because we've done it, not because we read about it.</p>
+<h2>Every bug fix means doing the whole thing over again</h2>
+<p>Base44's documentation is explicit that every update means generating new files from scratch, and build numbers can't be reused.</p>
+<p>So you launch, a customer finds a bug, you fix it in Base44, and now you regenerate, re-download, re-upload and resubmit, by hand. Then the next bug. Real apps go through dozens of these in the first few months.</p>
+<p>With us, updates are one step on your end. You tell us what's broken, we build it, submit it and deal with the store. You don't touch a file.</p>
+<h2>And when Apple says no, you're alone</h2>
+<p>Base44's own wording: Customer Care won't contact the stores or track your submission. You answer Apple's emails, interpret what they want, make the changes and resubmit. Base44 also states it can't guarantee approval even with a perfect score on its own readiness scan.</p>
+<p>Apple's rejection messages are famously vague. "Guideline 4.2 - Design - Minimum Functionality" is a real rejection you might receive, with no indication of which specific thing to change.</p>
+<p>We handle the rejection, the reply, the fix and the resubmission. Knowing which of four possible causes a vague Apple rejection actually means is a skill, and it isn't one you should have to learn to launch your own product.</p>
+<h2>What else the app can't do</h2>
+<p>From Base44's own documentation, and from what's conspicuously missing from it: no full offline mode, no HealthKit, and camera and biometric login aren't listed as supported. Permissions are set automatically by Base44's AI and, in their words, can't be edited.</p>
+<p>So if your app needs to work on a plane, scan something with the camera as a core feature, or let people sign in with Face ID, none of that is available to you.</p>
+<p>All four of those we can add: camera and photo scanning, Face ID and Touch ID sign-in, offline mode that syncs when the phone reconnects, and background location for apps that need to track something while closed.</p>
+<h2>The features you haven't thought to ask for</h2>
+<p>Most people come to us with a list of things that are broken. The bigger opportunity is usually the things nobody mentioned, Features they could have, but miss because they aren't building and shipping apps everyday.</p>
+<p>A notification that opens the exact screen it's about instead of dumping someone on your home page. A number badge on your app icon so people know there's something waiting. A pass in Apple Wallet, so a booking or a membership or a ticket lives next to someone's boarding passes instead of buried in your app. Sign-in with Face ID so nobody types a password twice. A scanner that reads a barcode or a document with the real camera. The phone's share sheet, so your content goes out to Messages and WhatsApp the way every other app does. Location that works while the app is closed, for anything involving drivers, deliveries or jobs in the field.</p>
+<p>None of this exists in a web app. All of it is normal for a real app, and all of it is work we do.</p>
+<h2>We can build the app itself, not just ship it</h2>
+<p>Shipping is the part people find us for. It isn't the limit of what we do.</p>
+<p>If Base44 got you most of a product and the rest is beyond what it can build, we build the rest. Real functionality, not workarounds: the admin side that staff use, properly separated from what customers see. A second and third app on the same data, a partner app, a dispatch app, a companion app, each with its own login and its own store listing. Data exports your customers ask for. Server-side logic Base44 was never going to reach.</p>
+<h2>The Summary</h2>
+<p>Base44 is genuinely good at building a working web app fast. It isn't an app publisher, doesn't claim to be, and its own documentation is the clearest proof.</p>
+<p>Everything between "I have a Base44 app" and "my app is live, working, taking payments and getting updates" is the part we do and we do well.</p>
+<div class="cta-box">
+<h2>We ship it, and we keep it working</h2>
+<p>Built, debugged and submitted under your own Apple and Google accounts. Store listing, app features, server side and the bug fixes after launch.</p>
+<a class="btn" href="/pricing.html">See pricing</a>
+</div>
+
+</div>
+</article>
+
+<footer>
+<div class="wrap">
+Questions? Email me &mdash; <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+Built by Jackson &middot; 2026
+</div>
+</footer>
+
+</body>
+</html>
