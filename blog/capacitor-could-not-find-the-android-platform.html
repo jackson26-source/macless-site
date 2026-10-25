@@ -70,7 +70,9 @@ npx cap add android</pre>
     <h2>After it succeeds</h2>
     <p>Run <code class="mono">npx cap sync android</code> to copy your web build in and update native dependencies. If you’re doing this in CI, both commands need to run on a runner with the Android SDK available, and <code class="mono">npx cap add android</code> should be treated as idempotent setup — it fails if the <code class="mono">android/</code> directory already exists, so guard it or commit the platform directory and skip it entirely.</p>
 
-    <div class="cta-box">
+    <h2>Wrapping a no-code app with Capacitor</h2>
+<p>Most people hitting Capacitor errors got here because their builder has no native output of its own and pointed them at Capacitor instead. If that's you, the platform-specific version of this problem is covered here: <a href="/blog/can-lovable-publish-to-app-store.html">Lovable</a>, <a href="/blog/can-base44-publish-to-app-store.html">Base44</a>, <a href="/blog/can-bolt-new-publish-to-app-store.html">Bolt.new</a>, <a href="/blog/can-bubble-publish-to-app-store.html">Bubble</a>, <a href="/blog/can-glide-publish-to-app-store.html">Glide</a>.</p>
+<div class="cta-box">
       <h2>The pipeline handles this automatically</h2>
       <p>Macless’s Android workflow detects your installed Capacitor core version and installs the matching platform package before it builds — this was found and fixed during a real end-to-end test.</p>
       <a class="btn" href="/pricing.html">See pricing — from $19.99/mo</a>
