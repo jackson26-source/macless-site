@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Can Replit publish your app to the App Store and Google Play?</title>
+<meta name="description" content="Replit has a real publish button that breaks in Expo&#x27;s usual ways. A real unresolved forum error, and what a successful publish still does not guarantee.">
+<link rel="canonical" href="https://macless.dev/blog/can-replit-publish-to-app-store.html">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://macless.dev/blog/can-replit-publish-to-app-store.html">
+<meta property="og:title" content="Can Replit publish your app to the App Store and Google Play?">
+<meta property="og:description" content="Replit has a real publish button that breaks in Expo&#x27;s usual ways. A real unresolved forum error, and what a successful publish still does not guarantee.">
+<meta property="og:image" content="https://macless.dev/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Can Replit publish your app to the App Store and Google Play?">
+<meta name="twitter:description" content="Replit has a real publish button that breaks in Expo&#x27;s usual ways. A real unresolved forum error, and what a successful publish still does not guarantee.">
+<meta name="twitter:image" content="https://macless.dev/assets/og-image.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Can Replit publish your app to the App Store and Google Play?",
+  "description": "Replit has a real publish button that breaks in Expo&#x27;s usual ways. A real unresolved forum error, and what a successful publish still does not guarantee.",
+  "datePublished": "2026-10-25",
+  "dateModified": "2026-10-25",
+  "author": {"@type": "Person", "name": "Jackson"},
+  "publisher": {"@type": "Organization", "name": "Macless", "url": "https://macless.dev/"},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://macless.dev/blog/can-replit-publish-to-app-store.html"},
+  "image": "https://macless.dev/assets/og-image.jpg"
+}
+</script>
+
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+<div class="site-inner">
+<a class="wordmark" href="/">Macless</a>
+<div class="nav-links">
+<a class="pricelink" href="/blog/">Blog</a>
+<a class="pricelink" href="/pricing.html">Pricing &rarr;</a>
+</div>
+</div>
+</header>
+
+<div class="hero compact">
+<div class="wrap">
+<a class="back-link" href="/blog/">&larr; All posts</a>
+<div class="eyebrow" style="margin-top:18px;">App builders</div>
+<h1>Can Replit publish your app to the App Store and Google Play?</h1>
+<p class="hero-sub">Replit has a real publish button, which makes it the one platform here where the honest answer is "sometimes." Whether that button works on the day you need it is a genuine question.</p>
+<div class="byline">Jackson &middot; October 2026</div>
+</div>
+</div>
+
+<article>
+<div class="wrap">
+<h2>The button breaks, and not because of anything you did</h2>
+<p>Replit's publishing runs on an outside build service. Replit inherited that service's failures and you get them through an extra layer that makes them harder to read.</p>
+<p>Here's a real one from Replit's own forum. Someone published successfully, came back a month later to ship an update, and got this:</p>
+<pre class="demo">Unable to parse URL: /expo//ios?embed=1&amp;brand=replit&amp;projectId=&amp;appId=</pre>
+<p>They did nothing wrong. Other users reported the same failure. Nobody solved it in the thread, the person filed a support ticket, and another user offered to publish the app for them within ten days. That's the market telling on itself.</p>
+<p>That's the frightening version of this problem if your business runs on your app. It worked, then it stopped, and the error means nothing to you.</p>
+<p>When that happens, clicking publish again isn't a fix. We go into the build configuration and fix the actual cause, once. And our pipeline doesn't depend on Replit's button having a good day. Macless is an all in one, built, debugged and shipped, so the publish step isn't a separate thing you're left holding.</p>
+<h2>A successful publish doesn't mean a working app</h2>
+<p>The button clearing tells you a file reached Apple. It says nothing about whether sign-in keeps people inside your app instead of dropping them in Safari, or whether your push notifications run on real credentials rather than test ones that quietly stop working in the live app. A sign-in that strands people can kill a whole app.</p>
+<p>We check and fix both before your users find them.</p>
+<h2>Apple's rejection emails are yours, and they're vague by design</h2>
+<p>Replit publishes. It doesn't read Apple's rejection, work out which of several causes it actually is, make the change and resubmit. That's you, learning Apple's review process during the week you were hoping to launch.</p>
+<p>We take that over completely, plus the listing, the screenshots and the privacy policy.</p>
+<h2>Every bug is another trip through the same machine</h2>
+<p>Once a real customer finds something, you're back in the publish flow hoping it behaves. Apps go through dozens of these in their first months.</p>
+<p>With us it's one step on your end. You tell us what's wrong, we build and submit it.</p>
+<h2>The features you haven't thought to ask for</h2>
+<p>Most people arrive with a list of what's broken. The bigger opportunity is usually the things nobody mentioned, features they could have, but miss because they aren't building and shipping apps everyday.</p>
+<p>A notification that opens the exact screen it's about instead of dumping someone on a home page. A number badge on your app icon. A pass in Apple Wallet, so a booking or ticket or membership sits next to someone's boarding passes. Face ID sign-in so nobody types a password twice. A real camera scanner for barcodes or documents. The phone's share sheet. Location that works while the app is closed, for drivers, deliveries or field jobs.</p>
+<p>All of it normal for a real app. All of it work we do.</p>
+<p>Subscriptions belong in this conversation too. Apple only permits digital subscriptions through its own payment system, and it's likely we can wire that into your app depending on how it's built. Ask early rather than after launch.</p>
+<h2>We can build the app itself, not just ship it</h2>
+<p>Shipping is what people find us for. It isn't the limit.</p>
+<p>If Replit got you most of a product and the rest is past what it handles, we build the rest. The admin side staff use, properly separated from what customers see. A second and third app on the same data, a partner app, a dispatch app, a companion app, each with its own login and its own store listing. Data exports your customers ask for. Server-side logic that was never Replit's job.</p>
+<h2>Summary</h2>
+<p>Replit went further than almost anyone here by building a publish button at all. It's also the platform where "it published fine last month" is no guarantee about this month.</p>
+<p>Everything between a broken publish and a live, working, maintained app is ours, and we do it well.</p>
+<h2>The rest of this series</h2>
+<p>The same question, asked of the other builders: <a href="/blog/can-base44-publish-to-app-store.html">Base44</a>, <a href="/blog/can-lovable-publish-to-app-store.html">Lovable</a>, <a href="/blog/can-bolt-new-publish-to-app-store.html">Bolt.new</a>, <a href="/blog/can-bubble-publish-to-app-store.html">Bubble</a>, <a href="/blog/can-glide-publish-to-app-store.html">Glide</a>.</p>
+<div class="cta-box">
+<h2>We ship it, and we keep it working</h2>
+<p>Built, debugged and submitted under your own Apple and Google accounts. Store listing, app features, server side and the bug fixes after launch.</p>
+<a class="btn" href="/pricing.html">See pricing</a>
+</div>
+
+</div>
+</article>
+
+<footer>
+<div class="wrap">
+Questions? Email me &mdash; <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+Built by Jackson &middot; 2026
+</div>
+</footer>
+
+</body>
+</html>
