@@ -94,16 +94,16 @@ gtag('config', 'G-L4YTJNNDS1');
 <h2>It also just opens to a grey screen</h2>
 <p>A wrapped Base44 app typically launches to a blank grey screen. Not a crash, not an error, just grey. The reason is invisible from the outside: the app no longer knows its own address, so it can't load any of your data.</p>
 <p>We've already fixed this exact thing on an app that's live right now. Two settings and one corrected line. We know because we've done it, not because we read about it.</p>
-<h2>Every bug fix means doing the whole thing over again</h2>
-<p>Base44's documentation is explicit that every update means generating new files from scratch, and build numbers can't be reused.</p>
-<p>So you launch, a customer finds a bug, you fix it in Base44, and now you regenerate, re-download, re-upload and resubmit, by hand. Then the next bug. Real apps go through dozens of these in the first few months.</p>
-<p>With us, updates are one step on your end. You tell us what's broken, we build it, submit it and deal with the store. You don't touch a file.</p>
+<h2>What actually needs a new submission</h2>
+<p>Credit where it's due: because your app is a web view pointing at your live web app, most content and logic changes reach people's phones the moment you publish in Base44, with no store update at all. That genuinely works in your favour and it's one of the real advantages of the wrapper approach.</p>
+<p>What does need a whole new build and another trip through review: the app's name, its icon, its splash screen, adding push notifications, or any feature needing a new device permission. Base44's docs are explicit that you can't set or reuse build numbers yourself, so each one of those is a fresh generate, download, upload and resubmit, by hand.</p>
+<p>With us, that's one step on your end. You tell us what changed, we build it, submit it and deal with the store. You don't touch a file.</p>
 <h2>And when Apple says no, you're alone</h2>
 <p>Base44's own wording: Customer Care won't contact the stores or track your submission. You answer Apple's emails, interpret what they want, make the changes and resubmit. Base44 also states it can't guarantee approval even with a perfect score on its own readiness scan.</p>
 <p>Apple's rejection messages are famously vague. "Guideline 4.2 - Design - Minimum Functionality" is a real rejection you might receive, with no indication of which specific thing to change.</p>
 <p>We handle the rejection, the reply, the fix and the resubmission. Knowing which of four possible causes a vague Apple rejection actually means is a skill, and it isn't one you should have to learn to launch your own product.</p>
 <h2>What else the app can't do</h2>
-<p>From Base44's own documentation, and from what's conspicuously missing from it: no full offline mode, no HealthKit, and camera and biometric login aren't listed as supported. Permissions are set automatically by Base44's AI and, in their words, can't be edited.</p>
+<p>Base44's own documentation lists the limits: full offline mode and HealthKit are not supported, and your app runs as a web view, so native camera and Face ID aren't part of it. Base44 also warns that some native capabilities may still need extra review from Apple or Google depending on the permissions your app asks for.</p>
 <p>So if your app needs to work on a plane, scan something with the camera as a core feature, or let people sign in with Face ID, none of that is available to you.</p>
 <p>All four of those we can add: camera and photo scanning, Face ID and Touch ID sign-in, offline mode that syncs when the phone reconnects, and background location for apps that need to track something while closed.</p>
 <h2>The features you haven't thought to ask for</h2>
