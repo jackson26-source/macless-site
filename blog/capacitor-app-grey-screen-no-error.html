@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L4YTJNNDS1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-L4YTJNNDS1');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Capacitor app opens to a grey screen and throws no error</title>
+<meta name="description" content="A wrapped Base44 app installed fine and opened to flat grey with no crash and no console error. The cause was a build step that set nothing and an API client pointing at a local origin.">
+<link rel="canonical" href="https://macless.dev/blog/capacitor-app-grey-screen-no-error.html">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://macless.dev/blog/capacitor-app-grey-screen-no-error.html">
+<meta property="og:title" content="Your Capacitor app opens to a grey screen and throws no error">
+<meta property="og:description" content="A wrapped Base44 app installed fine and opened to flat grey with no crash and no console error. The cause was a build step that set nothing and an API client pointing at a local origin.">
+<meta property="og:image" content="https://macless.dev/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Your Capacitor app opens to a grey screen and throws no error">
+<meta name="twitter:description" content="A wrapped Base44 app installed fine and opened to flat grey with no crash and no console error. The cause was a build step that set nothing and an API client pointing at a local origin.">
+<meta name="twitter:image" content="https://macless.dev/assets/og-image.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Your Capacitor app opens to a grey screen and throws no error",
+  "description": "A wrapped Base44 app installed fine and opened to flat grey with no crash and no console error. The cause was a build step that set nothing and an API client pointing at a local origin.",
+  "datePublished": "2026-10-25",
+  "dateModified": "2026-10-25",
+  "author": {"@type": "Person", "name": "Jackson"},
+  "publisher": {"@type": "Organization", "name": "Macless", "url": "https://macless.dev/"},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://macless.dev/blog/capacitor-app-grey-screen-no-error.html"},
+  "image": "https://macless.dev/assets/og-image.jpg"
+}
+</script>
+
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site">
+<div class="site-inner">
+<a class="wordmark" href="/">Macless</a>
+<div class="nav-links">
+<a class="pricelink" href="/blog/">Blog</a>
+<a class="pricelink" href="/pricing.html">Pricing &rarr;</a>
+</div>
+</div>
+</header>
+
+<div class="hero compact">
+<div class="wrap">
+<a class="back-link" href="/blog/">&larr; All posts</a>
+<div class="eyebrow" style="margin-top:18px;">Troubleshooting</div>
+<h1>Your Capacitor app opens to a grey screen and throws no error</h1>
+<p class="hero-sub">A Base44 app, wrapped with Capacitor, installed from TestFlight. It opened to flat grey. No crash, no error in the console, no failed request to inspect. The web app it was built from ran perfectly in a browser.</p>
+<div class="byline">Jackson &middot; October 2026</div>
+</div>
+</div>
+
+<article>
+<div class="wrap">
+<p>A failure with no error message is a different kind of problem. There is nothing to search for.</p>
+<h2>What the grey screen actually is</h2>
+<p>It's the WebView, loaded, running, and showing you an app that rendered nothing. The shell works. Capacitor works. The app's own JavaScript is executing. It just has no data and no error to report about not having it.</p>
+<p>That narrows things considerably. If the bundle were broken you'd get a white screen or a crash. If a request had failed you'd have a failed request. Grey with silence means the app never asked for anything.</p>
+<h2>Why it never asked</h2>
+<p>Two things, both invisible from the outside.</p>
+<p>The app reads its own identifiers from build-time environment variables. In this case <code class="mono">VITE_BASE44_APP_ID</code> and <code class="mono">VITE_BASE44_APP_BASE_URL</code>, pulled from <code class="mono">import.meta.env</code> inside <code class="mono">src/lib/app-params.js</code>. The CI job that produced the build set neither, so the bundle shipped without knowing which app it was or where its data lived.</p>
+<p>The API client made that worse rather than louder. It was constructed with an empty server URL, so every call resolved against a relative path. Relative is the right default for a web app served from its own domain, because <code class="mono">/api</code> resolves to <code class="mono">yourdomain.com/api</code> and everything works. Inside a native shell the page isn't served from your domain. It's served from <code class="mono">capacitor://localhost</code>. A relative path there resolves to a place that does not exist, and the SDK treats the result as nothing to report.</p>
+<p>So: no app ID, no base URL, and calls pointed at a local origin with no server behind it. The app asked nobody for nothing and rendered what it had.</p>
+<h2>The fix</h2>
+<p>Three changes, none of them interesting, which is usually how this goes.</p>
+<p>Set the environment variables in the build step that installs dependencies, before the bundle is produced. They have to be present at build time, not runtime, because the bundler inlines them.</p>
+<p>Rewrite the API client's server URL from empty to the actual host. A one-line patch during CI is sufficient if you don't want to fork the generated code.</p>
+<p>Enable native HTTP in the Capacitor config. This routes fetch and XHR through the native layer instead of the WebView, which also removes the CORS problem you get when a <code class="mono">capacitor://localhost</code> origin starts calling a real domain.</p>
+<h2>Two things learned the hard way</h2>
+<p><b>Use perl, not sed.</b> The patch step originally used <code class="mono">sed -i</code>, which fails on macOS build runners, because BSD sed requires an argument to <code class="mono">-i</code> and GNU sed does not. The job did not fail loudly. It just did not patch the file. <code class="mono">perl -pi -e</code> behaves the same on both.</p>
+<p><b>Guard the patch.</b> A find-and-replace that silently matches nothing is worse than a build failure, because you get a green checkmark and a grey app. Follow any patch step with a <code class="mono">grep -q</code> for the expected result and fail the job if it isn't there. Ten seconds of config, and it turns an invisible problem into an obvious one.</p>
+<h2>The generalisable part</h2>
+<p>A failure with no error usually means the thing you expected to happen never started. Not that it started and broke. When there's nothing to debug, stop looking at the place it hurts and go one layer earlier, to whatever was supposed to kick it off.</p>
+<p>In this case the layer earlier was a build step that set nothing, and a default that is correct everywhere except inside the one environment the app actually shipped in.</p>
+
+<div class="cta-box">
+<h2>We ship it, and we keep it working</h2>
+<p>Built, debugged and submitted under your own Apple and Google accounts. Store listing, app features, server side and the bug fixes after launch.</p>
+<a class="btn" href="/pricing.html">See pricing</a>
+</div>
+
+</div>
+</article>
+
+<footer>
+<div class="wrap">
+Questions? Email me &mdash; <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
+Built by Jackson &middot; 2026
+</div>
+</footer>
+
+</body>
+</html>
