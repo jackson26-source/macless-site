@@ -21,7 +21,7 @@
 <link rel="canonical" href="https://macless.dev/pipeline.html">
 <meta property="og:url" content="https://macless.dev/pipeline.html">
 <meta property="og:title" content="Macless — ship an iOS app without a Mac">
-<meta property="og:description" content="The GitHub Actions pipeline, signing scripts, and notes I used to build and submit an actual App Store app without owning a Mac. $19.99/month or $299 once. The pipeline lives in your own GitHub repo — cancel and your builds keep running.">
+<meta property="og:description" content="The GitHub Actions pipeline, signing scripts, and notes I used to build and submit an actual App Store app without owning a Mac. $99 once. The pipeline lives in your own GitHub repo and keeps running.">
 <meta property="og:image" content="https://macless.dev/assets/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -44,25 +44,16 @@
 <body>
 
 <header class="site">
-  <div class="site-inner">
-    <div class="wordmark">Macless</div>
-    <div class="nav-links">
-      <a class="pricelink" href="/signing-doctor.html">Free signing checker</a>
-      <a class="pricelink" href="/pricing.html">Pricing</a>
-      <a class="pricelink" href="https://macless.dev/app">Log in</a>
-      <div class="nav-dropdown">
-        <button class="nav-dropdown-toggle" type="button" aria-expanded="false">More <span class="nav-caret">&#9662;</span></button>
-        <div class="nav-dropdown-menu">
-          <a href="/blog/">Blog</a>
-          <a href="/calculator.html">What are you paying now?</a>
-          <a href="/rejection-doctor.html">Free rejection decoder</a>
-          <a href="/every-way-a-build-dies.html">Every way a build dies</a>
-          <a href="#compare">vs. competitors</a>
-          <a href="/ship-my-app.html">Ship it for me &rarr;</a>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="site-inner">
+<a class="wordmark" href="/" aria-label="Macless home">macless</a>
+<div class="nav-links">
+<a class="pricelink hide-sm" href="/#possibilities">Try the apps</a>
+<a class="pricelink hide-sm" href="/signing-doctor.html">Free tools</a>
+<a class="pricelink" href="/#pricing">Pricing</a>
+<a class="pricelink" href="/blog/">Blog</a>
+<a class="nav-cta" href="/#quote">Get a quote</a>
+</div>
+</div>
 </header>
 
 <div class="hero">
@@ -79,10 +70,10 @@
 <span class="dim">→ GitHub spins up a macOS build machine (free, public repo)</span>
 <span class="dim">→ signs the app, archives it, exports a .ipa</span>
 <span class="dim">→ uploads to TestFlight</span>
-done. no Mac involved, nothing spent.</pre> <div style="margin:40px 0 0;"> <h2 style="font-size:22px; margin-bottom:10px;">What you get that nothing else does</h2> <p style="color:var(--text-dim); margin-bottom:16px; font-size:15px;">Not a hype claim — every row here is backed up further down this page and in the <a href="#compare">full comparison</a>. That includes the honest free option: you can wire this up yourself on GitHub's own free Actions minutes for $0 — <a href="/github-actions-vs-macless.html">here's what that actually takes</a>.</p> <div style="overflow-x:auto;"> <table class="compare"> <tr><th></th><th>Monthly payments</th><th>One time payment</th><th>Hosted by you, the developer</th><th>Signing Doctor</th><th>Rejection Doctor</th><th>Store Listing wizard</th></tr> <tr><td><b>Macless</b></td><td>Yes — $19.99/mo</td><td>Yes — $299 once</td><td>Yes — it's a workflow file sitting in your own repo</td><td>Yes — free, no account</td><td>Yes — free, no account</td><td>Yes — one form, live character limits, writes fastlane/metadata for you</td></tr> <tr><td>Codemagic / Bitrise</td><td>Yes — per-build or monthly</td><td>No</td><td>No — hosted on their platform</td><td>No</td><td>No</td><td>No — fastlane's own text files, no live limits</td></tr> <tr><td>Xcode Cloud</td><td>No</td><td>No — you need to already own a Mac</td><td>No — tied to your Xcode setup</td><td>No</td><td>No</td><td>No — Xcode Cloud only builds, tests, and archives</td></tr> <tr><td>Cloud Mac rental <span class="mono" style="font-size:12.5px;">(MacinCloud, AWS Mac, etc.)</span></td><td>Yes — $20–100+/month</td><td>No</td><td>No — you're renting the machine itself</td><td>No</td><td>No</td><td>No</td></tr> <tr><td>DIY GitHub Actions pipeline</td><td>No</td><td>No — free, but it's a weekend of your own time</td><td>Yes — it's your own workflow file</td><td>No — cert/profile errors are yours to debug alone</td><td>No</td><td>No — same fastlane setup, you build it yourself</td></tr> <tr><td>Fiverr gig</td><td>No</td><td>No — pay per submission, forever</td><td>No — needs a person again next time</td><td>No</td><td>No</td><td>No — that's your job to hand them, not theirs</td></tr> </table> </div> </div>
+done. no Mac involved, nothing spent.</pre> <div style="margin:40px 0 0;"> <h2 style="font-size:22px; margin-bottom:10px;">What you get that nothing else does</h2> <p style="color:var(--text-dim); margin-bottom:16px; font-size:15px;">Not a hype claim — every row here is backed up further down this page and in the <a href="#compare">full comparison</a>. That includes the honest free option: you can wire this up yourself on GitHub's own free Actions minutes for $0 — <a href="/github-actions-vs-macless.html">here's what that actually takes</a>.</p> <div style="overflow-x:auto;"> <table class="compare"> <tr><th></th><th>One-time payment</th><th>Done-for-you option</th><th>Hosted by you, the developer</th><th>Signing Doctor</th><th>Rejection Doctor</th><th>Store Listing wizard</th></tr> <tr><td><b>Macless</b></td><td>Yes — $99 once</td><td>Yes — $299, or a quote from $599</td><td>Yes — it's a workflow file sitting in your own repo</td><td>Yes — free, no account</td><td>Yes — free, no account</td><td>Yes — one form, live character limits, writes fastlane/metadata for you</td></tr> <tr><td>Codemagic / Bitrise</td><td>No — per-build or monthly</td><td>No</td><td>No — hosted on their platform</td><td>No</td><td>No</td><td>No — fastlane's own text files, no live limits</td></tr> <tr><td>Xcode Cloud</td><td>No</td><td>No — you need to already own a Mac</td><td>No — tied to your Xcode setup</td><td>No</td><td>No</td><td>No — Xcode Cloud only builds, tests, and archives</td></tr> <tr><td>Cloud Mac rental <span class="mono" style="font-size:12.5px;">(MacinCloud, AWS Mac, etc.)</span></td><td>Yes — $20–100+/month</td><td>No</td><td>No — you're renting the machine itself</td><td>No</td><td>No</td><td>No</td></tr> <tr><td>DIY GitHub Actions pipeline</td><td>No</td><td>No — free, but it's a weekend of your own time</td><td>Yes — it's your own workflow file</td><td>No — cert/profile errors are yours to debug alone</td><td>No</td><td>No — same fastlane setup, you build it yourself</td></tr> <tr><td>Fiverr gig</td><td>No</td><td>No — pay per submission, forever</td><td>No — needs a person again next time</td><td>No</td><td>No</td><td>No — that's your job to hand them, not theirs</td></tr> </table> </div> </div>
 
     <div class="cta-row">
-      <a class="btn btn-primary" href="#pricing">Ship it in minutes — from $19.99/mo</a>
+      <a class="btn btn-primary" href="#pricing">Ship it in minutes — $99 once</a>
     </div>
     <div class="hero-note">30-day money-back guarantee if you can't get a signed build out.</div>
     <ul class="trust-strip">
@@ -174,7 +165,7 @@ done. no Mac involved, nothing spent.</pre> <div style="margin:40px 0 0;"> <h2 s
 
     <table class="compare">
       <tr><th></th><th>Needs a Mac?</th><th>Handles signing setup?</th><th>Cost</th></tr>
-      <tr><td><b>Macless</b></td><td>No</td><td>Yes — creates your cert and profile through Apple's own API, or takes them from you by hand</td><td>$19.99/mo, or $299 once and you keep it</td></tr>
+      <tr><td><b>Macless</b></td><td>No</td><td>Yes — creates your cert and profile through Apple's own API, or takes them from you by hand</td><td>$99 once and you keep it</td></tr>
       <tr><td>Codemagic / Bitrise</td><td>No</td><td>Real reviewers flag rough signing setup and documentation</td><td>Per-build or monthly</td></tr>
       <tr><td>Xcode Cloud</td><td>Yes, to configure</td><td>Only from inside Xcode</td><td>Requires owning a Mac first</td></tr>
       <tr><td>fastlane / free GitHub Actions</td><td>No</td><td>DIY — cert and profile errors are yours to debug alone</td><td>Debugging time</td></tr>
@@ -196,27 +187,26 @@ done. no Mac involved, nothing spent.</pre> <div style="margin:40px 0 0;"> <h2 s
     <p class="section-eyebrow">PRICING</p>
     <h2>Price</h2>
     <div class="price-block">
-      <div class="price-tag">$19.99 <small>/ month</small></div>
-      <div class="price-note">Everything — iOS and Android, the setup wizard, certificate and profile expiry monitoring, and updates as Apple changes things.</div>
+      <div class="price-tag">$99 <small>once</small></div>
+      <div class="price-note">Ship it yourself. The whole pipeline, yours to keep: iOS and Android, the setup wizard, the signing scripts, and the setup, App Store Connect, and troubleshooting guides.</div>
       <div class="ownership-badge">
         <span class="mark">&rarr;</span>
-        <span><b>Cancel any time and your builds keep running.</b><span>The pipeline is a workflow file and signing scripts sitting in your own GitHub repo, running on your own GitHub Actions minutes. It's not rented from Macless, so there's nothing to lose when you stop paying.</span></span>
+        <span><b>It lives in your own GitHub repo, so it's yours.</b><span>The pipeline is a workflow file and signing scripts sitting in your own repo, running on your own GitHub Actions minutes. It's not rented from Macless, so there is nothing to cancel and nothing that stops working.</span></span>
       </div>
       <ul class="plain" style="margin-bottom:22px;">
         <li><span>The setup wizard, workflow file, signing script, setup guide, App Store Connect guide, and troubleshooting doc</span></li>
         <li><span>iOS and Android both included — no separate purchase</span></li>
-        <li><span>Any future updates, included — <a href="/changelog.html">see what’s shipped so far</a></span></li>
+        <li><span>A walkthrough video is being recorded, so you can see exactly what you're dealing with before you buy</span></li>
       </ul>
       <a class="btn btn-primary" href="/pricing.html">See the plans</a>
       <div class="guarantee">30-day money-back guarantee. If you can’t get a signed build out, email me and I’ll refund it — no back-and-forth.</div>
     </div>
 
     <div class="price-block-alt" id="android">
-      <h3>Or own it outright</h3>
+      <h3>Want it done for you?</h3>
       <div class="price-tag">$299 <small>once</small></div>
-      <div class="price-note">The same thing, permanently — roughly fifteen months of the monthly, and then it stops costing anything. Nothing to renew and nothing to cancel. Android is included here too; it never needed a Mac in the first place.</div>
-      <a class="btn btn-secondary" href="/pricing.html">Compare both plans</a>
-      <div class="guarantee">Same 30-day money-back guarantee.</div>
+      <div class="price-note">I ship it for you. This is for developers whose app already builds and runs and who just don't know the Apple side. If your app was exported from Base44, Lovable, Replit, or Bubble and doesn't run yet, you want the premium plan, a quote from $599.</div>
+      <a class="btn btn-secondary" href="/pricing.html">Compare the plans</a>
     </div>
 
     <div class="note" style="margin-top:26px;">
@@ -254,7 +244,7 @@ done. no Mac involved, nothing spent.</pre> <div style="margin:40px 0 0;"> <h2 s
         <blockquote class="review-quote">"Very poor documentation for code signing."<cite>&mdash; <a href="https://www.capterra.com/p/152573/Nevercode/reviews/" target="_blank" rel="noopener">Capterra reviewer, on Codemagic</a></cite></blockquote>
         <blockquote class="review-quote">"Setting up Apple builds for testing on my device took me more than a couple of hours."<cite>&mdash; <a href="https://www.g2.com/products/bitrise/reviews" target="_blank" rel="noopener">G2 reviewer, on Bitrise</a></cite></blockquote>
       </div>
-      <p>That's the same signing setup this pipeline's troubleshooting doc, and its wizard, already have fixes for. This is different: you're paying for the actual pipeline itself, $19.99/month, or $299 once and nothing after, and it runs on GitHub's own free macOS minutes on public repos. The pipeline lives in your repo, so cancelling doesn't stop your builds. It's for people who'd rather own the setup than keep renting access to someone else's. <a href="/codemagic-bitrise-vs-macless.html">Full comparison here</a> if you want the honest breakdown of when each one actually makes sense.</p>
+      <p>That's the same signing setup this pipeline's troubleshooting doc, and its wizard, already have fixes for. This is different: you're paying for the actual pipeline itself, $99 once and nothing after, and it runs on GitHub's own free macOS minutes on public repos. The pipeline lives in your repo, so cancelling doesn't stop your builds. It's for people who'd rather own the setup than keep renting access to someone else's. <a href="/codemagic-bitrise-vs-macless.html">Full comparison here</a> if you want the honest breakdown of when each one actually makes sense.</p>
     </details>
     <details class="faq-item">
       <summary>I'm on Ionic Appflow, what do I switch to?</summary>
@@ -295,15 +285,18 @@ done. no Mac involved, nothing spent.</pre> <div style="margin:40px 0 0;"> <h2 s
   <div class="wrap">
     <p class="section-eyebrow">GET STARTED</p>
     <h2>Ready to give it a try?</h2>
-    <a class="btn btn-primary" href="/pricing.html">See pricing — from $19.99/mo</a>
+    <a class="btn btn-primary" href="/pricing.html">See pricing — from $99</a>
   </div>
 </div>
 
 <footer>
-  <div class="wrap">
-    Questions before buying? Email me — <a href="mailto:jackson@macless.dev">jackson@macless.dev</a><br>
-    Built by Jackson · 2026 · <a href="/privacy.html">Privacy</a>
-  </div>
+<div class="foot-inner">
+<div>
+<a class="wordmark" href="/">macless</a>
+<div class="footlinks"><a href="/blog/">Blog</a><a href="/pipeline.html">The pipeline</a><a href="/pricing.html">Pipeline pricing</a><a href="/signing-doctor.html">Signing Doctor</a><a href="/rejection-doctor.html">Rejection Doctor</a><a href="/privacy.html">Privacy</a><a href="mailto:jackson@macless.dev">jackson@macless.dev</a></div>
+</div>
+<p>App development. App Store launch.<br>&copy; 2026 Macless</p>
+</div>
 </footer>
 
 
