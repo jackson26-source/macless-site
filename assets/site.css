@@ -1,27 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap');
 :root{
-  --bg: #faf8f3;
-  --bg-panel: #f2efe6;
-  --border: #e2ddd0;
-  --text: #24211c;
-  --text-dim: #6b6558;
-  --text-faint: #948d7c;
-  --accent: #1f5aa8;
+  --bg: #f4f3ed;
+  --bg-panel: #eceae1;
+  --border: #d8dbd1;
+  --text: #22251f;
+  --text-dim: #555b50;
+  --text-faint: #6a7064;
+  --accent: #2463eb;
   --accent-ink: #ffffff;
-  --code-bg: #eeeae0;
-  --serif: 'Familjen Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --sans: 'Familjen Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --code-bg: #e8e8df;
+  --serif: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   --mono: 'Spline Sans Mono', 'SF Mono', Menlo, Consolas, monospace;
 
   /* dark product hero (homepage only, see .hero:not(.compact) below) */
-  --hero-bg: #12161c;
-  --hero-bg-2: #171d26;
-  --hero-border: #2a323d;
-  --hero-text: #f2f4f7;
-  --hero-text-dim: #b6bfc9;
-  --hero-text-faint: #808a96;
-  --hero-accent: #4f8fe0;
-  --hero-code-bg: #0c0f14;
+  --hero-bg: #22251f;
+  --hero-bg-2: #2d3128;
+  --hero-border: #3c4136;
+  --hero-text: #f4f3ed;
+  --hero-text-dim: #b9bcae;
+  --hero-text-faint: #8f9486;
+  --hero-accent: #8fb1ff;
+  --hero-code-bg: #1a1c17;
 }
 *{ box-sizing:border-box; margin:0; padding:0; }
 html{ scroll-behavior:smooth; }
@@ -36,15 +36,19 @@ a{ color: var(--accent); }
 .wrap{ max-width: 640px; margin: 0 auto; padding: 0 24px; }
 code, .mono{ font-family: var(--mono); }
 
-h1, h2{ font-family: var(--serif); font-weight: 700; }
+h1, h2{ font-family: var(--serif); font-weight: 500; letter-spacing: -0.03em; }
+h3{ font-family: var(--serif); letter-spacing: -0.02em; }
+a{ text-underline-offset: 3px; }
 
-/* ---- header ---- */
-header.site{ padding: 28px 0; border-bottom: 1px solid var(--border); }
-.site-inner{ display:flex; align-items:center; justify-content:space-between; max-width:960px; margin:0 auto; padding:0 24px; }
-.wordmark{ font-family: var(--serif); font-weight:700; font-size:18px; text-decoration:none; color:var(--text); }
-.nav-links{ display:flex; align-items:center; gap:36px; }
-.site-inner a.pricelink{ font-size:14px; color: var(--text-dim); text-decoration:none; border-bottom:1px solid var(--border); }
-.site-inner a.pricelink:hover{ color: var(--accent); border-color: var(--accent); }
+/* ---- header (same bar as the homepage) ---- */
+header.site{ padding: 0; border-bottom: 1px solid var(--border); margin: 0 5%; }
+.site-inner{ display:flex; align-items:center; justify-content:space-between; max-width:none; margin:0; padding:0; height:76px; }
+.wordmark{ font-family: var(--serif); font-weight:700; font-size:27px; letter-spacing:-1.5px; text-decoration:none; color:var(--text); }
+.nav-links{ display:flex; align-items:center; gap:28px; }
+.site-inner a.pricelink{ font-size:14px; color: var(--text); text-decoration:none; border-bottom:0; }
+.site-inner a.pricelink:hover{ color: var(--accent); }
+.site-inner a.nav-cta{ background:var(--text); color:#fff; padding:11px 18px; border-radius:4px; font-size:13px; font-weight:500; text-decoration:none; }
+.site-inner a.nav-cta:hover{ background:var(--accent); }
 
 /* ---- nav "More" dropdown (keeps Pricing + Free signing checker visible,
    tucks the rest away so the wordmark and first link stop crowding each
@@ -64,11 +68,19 @@ header.site{ padding: 28px 0; border-bottom: 1px solid var(--border); }
    screens at its default single-row layout, which was overflowing
    the viewport and forcing horizontal scroll on the whole page.
    Below 640px, let it wrap onto its own row(s) instead. */
-@media (max-width: 640px){
-  .site-inner{ flex-wrap: wrap; row-gap: 10px; }
-  .nav-links{ width: 100%; flex-wrap: wrap; gap: 10px 20px; row-gap: 8px; }
-  .nav-dropdown-menu{ position:static; box-shadow:none; border:none; padding:4px 0 0 16px; margin-top:4px; min-width:0; }
+@media (max-width: 760px){
+  .nav-links{ gap:16px; }
+  .site-inner a.pricelink.opt-hide{ display:none; }
 }
+@media (max-width: 520px){
+  .site-inner{ height:66px; }
+  .wordmark{ font-size:25px; }
+  .nav-links{ gap:13px; }
+  .site-inner a.pricelink{ font-size:13px; }
+  .site-inner a.pricelink.hide-sm{ display:none; }
+  .site-inner a.nav-cta{ padding:9px 12px; }
+}
+
 
 /* ---- hero (landing page + post/index heroes) ---- */
 .hero{ padding: 56px 0 8px; }
@@ -80,12 +92,12 @@ h1{ font-size: 38px; line-height:1.2; margin-bottom: 18px; }
 .byline{ color: var(--text-faint); font-size: 14px; margin: 18px 0 0; }
 .cta-row{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom: 8px; }
 .btn{
-  display:inline-block; padding: 13px 22px; border-radius: 6px; font-weight:600; font-size:15.5px;
+  display:inline-block; padding: 13px 22px; border-radius: 4px; font-weight:500; font-size:15px;
   text-decoration:none; cursor:pointer; border: 1px solid transparent;
-  background: var(--text); color: #fdfcf9;
+  background: var(--text); color: #fff;
 }
 .btn:hover{ background: var(--accent); }
-.btn-primary{ background: var(--text); color: #fdfcf9; }
+.btn-primary{ background: var(--text); color: #fff; }
 .btn-primary:hover{ background: var(--accent); }
 .btn-text{ color: var(--text-dim); font-size:14.5px; text-decoration:none; border-bottom:1px solid var(--border); }
 .btn-text:hover{ color: var(--accent); border-color: var(--accent); }
@@ -109,13 +121,13 @@ button.btn-text:hover{ background:none; }
   display:inline-block; color: var(--hero-accent); font-weight:600; font-size:13px;
   letter-spacing:.04em; text-transform:uppercase; margin-bottom: 18px;
   padding: 5px 12px; border: 1px solid var(--hero-border); border-radius: 20px;
-  background: rgba(79,143,224,0.1);
+  background: rgba(143,177,255,0.12);
 }
 .hero:not(.compact) h1{ color: var(--hero-text); }
 .hero:not(.compact) .hero-sub{ color: var(--hero-text-dim); max-width: 600px; }
 .hero:not(.compact) .hero-note{ color: var(--hero-text-faint); }
-.hero:not(.compact) .btn-primary{ background: var(--hero-accent); color: #0c0f14; }
-.hero:not(.compact) .btn-primary:hover{ background: #74aae8; }
+.hero:not(.compact) .btn-primary{ background: var(--accent); color: #fff; }
+.hero:not(.compact) .btn-primary:hover{ background: #4a82f0; }
 .hero:not(.compact) .btn-text{ color: var(--hero-text-dim); border-color: var(--hero-border); }
 .hero:not(.compact) .btn-text:hover{ color: var(--hero-accent); border-color: var(--hero-accent); }
 .hero:not(.compact) pre.demo{
@@ -129,6 +141,15 @@ button.btn-text:hover{ background:none; }
 }
 .hero:not(.compact) .note b{ color: var(--hero-text); }
 .hero:not(.compact) .sig{ color: var(--hero-text-faint); }
+
+/* readable defaults for content inside the dark block (pipeline.html) */
+.hero:not(.compact) h2, .hero:not(.compact) h3{ color: var(--hero-text); }
+.hero:not(.compact) p{ color: var(--hero-text-dim); }
+.hero:not(.compact) a:not(.btn){ color: var(--hero-accent); }
+table.compare{ display:block; overflow-x:auto; max-width:100%; }
+.hero:not(.compact) table.compare th, .hero:not(.compact) table.compare td{ color: var(--hero-text-dim); border-bottom-color: var(--hero-border); }
+.hero:not(.compact) table.compare th{ color: var(--hero-accent); border-bottom-color: var(--hero-accent); }
+.hero:not(.compact) table.compare td b{ color: var(--hero-text); }
 
 /* trust strip: short, true, checkable claims right under the CTA */
 .trust-strip{
@@ -144,7 +165,7 @@ button.btn-text:hover{ background:none; }
 /* ---- code block ---- */
 pre.demo{
   margin: 40px 0 0; background: var(--code-bg); border:1px solid var(--border); border-radius: 8px;
-  padding: 18px 20px; font-family: var(--mono); font-size: 13.5px; color: #3a362e; overflow-x:auto;
+  padding: 18px 20px; font-family: var(--mono); font-size: 13.5px; color: var(--text); overflow-x:auto;
 }
 pre.demo .dim{ color: var(--text-faint); }
 article pre.demo{ margin: 18px 0 22px; }
@@ -218,7 +239,7 @@ blockquote.proof a{ display:inline-block; margin-top:10px; font-style:normal; fo
 .price-block-alt h3{ font-family: var(--serif); font-size: 19px; margin-bottom: 8px; }
 .price-block-alt .price-tag{ font-size: 32px; }
 .btn-secondary{ background: transparent; color: var(--text); border: 1px solid var(--text); }
-.btn-secondary:hover{ background: var(--text); color: #fdfcf9; }
+.btn-secondary:hover{ background: var(--text); color: #fff; }
 
 /* ---- FAQ (accordion, built on native <details>/<summary>) ---- */
 .faq-item{ padding: 4px 0; border-bottom: 1px solid var(--border); }
@@ -277,6 +298,11 @@ table.compare td b{ color: var(--text); }
 
 /* ---- footer ---- */
 footer{ border-top:1px solid var(--border); padding: 30px 0 50px; color: var(--text-faint); font-size:14px; }
+footer .foot-inner{ margin:0 5%; display:flex; align-items:flex-start; justify-content:space-between; gap:30px; }
+footer .foot-inner p{ font-size:13px; text-align:right; line-height:1.6; }
+footer .wordmark{ font-size:27px; border:0; color:var(--text); }
+.footlinks{ display:flex; gap:10px 22px; flex-wrap:wrap; font-size:13px; color:var(--text-faint); margin-top:12px; max-width:640px; }
+@media (max-width: 640px){ footer .foot-inner{ flex-direction:column; } footer .foot-inner p{ text-align:left; } }
 footer a{ color: var(--text-dim); text-decoration:none; border-bottom:1px solid var(--border); }
 footer a:hover{ color: var(--accent); border-color: var(--accent); }
 
@@ -288,9 +314,9 @@ footer a:hover{ color: var(--accent); border-color: var(--accent); }
 
 .stepper{
   display:flex; align-items:stretch; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
-  overflow:hidden; box-shadow: inset 0 1px 3px rgba(36,33,28,0.05); transition: border-color .15s ease, box-shadow .15s ease;
+  overflow:hidden; box-shadow: inset 0 1px 3px rgba(34,37,31,0.05); transition: border-color .15s ease, box-shadow .15s ease;
 }
-.stepper:focus-within{ border-color: var(--accent); box-shadow: 0 0 0 3px rgba(31,90,168,0.12); }
+.stepper:focus-within{ border-color: var(--accent); box-shadow: 0 0 0 3px rgba(36,99,235,0.14); }
 .stepper-btn{
   flex-shrink:0; width:44px; border:none; background:transparent; color: var(--text-faint);
   font-family: var(--serif); font-size:21px; line-height:1; cursor:pointer; user-select:none;
