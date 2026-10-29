@@ -37,7 +37,8 @@
   a{ color:var(--accent); }
   .wrap{ max-width:1160px; margin:0 auto; padding:0 20px; }
 
-  header.site{ border-bottom:1px solid var(--border); margin:0 5%; }
+  header.site{ border-bottom:1px solid var(--border); margin:0 5%; position:sticky; top:0; z-index:50; background:var(--bg); box-shadow:0 0 0 100vmax var(--bg); clip-path:inset(0 -100vmax); }
+  html{ scroll-padding-top:84px; }
   .site-inner{ display:flex; align-items:center; justify-content:space-between; height:76px; }
   .wordmark{ font-family:"Space Grotesk",sans-serif; font-weight:700; font-size:27px; letter-spacing:-1.5px; text-decoration:none; color:var(--text); }
   .nav-links{ display:flex; align-items:center; gap:28px; }
@@ -181,10 +182,10 @@
 <div class="site-inner">
 <a class="wordmark" href="/" aria-label="Macless home">macless</a>
 <div class="nav-links">
-<a class="pricelink hide-sm" href="/#possibilities">Try the apps</a>
 <a class="pricelink hide-sm" href="/signing-doctor.html">Free tools</a>
 <a class="pricelink" href="/#pricing">Pricing</a>
 <a class="pricelink" href="/blog/">Blog</a>
+<a class="pricelink" href="/app">Log in</a>
 <a class="nav-cta" href="/#quote">Get a quote</a>
 </div>
 </div>
@@ -380,7 +381,7 @@
 
       </svg>
     </div>
-    <p class="scroll-hint mono mobile-show">↔ scroll to see the full pipeline</p>
+    <p class="scroll-hint mono mobile-show">&#8596;&#xFE0E; scroll to see the full pipeline</p>
   </div>
 
   <div class="detail-panel" id="detailPanel">
@@ -414,7 +415,7 @@
     <div class="copy">
       <h3>You can fix all sixteen yourself, or run a pipeline that already has.</h3>
       <p>Macless is the same GitHub Actions pipeline diagrammed above, pre-built with these failure modes already handled — cert/profile selection, keychain search-list ordering, the post-upload processing check — running on your own repo, your own Actions minutes, your own Apple and Google accounts.</p>
-      <p class="price-line">$99 once. Or $299 and I ship it for you. No Mac required either way.</p>
+      <p class="price-line">$99 once. Or $299 and we do the Apple side for you. No Mac required either way.</p>
     </div>
     <div class="cta-actions">
       <a class="btn btn-primary" href="https://macless.dev/#pricing">See pricing</a>
