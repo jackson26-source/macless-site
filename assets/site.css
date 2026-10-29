@@ -41,11 +41,18 @@ h3{ font-family: var(--serif); letter-spacing: -0.02em; }
 a{ text-underline-offset: 3px; }
 
 /* ---- header (same bar as the homepage) ---- */
-header.site{ padding: 0; border-bottom: 1px solid var(--border); margin: 0 5%; position:sticky; top:0; z-index:50; background:var(--bg); box-shadow:0 0 0 100vmax var(--bg); clip-path:inset(0 -100vmax); }
+header.site{ margin:0; padding:0 5%; border:0; position:sticky; top:0; z-index:50; background:linear-gradient(var(--border),var(--border)) center bottom/90% 1px no-repeat var(--bg); }
 html{ scroll-padding-top:84px; }
+.dd{ position:relative; }
+.ddm{ display:none; position:absolute; right:-14px; top:100%; padding-top:14px; z-index:60; }
+.ddm-in{ background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:6px; min-width:170px; box-shadow:0 8px 24px rgba(34,37,31,.08); }
+.dd:hover .ddm,.dd:focus-within .ddm{ display:block; }
+.ddm a{ display:block; padding:9px 12px; font-size:14px; color:var(--text); text-decoration:none; border-radius:4px; white-space:nowrap; }
+.ddm a:hover{ background:var(--bg-panel); color:var(--accent); }
 .site-inner{ display:flex; align-items:center; justify-content:space-between; max-width:none; margin:0; padding:0; height:76px; }
 .wordmark{ font-family: var(--serif); font-weight:700; font-size:27px; letter-spacing:-1.5px; text-decoration:none; color:var(--text); }
 .nav-links{ display:flex; align-items:center; gap:28px; }
+.site-inner .nav-links a{ white-space:nowrap; }
 .site-inner a.pricelink{ font-size:14px; color: var(--text); text-decoration:none; border-bottom:0; }
 .site-inner a.pricelink:hover{ color: var(--accent); }
 .site-inner a.nav-cta{ background:var(--text); color:#fff; padding:11px 18px; border-radius:4px; font-size:13px; font-weight:500; text-decoration:none; }
@@ -78,7 +85,7 @@ html{ scroll-padding-top:84px; }
   .wordmark{ font-size:25px; }
   .nav-links{ gap:13px; }
   .site-inner a.pricelink{ font-size:13px; }
-  .site-inner a.pricelink.hide-sm{ display:none; }
+  .site-inner .hide-sm{ display:none; }
   .site-inner a.nav-cta{ padding:9px 12px; }
 }
 
