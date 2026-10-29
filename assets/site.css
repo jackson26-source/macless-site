@@ -41,7 +41,8 @@ h3{ font-family: var(--serif); letter-spacing: -0.02em; }
 a{ text-underline-offset: 3px; }
 
 /* ---- header (same bar as the homepage) ---- */
-header.site{ padding: 0; border-bottom: 1px solid var(--border); margin: 0 5%; }
+header.site{ padding: 0; border-bottom: 1px solid var(--border); margin: 0 5%; position:sticky; top:0; z-index:50; background:var(--bg); box-shadow:0 0 0 100vmax var(--bg); clip-path:inset(0 -100vmax); }
+html{ scroll-padding-top:84px; }
 .site-inner{ display:flex; align-items:center; justify-content:space-between; max-width:none; margin:0; padding:0; height:76px; }
 .wordmark{ font-family: var(--serif); font-weight:700; font-size:27px; letter-spacing:-1.5px; text-decoration:none; color:var(--text); }
 .nav-links{ display:flex; align-items:center; gap:28px; }
