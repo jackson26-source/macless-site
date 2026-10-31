@@ -161,6 +161,17 @@ body>nav{position:sticky;top:0;z-index:50;margin:0;padding:0 5%;border:0;backgro
 .sp-screen{overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
 .sp-screen::-webkit-scrollbar{display:none}
 .sp-shot{display:block;width:100%;height:auto}
+
+.hero2{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:40px;padding:40px 0 36px;align-items:center}
+.hero2 h1{font-size:clamp(36px,4.4vw,62px);letter-spacing:-2.6px;line-height:1.04}
+.hero2 p{font-size:15px;max-width:440px;margin-top:18px}
+.hero2 .scan{margin-top:28px}
+.hero2 .hero-cta{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-top:18px}
+.h2-demo .comparison{padding:0;display:flex;flex-direction:column;gap:14px}
+.h2-demo .app-pair{zoom:.82;justify-content:center}
+.h2-demo .demo-toolbar{order:2;margin:0;flex-wrap:wrap;justify-content:center}
+.h2-demo .comparison>:last-child{order:3}
+@media(max-width:1000px){.hero2{grid-template-columns:1fr;gap:36px;padding:28px 0 28px}.h2-demo .app-pair{zoom:1}}
 </style><script type="application/ld+json">
 [
   {
@@ -226,11 +237,12 @@ body>nav{position:sticky;top:0;z-index:50;margin:0;padding:0 5%;border:0;backgro
   }
 ]
 </script>
-</head><body><nav><a class="logo" href="#" aria-label="Macless home">macless</a><div class="links"><span class="dd"><a href="/signing-doctor.html">Free tools</a><span class="ddm"><span class="ddm-in"><a href="/signing-doctor.html">Signing Doctor</a><a href="/rejection-doctor.html">Rejection Doctor</a></span></span></span><a href="#pricing">Pricing</a><a href="/blog/">Blog</a><a href="/app">Log in</a><a class="contact" href="#start" data-start data-need="Not sure yet">Get a quote</a></div></nav><main class="container"><section class="hero hero2"><div class="h2-copy"><h1>Your app. Working.<br><span>On the App Store.</span></h1><p>We turn web projects into usable mobile apps. Or bring us the idea. We build it, ship it, and keep it running.</p><form class="scan" id="scan" novalidate><label for="scan-url">Will Apple approve your app?</label><div class="scan-row"><input id="scan-url" type="text" inputmode="url" placeholder="yourapp.base44.app" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="scan-err"><button class="primary" type="submit"><span id="scan-btn">Scan it free</span> <svg class="arr" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><small>Free and instant, no signup. Reads only your public web address.</small><div class="sr-err" id="scan-err" role="alert"></div></form><div class="hero-cta"><a class="scan-alt" href="#start" data-start data-need="Not sure yet">Or skip the scan and get a free quote →</a><a class="try-link" href="#possibilities">See a simulated example ↓</a></div></div><div class="h2-phone"><div class="sp"><div class="sp-bar"><span>9:41</span><span id="sp-host"></span></div><div class="sp-screen" id="sp-screen"><div class="sp-empty" id="sp-empty"><div class="sp-chip">yourapp.base44.app</div><i></i><i></i><i class="s"></i><p>Paste your address and your real app loads here, at phone size.</p></div></div></div><div class="sp-cap" id="sp-cap">Your app, as a phone sees it.</div></div></section><section id="scan-result" aria-live="polite" aria-label="App scan results"></section>
-<section class="comparison" id="possibilities" aria-label="Try a web app export and a Macless mobile app"><div class="demo-toolbar"><span class="live"><i></i>Live demo</span><span>Both phones work. Tap anything and compare.</span><button id="wifi" aria-pressed="false">Turn off Wi-Fi</button><button id="remind">Send a reminder</button><button class="reset" id="reset">Reset ↺</button></div><div class="app-pair">
+</head><body><nav><a class="logo" href="#" aria-label="Macless home">macless</a><div class="links"><span class="dd"><a href="/signing-doctor.html">Free tools</a><span class="ddm"><span class="ddm-in"><a href="/signing-doctor.html">Signing Doctor</a><a href="/rejection-doctor.html">Rejection Doctor</a></span></span></span><a href="#pricing">Pricing</a><a href="/blog/">Blog</a><a href="/app">Log in</a><a class="contact" href="#start" data-start data-need="Not sure yet">Get a quote</a></div></nav><main class="container"><section class="hero hero2"><div class="h2-copy"><h1>Your app. Working.<br><span>On the App Store.</span></h1><p>We turn web projects into usable mobile apps. Or bring us the idea. We build it, ship it, and keep it running.</p><form class="scan" id="scan" novalidate><label for="scan-url">Will Apple approve your app?</label><div class="scan-row"><input id="scan-url" type="text" inputmode="url" placeholder="yourapp.base44.app" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="scan-err"><button class="primary" type="submit"><span id="scan-btn">Scan it free</span> <svg class="arr" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><small>Free and instant, no signup. Reads only your public web address.</small><div class="sr-err" id="scan-err" role="alert"></div></form><div class="hero-cta"><a class="scan-alt" href="#start" data-start data-need="Not sure yet">Or skip the scan and get a free quote →</a><small>I reply within 12 hours. No call needed.</small></div></div><div class="h2-demo"><section class="comparison" id="possibilities" aria-label="Try a web app export and a Macless mobile app"><div class="demo-toolbar"><span class="live"><i></i>Live demo</span><span>Both phones work. Tap anything and compare.</span><button id="wifi" aria-pressed="false">Turn off Wi-Fi</button><button id="remind">Send a reminder</button><button class="reset" id="reset">Reset ↺</button></div><div class="app-pair">
 <figure class="app-example before"><figcaption class="app-label"><span>Your app, just exported.</span><small>WEB APP → PHONE</small></figcaption><div class="device"><div class="phone-status"><span>9:41</span><span class="network">Wi-Fi ▰</span></div><div class="phone-app" id="web-screen"></div><div class="problem-message" id="web-error" hidden role="status"><h3 id="error-title"></h3><p id="error-copy"></p><button id="dismiss-error">Back to app</button></div><div class="web-scrollbar"><span></span></div><div class="inside-caption" id="web-caption">Desktop layout. Small controls. Tap “Check in”.</div></div></figure>
 <figure class="app-example after"><figcaption class="app-label"><span>Your app, with Macless.</span><small class="blue">ON THE APP STORE</small></figcaption><div class="device"><div class="phone-status"><span>9:41</span><span class="network">Wi-Fi ▰</span></div><div class="phone-app"><div class="app-header"><span class="app-name">regular</span><span class="person">AM</span></div><div id="mobile-screen"></div></div><button class="toast" id="notification" hidden aria-label="Open reward reminder"><b>REGULAR · NOW</b>Your next coffee is on us. Your reward is ready.</button><div class="app-nav" role="group" aria-label="Mobile app pages"><button data-page="card" aria-pressed="true">My card</button><button data-page="rewards" aria-pressed="false">Rewards</button><button data-page="activity" aria-pressed="false">Activity</button></div><div class="inside-caption" id="mobile-caption">Mobile layout. One-tap check-in. Tap it.</div></div></figure>
-</div><div class="demo-bottom"><p>Simulated example: an unadapted web export versus a mobile app with the missing pieces built in.</p><a href="#start" data-start data-need="Not sure yet">Build or finish my app <svg class="arr" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></section><section class="handoff"><div class="eyebrow">Builds, signing & submission</div><h2>We handle the Apple setup.<br><span>And the app that goes through it.</span></h2><div class="shipping-track" aria-label="Macless launch process"><span><b>01</b> Your project</span><i>→</i><span><b>02</b> Build & sign</span><i>→</i><span><b>03</b> TestFlight</span><i>→</i><span class="destination"><b>04</b> App Store submission <svg class="arr" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><p>We handle the build setup, device testing, and submission work. Then you keep a pipeline for the next release, too.</p></section>
+</div><div class="demo-bottom"><p>Simulated example: an unadapted web export versus a mobile app with the missing pieces built in.</p><a href="#start" data-start data-need="Not sure yet">Build or finish my app <svg class="arr" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></section></div></section>
+<section id="scan-result" aria-live="polite" aria-label="App scan results"></section>
+<section class="handoff"><div class="eyebrow">Builds, signing & submission</div><h2>We handle the Apple setup.<br><span>And the app that goes through it.</span></h2><div class="shipping-track" aria-label="Macless launch process"><span><b>01</b> Your project</span><i>→</i><span><b>02</b> Build & sign</span><i>→</i><span><b>03</b> TestFlight</span><i>→</i><span class="destination"><b>04</b> App Store submission <svg class="arr" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><p>We handle the build setup, device testing, and submission work. Then you keep a pipeline for the next release, too.</p></section>
 <section class="statement"><div class="eyebrow">Where we can help</div><h2>Haven’t started?<br>Already stuck?<br><span>Either works.</span></h2></section><section class="services" aria-label="How we help"><div class="service"><span class="num">01 /</span><h3>Build it for me.</h3><p>Tell us what the app needs to do. We plan it, design it, build it, and suggest features you may not have considered.</p></div><div class="service"><span class="num">02 /</span><h3>Finish what I started.</h3><p>Bring your Base44, Replit, Lovable, or other web project. We review what works, fix what doesn’t, and develop what’s missing.</p></div><div class="service"><span class="num">03 /</span><h3>Get it into the store.</h3><p>We set up builds and signing, test on devices, prepare submissions, and work through review feedback.</p></div></section><section class="pricing-section" id="pricing" aria-labelledby="pricing-title"><div class="eyebrow">Pricing</div><h2 id="pricing-title">Pick how much you want done for you.</h2>
 <div class="chart-wrap"><table class="plan-chart"><caption class="sr">Compare the three plans</caption>
 <thead><tr><td class="corner"></td>
@@ -299,31 +311,10 @@ status.innerHTML='That didn\u2019t go through. Email <a href="mailto:jackson@mac
 (function(){
 var f=document.getElementById('scan');if(!f)return;
 var inp=document.getElementById('scan-url'),btn=f.querySelector('button'),lab=document.getElementById('scan-btn'),err=document.getElementById('scan-err'),box=document.getElementById('scan-result');
-var scr=document.getElementById('sp-screen'),cap=document.getElementById('sp-cap'),hostEl=document.getElementById('sp-host');
 var TAG={fail:'FIX',warn:'CHECK',pass:'OK'};
 var LEVEL={high:'High',medium:'Medium',low:'Low'};
 function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
 function ev(n,p){try{if(window.gtag)gtag('event',n,p)}catch(e){}}
-function safeUrl(u){return /^https?:/i.test(u||'')?u:''}
-function showPhone(j){
- scr.textContent='';scr.style.background='';hostEl.textContent=j.host;
- scr.appendChild(el('div','sp-load','Loading your app…'));
- var p=j.preview||{};
- function card(){
-  scr.textContent='';
-  var c=el('div','sp-card');
-  if(p.themeColor&&/^#[0-9a-fA-F]{3,8}$/.test(p.themeColor))scr.style.background=p.themeColor;
-  c.appendChild(el('h4',null,p.title||j.host));
-  c.appendChild(el('p',null,"We couldn't draw a preview of this one, but the report below still reads the real site."));
-  scr.appendChild(c);
-  cap.textContent='Preview unavailable for this site.';
- }
- var im=new Image();
- im.className='sp-shot';im.alt='Your app at phone width';
- im.onload=function(){scr.textContent='';scr.scrollTop=0;scr.appendChild(im);cap.textContent='Your real app at 390 px wide, the way a phone loads it today. Scroll it.'};
- im.onerror=card;
- im.src='/api/app-shot?url='+encodeURIComponent(j.url);
-}
 function render(j){
  box.textContent='';
  var head=el('div','sr-head'),l=el('div');
@@ -357,16 +348,17 @@ function render(j){
  var d=el('a','sr-doc','Already have a rejection email? Decode it');d.href='/rejection-doctor.html';cta.appendChild(d);
  foot.appendChild(cta);box.appendChild(foot);
  box.classList.add('on');
+ var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+ box.scrollIntoView({behavior:rm?'auto':'smooth',block:'start'});
 }
 f.addEventListener('submit',function(e){
  e.preventDefault();var v=inp.value.trim();
  if(!v){err.textContent="Paste your app's web address first.";inp.focus();return}
  err.textContent='';btn.disabled=true;lab.textContent='Reading your app…';
- scr.textContent='';scr.style.background='';scr.appendChild(el('div','sp-load','Loading your app…'));
  fetch('/api/app-scan?url='+encodeURIComponent(v)).then(function(r){return r.json()}).then(function(j){
-  if(j&&j.ok){showPhone(j);render(j);ev('app_scan',{platform:j.platform||'unknown',level:j.level,framed:!!(j.preview&&j.preview.frameable)})}
-  else{scr.textContent='';err.textContent=(j&&j.message)||'The scan did not work. Try again.';ev('app_scan_error',{reason:(j&&j.error)||'unknown'});scr.appendChild(el('div','sp-load','Nothing to show yet'))}
- }).catch(function(){scr.textContent='';scr.appendChild(el('div','sp-load','Nothing to show yet'));err.textContent='The scan did not work. Check your connection and try again.'}).then(function(){btn.disabled=false;lab.textContent='Scan it free'});
+  if(j&&j.ok){render(j);ev('app_scan',{platform:j.platform||'unknown',level:j.level})}
+  else{err.textContent=(j&&j.message)||'The scan did not work. Try again.';ev('app_scan_error',{reason:(j&&j.error)||'unknown'})}
+ }).catch(function(){err.textContent='The scan did not work. Check your connection and try again.'}).then(function(){btn.disabled=false;lab.textContent='Scan it free'});
 });
 })();
 </script>
