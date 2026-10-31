@@ -174,7 +174,7 @@ body>nav{position:sticky;top:0;z-index:50;margin:0;padding:0 5%;border:0;backgro
 @media(max-width:1000px){.hero2{grid-template-columns:1fr;gap:36px;padding:28px 0 28px}.h2-demo .app-pair{zoom:1}}
 .h2-demo .demo-toolbar{gap:10px 12px}
 .h2-demo .demo-toolbar>.live{order:0}.h2-demo .demo-toolbar>span:nth-child(2){order:1;flex:0 0 100%;text-align:center;margin:0}.h2-demo .demo-toolbar>button{order:2}.h2-demo .demo-bottom{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;margin:6px 0 0}.h2-demo .demo-bottom p{max-width:340px;margin:0;font-size:13px;line-height:1.5}
-</style><script type="application/ld+json">
+.device.hint .web-checkin,.device.hint .checkin{position:relative}.device.hint .web-checkin::after,.device.hint .checkin::after{content:"Tap me";position:absolute;right:-8px;top:-11px;background:#2463eb;color:#fff;font:600 8px/1 "DM Sans",sans-serif;letter-spacing:.3px;padding:4px 8px;border-radius:99px;box-shadow:0 2px 6px rgba(36,99,235,.35);pointer-events:none;z-index:2}@keyframes tapRing{0%{box-shadow:0 0 0 0 rgba(36,99,235,.55)}70%{box-shadow:0 0 0 12px rgba(36,99,235,0)}100%{box-shadow:0 0 0 0 rgba(36,99,235,0)}}@media(prefers-reduced-motion:no-preference){.device.hint .web-checkin,.device.hint .checkin{animation:tapRing 1.6s ease-out infinite}}</style><script type="application/ld+json">
 [
   {
     "@context": "https://schema.org",
@@ -364,4 +364,4 @@ f.addEventListener('submit',function(e){
 });
 })();
 </script>
-</body></html>
+<script>(function(){var s=document.getElementById("possibilities");if(!s)return;var t;function arm(){document.querySelectorAll(".device").forEach(function(d){d.classList.add("hint")})}s.addEventListener("pointerdown",function(){clearTimeout(t);t=setTimeout(arm,8000)});var r=document.getElementById("reset");if(r)r.addEventListener("click",arm)})();</script></body></html>
