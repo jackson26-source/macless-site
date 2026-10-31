@@ -158,6 +158,9 @@ body>nav{position:sticky;top:0;z-index:50;margin:0;padding:0 5%;border:0;backgro
 .sp-cap{font-size:12px;color:var(--muted);text-align:center;max-width:300px;line-height:1.6}
 @media(max-width:900px){.hero2{grid-template-columns:1fr;gap:40px;padding:36px 0 34px}.hero2 h1{letter-spacing:-2px}.h2-phone{order:2}}
 @media(max-width:760px){.hero2 .scan-row{flex-direction:column}.sp{width:270px;height:550px}}
+.sp-screen{overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.sp-screen::-webkit-scrollbar{display:none}
+.sp-shot{display:block;width:100%;height:auto}
 </style><script type="application/ld+json">
 [
   {
@@ -303,29 +306,23 @@ function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null
 function ev(n,p){try{if(window.gtag)gtag('event',n,p)}catch(e){}}
 function safeUrl(u){return /^https?:/i.test(u||'')?u:''}
 function showPhone(j){
- scr.textContent='';hostEl.textContent=j.host;
+ scr.textContent='';scr.style.background='';hostEl.textContent=j.host;
+ scr.appendChild(el('div','sp-load','Loading your app…'));
  var p=j.preview||{};
- if(p.frameable&&safeUrl(j.url)){
-  var fr=document.createElement('iframe');
-  fr.title='Your app, previewed at phone size';
-  fr.setAttribute('sandbox','allow-scripts allow-same-origin allow-forms allow-popups');
-  fr.setAttribute('referrerpolicy','no-referrer');
-  var s=scr.clientWidth/390;
-  fr.style.height=Math.ceil(scr.clientHeight/s)+'px';
-  fr.style.transform='scale('+s+')';
-  fr.src=j.url;
-  scr.appendChild(fr);
-  cap.textContent='This is your real app at 390 px wide, the way a phone loads it today. Tap around.';
- }else{
+ function card(){
+  scr.textContent='';
   var c=el('div','sp-card');
   if(p.themeColor&&/^#[0-9a-fA-F]{3,8}$/.test(p.themeColor))scr.style.background=p.themeColor;
-  if(safeUrl(p.ogImage)){var o=el('img','og');o.alt='';o.src=p.ogImage;o.referrerPolicy='no-referrer';c.appendChild(o)}
-  else if(safeUrl(p.icon)){var i=el('img','ic');i.alt='';i.src=p.icon;i.referrerPolicy='no-referrer';c.appendChild(i)}
   c.appendChild(el('h4',null,p.title||j.host));
-  c.appendChild(el('p',null,"This site doesn't allow itself to be shown inside other pages, so this is its public card. The scan below still reads the real site."));
+  c.appendChild(el('p',null,"We couldn't draw a preview of this one, but the report below still reads the real site."));
   scr.appendChild(c);
-  cap.textContent='Preview unavailable for this site. The report below is still accurate.';
+  cap.textContent='Preview unavailable for this site.';
  }
+ var im=new Image();
+ im.className='sp-shot';im.alt='Your app at phone width';
+ im.onload=function(){scr.textContent='';scr.scrollTop=0;scr.appendChild(im);cap.textContent='Your real app at 390 px wide, the way a phone loads it today. Scroll it.'};
+ im.onerror=card;
+ im.src='/api/app-shot?url='+encodeURIComponent(j.url);
 }
 function render(j){
  box.textContent='';
