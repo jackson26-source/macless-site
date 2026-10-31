@@ -1,0 +1,23 @@
+# Macless
+
+> Macless turns web projects and app-builder exports (Base44, Lovable, Replit, Bubble) into working iOS and Android apps, and handles the build, code signing, TestFlight and App Store or Google Play submission, with no Mac required. Run by one person, with free tools anyone can use.
+
+## Services and pricing
+
+- [Pricing](https://macless.dev/pricing.html): Ship it yourself with the Macless pipeline from $99; Ship it for me, one platform for an app that already builds and runs, $299; premium build-and-ship work is quoted individually, from $599.
+- [Ship my app](https://macless.dev/ship-my-app.html): Done-for-you submission to the App Store or Google Play, including signing, build, store listing and review responses.
+- [Pipeline](https://macless.dev/pipeline.html): How the automated build, sign and upload pipeline works.
+
+## Free tools
+
+- [Signing Doctor](https://macless.dev/signing-doctor.html): Diagnoses iOS code signing and provisioning errors.
+- [Rejection Doctor](https://macless.dev/rejection-doctor.html): Explains App Store rejection messages and what to change.
+
+## Blog
+
+- [Blog](https://macless.dev/blog/): Guides on getting wrapped web apps and no-code exports through App Store and Google Play review.
+
+## Contact
+
+- Email: jackson@macless.dev (free quote, replies within 12 hours)
+- [Privacy policy](https://macless.dev/privacy.html)
