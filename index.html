@@ -90,7 +90,43 @@ dialog{max-height:calc(100vh - 32px);overflow:auto}
 .video-block{margin-top:44px;max-width:760px}.video-block p{font-size:15px;color:var(--muted);margin:10px 0 16px}
 .video-frame{aspect-ratio:16/9;border:1px dashed #b9bcae;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;background:#eceae1}
 @media(max-width:750px){.plan-chart th,.plan-chart td{padding:11px 5px;font-size:12px}.plan-chart tbody th{width:31%;padding-left:0;font-size:12px}.plan-chart thead th{padding:16px 4px 14px}.plan-chart .pn{font-size:12px;margin-bottom:8px;letter-spacing:-.2px}.plan-chart .pp{font-size:19px;letter-spacing:-.6px}.plan-chart .pu{font-size:10.5px}.plan-chart .who td,.plan-chart .who th{font-size:11px}.plan-chart .ck{width:17px;height:17px}.chart-cta{padding:9px 7px;font-size:12px}.plan-warn{font-size:13px}}
-body>nav{position:sticky;top:0;z-index:50;margin:0;padding:0 5%;border:0;background:linear-gradient(var(--line),var(--line)) center bottom/90% 1px no-repeat var(--paper)}html{scroll-padding-top:76px}.dd{position:relative}.ddm{display:none;position:absolute;right:-14px;top:100%;padding-top:14px;z-index:60}.ddm-in{display:block;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:6px;min-width:170px;box-shadow:0 8px 24px rgba(34,37,31,.08)}.dd:hover .ddm,.dd:focus-within .ddm{display:block}.ddm a{display:block;padding:9px 12px;font-size:14px;white-space:nowrap;border-radius:4px}.ddm a:hover{background:#eceae1;color:var(--accent)}</style><script type="application/ld+json">
+body>nav{position:sticky;top:0;z-index:50;margin:0;padding:0 5%;border:0;background:linear-gradient(var(--line),var(--line)) center bottom/90% 1px no-repeat var(--paper)}html{scroll-padding-top:76px}.dd{position:relative}.ddm{display:none;position:absolute;right:-14px;top:100%;padding-top:14px;z-index:60}.ddm-in{display:block;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:6px;min-width:170px;box-shadow:0 8px 24px rgba(34,37,31,.08)}.dd:hover .ddm,.dd:focus-within .ddm{display:block}.ddm a{display:block;padding:9px 12px;font-size:14px;white-space:nowrap;border-radius:4px}.ddm a:hover{background:#eceae1;color:var(--accent)}.scan{margin-top:20px;max-width:430px}
+.scan label{display:block;font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:500;letter-spacing:-.5px;margin-bottom:10px}
+.scan-row{display:flex;gap:8px}
+.scan-row input{flex:1;min-width:0;font:14px 'DM Sans',sans-serif;color:var(--ink);background:#fbfbf7;border:1px solid var(--line);border-radius:4px;padding:15px 14px}
+.scan-row input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.scan-row .primary{cursor:pointer;gap:14px;white-space:nowrap;font-family:inherit}
+.scan-row .primary:disabled{opacity:.65;cursor:wait}
+.scan small{display:block;margin-top:9px;font-size:11px;color:var(--muted)}
+.sr-err{margin-top:8px;font-size:12.5px;color:#b42318}
+.sr-err:empty{display:none}
+.scan-alt{display:inline-block;margin-top:16px;font-size:12px;color:var(--accent);border-bottom:1px solid currentColor}
+#scan-result{display:none;margin:8px 0 36px;border:1px solid var(--line);border-radius:6px;background:#fbfbf7;padding:28px 30px;scroll-margin-top:16px}
+#scan-result.on{display:block}
+.sr-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:20px}
+.sr-host{font-family:monospace;font-size:11px;color:var(--muted)}
+.sr-verdict{font-family:'Space Grotesk',sans-serif;font-size:clamp(24px,3vw,34px);font-weight:500;letter-spacing:-1.2px;line-height:1.1;margin:6px 0 8px}
+.sr-level.high{color:#b42318}.sr-level.medium{color:#a15c07}.sr-level.low{color:#2f7d46}
+.sr-sub{font-size:12px;color:#636b5b}
+.sr-chip{font-family:monospace;font-size:10px;border:1px solid var(--line);border-radius:20px;padding:5px 11px;color:#636b5b;background:var(--paper)}
+.sr-list{list-style:none;margin:0;padding:0}
+.sr-item{display:grid;grid-template-columns:62px 1fr;gap:6px 18px;padding:16px 0;border-bottom:1px solid var(--line)}
+.sr-item.pass{padding:10px 0}
+.sr-tag{font-family:monospace;font-size:10px;letter-spacing:.8px;padding-top:3px}
+.sr-tag.fail{color:#b42318}.sr-tag.warn{color:#a15c07}.sr-tag.pass{color:#2f7d46}
+.sr-item h3{font-size:14px;font-weight:600;margin:0 0 4px}
+.sr-item.pass h3{font-weight:400;margin:0;color:#636b5b}
+.sr-item p{font-size:12.5px;line-height:1.7;color:#636b5b;margin:0;max-width:640px}
+.sr-g{font-family:monospace;font-size:10px;color:var(--muted);margin-left:8px;font-weight:400}
+.sr-foot{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;padding-top:24px}
+.sr-cant{max-width:460px;font-size:12px;line-height:1.7;color:#636b5b}
+.sr-cant b{display:block;font-family:monospace;font-size:10px;letter-spacing:.8px;font-weight:400;color:var(--muted);margin-bottom:6px}
+.sr-cant ul{margin:0;padding-left:16px}
+.sr-cta{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.sr-cta small{font-size:11px;color:var(--muted)}
+.sr-doc{font-size:12px;color:var(--accent);border-bottom:1px solid currentColor}
+@media(max-width:760px){.scan{max-width:none}.scan-row{flex-direction:column}.scan-row input{font-size:16px}#scan-result{padding:20px 18px}.sr-item{grid-template-columns:1fr}}
+</style><script type="application/ld+json">
 [
   {
     "@context": "https://schema.org",
@@ -155,7 +191,7 @@ body>nav{position:sticky;top:0;z-index:50;margin:0;padding:0 5%;border:0;backgro
   }
 ]
 </script>
-</head><body><nav><a class="logo" href="#" aria-label="Macless home">macless</a><div class="links"><span class="dd"><a href="/signing-doctor.html">Free tools</a><span class="ddm"><span class="ddm-in"><a href="/signing-doctor.html">Signing Doctor</a><a href="/rejection-doctor.html">Rejection Doctor</a></span></span></span><a href="#pricing">Pricing</a><a href="/blog/">Blog</a><a href="/app">Log in</a><a class="contact" href="#start" data-start data-need="Not sure yet">Get a quote</a></div></nav><main class="container"><section class="hero"><h1>Your app. Working.<br><span>On the App Store.</span></h1><div><p>We turn web projects into usable mobile apps.<br>Or bring us the idea. We build it, ship it, and keep it running.</p><div class="hero-cta"><a class="primary" href="#start" data-start data-need="Not sure yet">Get a free quote <svg class="arr" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><small>I reply within 12 hours. No call needed.</small><a class="try-link" href="#possibilities">Or try two live apps below ↓</a></div></div></section>
+</head><body><nav><a class="logo" href="#" aria-label="Macless home">macless</a><div class="links"><span class="dd"><a href="/signing-doctor.html">Free tools</a><span class="ddm"><span class="ddm-in"><a href="/signing-doctor.html">Signing Doctor</a><a href="/rejection-doctor.html">Rejection Doctor</a></span></span></span><a href="#pricing">Pricing</a><a href="/blog/">Blog</a><a href="/app">Log in</a><a class="contact" href="#start" data-start data-need="Not sure yet">Get a quote</a></div></nav><main class="container"><section class="hero"><h1>Your app. Working.<br><span>On the App Store.</span></h1><div><p>We turn web projects into usable mobile apps.<br>Or bring us the idea. We build it, ship it, and keep it running.</p><form class="scan" id="scan" novalidate><label for="scan-url">Will Apple approve your app?</label><div class="scan-row"><input id="scan-url" type="text" inputmode="url" placeholder="yourapp.base44.app" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="scan-err"><button class="primary" type="submit"><span id="scan-btn">Scan it free</span> <svg class="arr" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><small>Free and instant, no signup. Reads only your public web address.</small><div class="sr-err" id="scan-err" role="alert"></div></form><div class="hero-cta"><a class="scan-alt" href="#start" data-start data-need="Not sure yet">Or skip the scan and get a free quote →</a><small>I reply within 12 hours. No call needed.</small><a class="try-link" href="#possibilities">Or try two live apps below ↓</a></div></div></section><section id="scan-result" aria-live="polite" aria-label="App scan results"></section>
 <section class="comparison" id="possibilities" aria-label="Try a web app export and a Macless mobile app"><div class="demo-toolbar"><span class="live"><i></i>Live demo</span><span>Both phones work. Tap anything and compare.</span><button id="wifi" aria-pressed="false">Turn off Wi-Fi</button><button id="remind">Send a reminder</button><button class="reset" id="reset">Reset ↺</button></div><div class="app-pair">
 <figure class="app-example before"><figcaption class="app-label"><span>Your app, just exported.</span><small>WEB APP → PHONE</small></figcaption><div class="device"><div class="phone-status"><span>9:41</span><span class="network">Wi-Fi ▰</span></div><div class="phone-app" id="web-screen"></div><div class="problem-message" id="web-error" hidden role="status"><h3 id="error-title"></h3><p id="error-copy"></p><button id="dismiss-error">Back to app</button></div><div class="web-scrollbar"><span></span></div><div class="inside-caption" id="web-caption">Desktop layout. Small controls. Tap “Check in”.</div></div></figure>
 <figure class="app-example after"><figcaption class="app-label"><span>Your app, with Macless.</span><small class="blue">ON THE APP STORE</small></figcaption><div class="device"><div class="phone-status"><span>9:41</span><span class="network">Wi-Fi ▰</span></div><div class="phone-app"><div class="app-header"><span class="app-name">regular</span><span class="person">AM</span></div><div id="mobile-screen"></div></div><button class="toast" id="notification" hidden aria-label="Open reward reminder"><b>REGULAR · NOW</b>Your next coffee is on us. Your reward is ready.</button><div class="app-nav" role="group" aria-label="Mobile app pages"><button data-page="card" aria-pressed="true">My card</button><button data-page="rewards" aria-pressed="false">Rewards</button><button data-page="activity" aria-pressed="false">Activity</button></div><div class="inside-caption" id="mobile-caption">Mobile layout. One-tap check-in. Tap it.</div></div></figure>
@@ -224,4 +260,59 @@ sendBtn.firstChild.textContent='Request sent ';
 status.textContent='Got it. Your request is in, and you\u2019ll hear from me at the email you gave within 12 hours. If you don\u2019t see a reply, check spam.'})
 .catch(()=>{sendBtn.disabled=false;sendBtn.firstChild.textContent='Get my free quote ';status.className='err';
 status.innerHTML='That didn\u2019t go through. Email <a href="mailto:jackson@macless.dev?subject='+encodeURIComponent('Quote request')+'&body='+encodeURIComponent(data.details||'')+'">jackson@macless.dev</a> instead and I\u2019ll reply within 12 hours.'})});
-</script></body></html>
+</script><script>
+(function(){
+var f=document.getElementById('scan');if(!f)return;
+var inp=document.getElementById('scan-url'),btn=f.querySelector('button'),lab=document.getElementById('scan-btn'),err=document.getElementById('scan-err'),box=document.getElementById('scan-result');
+var TAG={fail:'FIX',warn:'CHECK',pass:'OK'};
+var LEVEL={high:'High',medium:'Medium',low:'Low'};
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function ev(n,p){try{if(window.gtag)gtag('event',n,p)}catch(e){}}
+function render(j){
+ box.textContent='';
+ var head=el('div','sr-head'),l=el('div');
+ l.appendChild(el('div','sr-host',j.host));
+ var v=el('h2','sr-verdict','Apple rejection risk: ');
+ v.appendChild(el('span','sr-level '+j.level,LEVEL[j.level]));
+ l.appendChild(v);
+ l.appendChild(el('div','sr-sub',j.fails+(j.fails===1?' likely problem':' likely problems')+' · '+j.warns+' to check · '+j.passes+' fine'));
+ head.appendChild(l);
+ if(j.platform)head.appendChild(el('span','sr-chip','Built on '+j.platform));
+ box.appendChild(head);
+ var ul=el('ul','sr-list');
+ j.findings.forEach(function(f){
+  var li=el('li','sr-item '+f.status);
+  li.appendChild(el('div','sr-tag '+f.status,TAG[f.status]));
+  var b=el('div'),h=el('h3',null,f.title);
+  if(f.guideline&&f.status!=='pass')h.appendChild(el('span','sr-g','Guideline '+f.guideline));
+  b.appendChild(h);
+  if(f.status!=='pass')b.appendChild(el('p',null,f.detail));
+  li.appendChild(b);ul.appendChild(li)});
+ box.appendChild(ul);
+ var foot=el('div','sr-foot'),cant=el('div','sr-cant');
+ cant.appendChild(el('b',null,"WHAT A SCAN FROM OUTSIDE CAN'T SEE"));
+ var cu=el('ul');j.cantSee.forEach(function(t){cu.appendChild(el('li',null,t))});cant.appendChild(cu);
+ foot.appendChild(cant);
+ var cta=el('div','sr-cta'),a=el('a','primary','Have us fix these');
+ a.href='#start';
+ a.addEventListener('click',function(e){e.preventDefault();var s=document.querySelector('.hero-cta [data-start]');if(s)s.click();ev('scan_quote_click',{level:j.level})});
+ cta.appendChild(a);
+ cta.appendChild(el('small',null,'Done-for-you from $299. Free quote, reply within 12 hours.'));
+ var d=el('a','sr-doc','Already have a rejection email? Decode it');d.href='/rejection-doctor.html';cta.appendChild(d);
+ foot.appendChild(cta);box.appendChild(foot);
+ box.classList.add('on');
+ var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+ box.scrollIntoView({behavior:rm?'auto':'smooth',block:'start'});
+}
+f.addEventListener('submit',function(e){
+ e.preventDefault();var v=inp.value.trim();
+ if(!v){err.textContent="Paste your app's web address first.";inp.focus();return}
+ err.textContent='';btn.disabled=true;lab.textContent='Reading your app…';
+ fetch('/api/app-scan?url='+encodeURIComponent(v)).then(function(r){return r.json()}).then(function(j){
+  if(j&&j.ok){render(j);ev('app_scan',{platform:j.platform||'unknown',level:j.level})}
+  else{err.textContent=(j&&j.message)||'The scan did not work. Try again.';ev('app_scan_error',{reason:(j&&j.error)||'unknown'})}
+ }).catch(function(){err.textContent='The scan did not work. Check your connection and try again.'}).then(function(){btn.disabled=false;lab.textContent='Scan it free'});
+});
+})();
+</script>
+</body></html>
